@@ -1,22 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "LifeStory", "http://localhost:6631", "{84B9987E-7BAE-4F93-81C4-DD8EF687E97B}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "LifeStory", "http://localhost:6632", "{84B9987E-7BAE-4F93-81C4-DD8EF687E97B}"
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_6631"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_6632"
 		Debug.AspNetCompiler.PhysicalPath = "..\LifeStory\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_6631\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_6632\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_6631"
+		Release.AspNetCompiler.VirtualPath = "/localhost_6632"
 		Release.AspNetCompiler.PhysicalPath = "..\LifeStory\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_6631\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_6632\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
