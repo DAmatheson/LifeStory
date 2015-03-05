@@ -1,0 +1,20 @@
+/* custom.css
+ * Purpose: Custom styling
+ *
+ * Revision History:
+ *      Drew Matheson, 2015.01.12: Copied into assignment 1
+ *      Drew Matheson, 2015.02.06: Added styles for assignment 2
+ */
+
+img { max-width: 100%; }
+
+.red { color : red; }
+
+label.error {
+	color: red;
+}
+
+label.ui-input-text
+{
+    font-weight: bold;
+}
