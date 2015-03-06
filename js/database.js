@@ -5,9 +5,15 @@
  *      Drew Matheson, 2015.03.05: Created
  */
 
+// Extend lifeStory with database functions located under lifeStory.db
 (function(lifeStory, undefined)
 {
     'use strict';
+
+    if (lifeStory === undefined || lifeStory === null)
+    {
+        throw 'lifeStory is required by database but is undefined.';
+    }
 
     var dbLibrary = lifeStory.db = {};
 
@@ -106,6 +112,7 @@
             'CREATE TABLE IF NOT EXISTS eventDetail ' +
             '(' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+                'event_id INTEGER NOT NULL, ' +
                 'date DATE NOT NULL, ' +
                 'numberOfPCs INTEGER, ' +
                 'description TEXT' +
@@ -128,55 +135,38 @@
             initializationError);
     }
 
-    dbLibrary.insertRace = function insertRace(raceName)
+    // Insert default class records
+    function insertDefaultClasses(transaction)
     {
-        dbLibrary.getDb().transaction(function (tx)
-        {
-            var sql = 'INSERT INTO race (name) VALUES (?);';
+        var defaultClasses = ['Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk',
+            'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'];
 
-            tx.executeSql(sql, [raceName], null, sqlErrorHandler);
+        defaultClasses.forEach(function(element)
+        {
+            transaction.executeSql('INSERT INTO class (name) VALUES (?);',
+                [element],
+                null,
+                initializationError);
         });
     }
 
-    dbLibrary.insertClass = function insertClass(className)
+    // Insert default race records
+    function insertDefaultRaces(transaction)
     {
-        dbLibrary.getDb().transaction(function (tx)
-        {
-            var sql = 'INSERT INTO class (name) VALUES (?);';
+        var names = ['Dwarf', 'Human', 'Halfling', 'Elf', 'Half-elf',
+            'Half-orc', 'Gnome', 'Dragonborn', 'Tiefling'];
 
-            tx.executeSql(sql, [className], null, sqlErrorHandler);
+        names.forEach(function(element)
+        {
+            transaction.executeSql(
+                'INSERT INTO race (name) VALUES (?);',
+                [element],
+                null,
+                initializationError);
         });
     }
 
-    function insertDefaultClasses()
-    {
-        dbLibrary.insertClass('Barbarian');
-        dbLibrary.insertClass('Bard');
-        dbLibrary.insertClass('Cleric');
-        dbLibrary.insertClass('Druid');
-        dbLibrary.insertClass('Fighter');
-        dbLibrary.insertClass('Monk');
-        dbLibrary.insertClass('Paladin');
-        dbLibrary.insertClass('Ranger');
-        dbLibrary.insertClass('Rogue');
-        dbLibrary.insertClass('Sorcerer');
-        dbLibrary.insertClass('Warlock');
-        dbLibrary.insertClass('Wizard');
-    }
-
-    function insertDefaultRaces()
-    {
-        dbLibrary.insertRace("Dwarf");
-        dbLibrary.insertRace("Human");
-        dbLibrary.insertRace("Halfling");
-        dbLibrary.insertRace("Elf");
-        dbLibrary.insertRace("Half-elf");
-        dbLibrary.insertRace("Half-orc");
-        dbLibrary.insertRace("Gnome");
-        dbLibrary.insertRace("Dragonborn");
-        dbLibrary.insertRace("Tiefling");
-    }
-
+    // Creates the database tables and inserts default records
     function initializeTables(database)
     {
         database.transaction(function createTables(tx)
@@ -188,8 +178,9 @@
             createEventTable(tx);
             createEventDetailTable(tx);
             createCharacterEventTable(tx);
-            insertDefaultClasses();
-            insertDefaultRaces();
+
+            insertDefaultClasses(tx);
+            insertDefaultRaces(tx);
         });
 
         if (localStorage.getItem('dbInitializationError') !== 'true')
@@ -204,7 +195,8 @@
         }
     }
 
-    dbLibrary.initializeDb = function initializeDb()
+    // Initializes the database
+    function initializeDb()
     {
         if (window.openDatabase === undefined)
         {
@@ -231,11 +223,104 @@
         // Initialize the database if it hasn't been
         if (db === undefined || localStorage.getItem('dbInitialized') !== 'true')
         {
-            dbLibrary.initializeDb();
+            initializeDb();
         }
 
         // return the database
         return db;
     }
+
+    // Saves the Race to the database and calls the corresponding success or failure callback
+    dbLibrary.addRace = function addRace(race, successCallback, failureCallback)
+    {
+        if (!(race instanceof lifeStory.Race))
+        {
+            throw 'race parameter to addRace must be an instance of lifeStory.Race';
+        }
+
+        dbLibrary.getDb().transaction(function(tx)
+        {
+            tx.executeSql(
+                'INSERT INTO race (name) VALUES (?);',
+                [race.name],
+                successCallback || null,
+                failureCallback || sqlErrorHandler);
+        });
+    }
+
+    // Saves the CharacterClass to the database and calls the corresponding success or failure callback
+    dbLibrary.addClass = function addClass(characterClass, successCallback, failureCallback)
+    {
+        if (!(characterClass instanceof lifeStory.CharacterClass))
+        {
+            throw 'characterClass parameter to addClass must be an instance of lifeStory.CharacterClass';
+        }
+
+        dbLibrary.getDb().transaction(function (tx)
+        {
+            tx.executeSql('INSERT INTO class (name) VALUES (?);',
+                [characterClass.name],
+                successCallback || null,
+                failureCallback || sqlErrorHandler);
+        });
+    }
+
+    // Saves the Character into the database and calls the corresponding success or failure callback
+    dbLibrary.insertCharacter = function insertCharacter(character, successCallback, failureCallback)
+    {
+        if (!(character instanceof lifeStory.Character))
+        {
+            throw 'character parameter to insertCharacter must be an instance of lifeStory.Character';
+        }
+
+        dbLibrary.getDb().transaction(function (tx)
+        {
+            tx.executeSql(
+                'INSERT INTO character ' +
+                    '(name, race_id, class_Id, details, living) ' +
+                'VALUES (?, ?, ?, ?, ?)',
+                [
+                    character.name, character.raceId, character.classId,
+                    character.details, character.living
+                ],
+                successCallback || null,
+                failureCallback || sqlErrorHandler);
+        });
+    }
+
+    // Gets the character count and passes it as the sole argument to callBack
+    dbLibrary.getCharacterCount = function (callBack)
+    {
+        dbLibrary.getDb().readTransaction(function (tx)
+        {
+            tx.executeSql(
+                'SELECT COUNT() AS count ' +
+                'FROM character',
+                null,
+                function (transaction, resultSet)
+                {
+                    if (resultSet.rows.length > 0)
+                    {
+                        callBack(resultSet.rows.item(0).count);
+                    }
+                    else
+                    {
+                        callBack(0);
+                    }
+                },
+                sqlErrorHandler);
+        });
+    };
+
+    // Clears the character table
+    dbLibrary.clearCharacterTable = function ()
+    {
+        dbLibrary.getDb().transaction(function (tx)
+        {
+            tx.executeSql('DROP TABLE IF EXISTS character', null, null, sqlErrorHandler);
+
+            createCharacterTable();
+        });
+    };
 
 })(lifeStory);
