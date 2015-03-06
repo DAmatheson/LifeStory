@@ -96,10 +96,9 @@
             'CREATE TABLE IF NOT EXISTS event ' +
             '(' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
-                'event_id INTEGER NOT NULL, ' +
-                'eventName_id INTEGER, ' +
-                'xp INTEGER, ' +
-                'numberOfCreatures INTEGER' +
+                'numberOfPCs INTEGER, ' +
+                'date DATE NOT NULL, ' +
+                'description TEXT' +
             ');',
             null,
             null,
@@ -113,9 +112,9 @@
             '(' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
                 'event_id INTEGER NOT NULL, ' +
-                'date DATE NOT NULL, ' +
-                'numberOfPCs INTEGER, ' +
-                'description TEXT' +
+                'eventName_id INTEGER, ' +
+                'xp INTEGER, ' +
+                'numberOfCreatures INTEGER' +
             ');',
             null,
             null,
