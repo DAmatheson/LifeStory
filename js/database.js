@@ -76,19 +76,6 @@
             initializationError);
     }
 
-    function createEventNameTable(transaction)
-    {
-        transaction.executeSql(
-            'CREATE TABLE IF NOT EXISTS eventName ' +
-            '(' +
-                'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
-                'name VARCHAR(60) NOT NULL' +
-            ');',
-            null,
-            null,
-            initializationError);
-    }
-
     function createEventTable(transaction)
     {
 
@@ -112,7 +99,7 @@
             '(' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
                 'event_id INTEGER NOT NULL, ' +
-                'eventName_id INTEGER, ' +
+                'eventName VARCHAR(60) NOT NULL, ' +
                 'xp INTEGER, ' +
                 'numberOfCreatures INTEGER' +
             ');',
@@ -173,7 +160,6 @@
             createRaceTable(tx);
             createClassTable(tx);
             createCharacterTable(tx);
-            createEventNameTable(tx);
             createEventTable(tx);
             createEventDetailTable(tx);
             createCharacterEventTable(tx);
@@ -199,21 +185,23 @@
     {
         if (window.openDatabase === undefined)
         {
-            alert('WebSQL isn\'t supported in this browser.');
+            //alert('WebSQL isn\'t supported in this browser.');
         }
-
-        db = window.openDatabase('LifeStory', '1.0', 'Life Story Database',
-            2 * 1024 * 1024, initializeTables);
-
-        // Ensure the database has been initialized as openDatabase will only call
-        // initializeDatabase if the database doesn't exist.
-        // The database can exist without being initialized if dmLibrary.db.cleaDb is used
-        if (localStorage.getItem('dbInitialized') !== 'true')
+        else
         {
-            initializeTables(db);
-        }
+            db = window.openDatabase('LifeStory', '1.0', 'Life Story Database',
+                2 * 1024 * 1024, initializeTables);
 
-        return db;
+            // Ensure the database has been initialized as openDatabase will only call
+            // initializeDatabase if the database doesn't exist.
+            // The database can exist without being initialized if dmLibrary.db.cleaDb is used
+            if (localStorage.getItem('dbInitialized') !== 'true')
+            {
+                initializeTables(db);
+            }
+
+            return db;
+        }
     }
 
     // Returns the database for the application

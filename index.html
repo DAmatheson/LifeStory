@@ -2,7 +2,8 @@
 <html>
     <head>
         <title>Life Story</title>
-        <link href="css/themes/default/jquery.mobile-1.1.1.min.css" rel="stylesheet" />
+        <link href="css/themes/jquery.mobile-1.1.2.min.css" rel="stylesheet" />
+        <link href="css/themes/LifeStory.css" rel="stylesheet" />
         <link href="css/custom.css" rel="stylesheet" />
     </head>
     <body>
@@ -13,19 +14,16 @@
                 <nav data-role="navbar">
                     <ul>
                         <li>
-                            <a href="#home" data-icon="home" data-theme="c"
-                               class="ui-btn-active ui-state-persist">
+                            <a href="#home"  data-theme="c"
+                                    class="ui-btn-active ui-state-persist">
                                 Home
                             </a>
                         </li>
                         <li>
-                            <a href="#AddFeedback" data-icon="star" data-theme="c">Add</a>
+                            <a href="#customize" data-theme="c">Customize</a>
                         </li>
                         <li>
-                            <a href="#ViewFeedback" data-icon="grid" data-theme="c">Reviews</a>
-                        </li>
-                        <li>
-                            <a href="#Settings" data-icon="gear" data-theme="c">Settings</a>
+                            <a href="#settings" data-theme="c">Settings</a>
                         </li>
                     </ul>
                 </nav>
@@ -33,7 +31,124 @@
 
 
             <div class="ui-content" data-role="content">
-                <h2>Hi, I'm Life Story App!</h2>
+                <h2 class="left">Characters</h2>
+
+                <div class="right">
+                    <button class="ui-btn-inline" data-theme="b" data-mini="true" data-icon="plus">
+                        New Character
+                    </button>
+                </div>
+                
+                <ul id="dmFeedbackListing" class="clearBoth" data-role="listview">
+                    <li data-theme="f">
+                        <a href="#dmEditFeedback">
+                            <h1>Trogdor</h1>
+                            <p>
+                                Trogg Burnunator
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#dmEditFeedback">
+                            <h1>Dudebro</h1>
+                            <p>
+                                Human Warrior
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+
+            <footer data-role="footer" data-position="fixed">
+                <h4>&copy; 2015 - Drew Matheson & Isaac West</h4>
+            </footer>
+        </section>
+        
+        <section id="customize" class="page" data-role="page">
+            <header id="homeHeader" data-role="header" data-position="fixed">
+                <h1>LifeStory</h1>
+
+                <nav data-role="navbar">
+                    <ul>
+                        <li>
+                            <a href="#home" data-theme="c">
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#customize" data-theme="c"
+                                    class="ui-btn-active ui-state-persist">
+                                Customize
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#settings" data-theme="c">
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+
+            <div class="ui-content" data-role="content">
+                <h2>Custom Races &amp; Classes</h2>
+                <div class="ui-grid-a my-breakpoint">
+                    <div class="ui-block-a">
+                        <form class="leftForm" data-ajax="false">
+                            <label for="raceName">Race Name:</label>
+                            <input type="text" name="raceName" id="raceName" placeholder="Race Name" />
+                            <button>Save New Race</button>
+                        </form>
+                    </div>
+                    <div class="ui-block-b">
+                        <form class="rightForm" data-ajax="false">
+                            <label for="className">Class Name:</label>
+                            <input type="text" name="className" id="className" placeholder="Class Name" />
+                            <button>Save New Class</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <footer data-role="footer" data-position="fixed">
+                <h4>&copy; 2015 - Drew Matheson & Isaac West</h4>
+            </footer>
+        </section>
+        
+        <section id="settings" class="page" data-role="page">
+            <header id="homeHeader" data-role="header" data-position="fixed">
+                <h1>LifeStory</h1>
+
+                <nav data-role="navbar">
+                    <ul>
+                        <li>
+                            <a href="#home" data-theme="c">
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#customize" data-theme="c">Customize</a>
+                        </li>
+                        <li>
+                            <a href="#settings" data-theme="c"
+                                    class="ui-btn-active ui-state-persist">
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+
+            <div class="ui-content" data-role="content">
+                <button data-theme="a">Reset to Default Races</button>
+                <button data-theme="a">Reset to Default Classes</button>
+
+                <br/>
+
+                <button data-theme="e">Clear Characters</button>
             </div>
 
             <footer data-role="footer" data-position="fixed">
@@ -42,7 +157,7 @@
         </section>
 
         <script src="js/lib/jquery.js"></script>
-        <script src="js/lib/jquery.mobile-1.1.1.js"></script>
+        <script src="js/lib/jquery.mobile-1.1.2.js"></script>
         <script src="js/lib/jquery.validate.js"></script>
         <script src="js/init.js"></script>
         <script src="js/dataClasses.js"></script>

@@ -18,3 +18,53 @@ label.ui-input-text
 {
     font-weight: bold;
 }
+
+@media all and (max-width: 35em)
+{
+   .my-breakpoint .ui-block-a,
+   .my-breakpoint .ui-block-b 
+   {
+       width: 100%;
+       float: none;
+   } 
+   .my-breakpoint .ui-block-b
+   {
+       padding-top: 1.5em;
+       clear: left;
+   }
+
+   .leftForm, .rightForm
+    {
+       padding: 0 !important; /* HORRIBLE */
+    }
+}
+
+.leftForm
+{
+    padding-right: 0.5em;
+}
+
+.rightForm
+{
+    padding-left: 0.5em;
+}
+
+.right
+{
+    float: right;
+}
+
+.left
+{
+    float: left;
+}
+
+.clearBoth
+{
+    clear:both
+}
+
+h2
+{
+    margin-top: 0.3em;
+}
