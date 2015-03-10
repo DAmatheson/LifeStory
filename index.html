@@ -9,8 +9,6 @@
     <body>
         <section id="home" class="page" data-role="page">
             <header id="homeHeader" data-role="header" data-position="fixed">
-                <h1>LifeStory</h1>
-
                 <nav data-role="navbar">
                     <ul>
                         <li>
@@ -60,15 +58,16 @@
 
             </div>
 
-            <footer data-role="footer" data-position="fixed">
-                <h4>&copy; 2015 - Drew Matheson & Isaac West</h4>
+            <footer data-role="footer fieldcontain" data-position="fixed">
+                <fieldset data-role="controlgroup" style="margin:0;">
+                    <input type="checkbox" name="showDeceased" id="showDeceased" checked="checked" />
+                    <label for="showDeceased">Show deceased characters</label>
+                </fieldset>
             </footer>
         </section>
         
         <section id="customize" class="page" data-role="page">
             <header id="homeHeader" data-role="header" data-position="fixed">
-                <h1>LifeStory</h1>
-
                 <nav data-role="navbar">
                     <ul>
                         <li>
@@ -111,16 +110,10 @@
                     </div>
                 </div>
             </div>
-
-            <footer data-role="footer" data-position="fixed">
-                <h4>&copy; 2015 - Drew Matheson & Isaac West</h4>
-            </footer>
         </section>
         
         <section id="settings" class="page" data-role="page">
             <header id="homeHeader" data-role="header" data-position="fixed">
-                <h1>LifeStory</h1>
-
                 <nav data-role="navbar">
                     <ul>
                         <li>
@@ -151,9 +144,7 @@
                 <button data-theme="e">Clear Characters</button>
             </div>
 
-            <footer data-role="footer" data-position="fixed">
-                <h4>&copy; 2015 - Drew Matheson & Isaac West</h4>
-            </footer>
+            <h4 class="alignCenter">&copy; 2015 - Drew Matheson & Isaac West</h4>
         </section>
 
         <script src="js/lib/jquery.js"></script>
