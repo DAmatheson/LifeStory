@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+
+<!-- index.html
+    Revision History:
+        Drew Matheson, 2015.03.05: Created
+-->
+
 <html>
     <head>
         <title>Life Story</title>
@@ -59,10 +65,8 @@
             </div>
 
             <footer data-role="footer fieldcontain" data-position="fixed">
-                <fieldset data-role="controlgroup" style="margin:0;">
                     <input type="checkbox" name="showDeceased" id="showDeceased" checked="checked" />
-                    <label for="showDeceased">Show deceased characters</label>
-                </fieldset>
+                    <label for="showDeceased" class="margin0">Show deceased characters</label>
             </footer>
         </section>
         
@@ -144,7 +148,11 @@
                 <button data-theme="e">Clear Characters</button>
             </div>
 
-            <h4 class="alignCenter">&copy; 2015 - Drew Matheson & Isaac West</h4>
+            <footer data-role="footer" data-position="fixed" data-theme="d">
+                <h4 class="alignCenter">
+                    &copy; 2015 - Drew Matheson & Isaac West
+                </h4>
+            </footer>
         </section>
 
         <script src="js/lib/jquery.js"></script>

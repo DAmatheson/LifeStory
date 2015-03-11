@@ -2,23 +2,10 @@
  * Purpose: Custom styling
  *
  * Revision History:
- *      Drew Matheson, 2015.01.12: Copied into assignment 1
- *      Drew Matheson, 2015.02.06: Added styles for assignment 2
+ *      Drew Matheson, 2015.02.06: Copied from Assignment 2
  */
 
-img { max-width: 100%; }
-
-.red { color : red; }
-
-label.error {
-	color: red;
-}
-
-label.ui-input-text
-{
-    font-weight: bold;
-}
-
+/*#region  -- Media Queries --  */
 @media all and (max-width: 35em)
 {
    .my-breakpoint .ui-block-a,
@@ -27,6 +14,7 @@ label.ui-input-text
        width: 100%;
        float: none;
    } 
+
    .my-breakpoint .ui-block-b
    {
        padding-top: 1.5em;
@@ -37,6 +25,34 @@ label.ui-input-text
     {
        padding: 0 !important; /* HORRIBLE */
     }
+}
+/*#endregion*/
+
+label.error {
+	color: red;
+}
+
+label.ui-input-text
+{
+    font-weight: bold;
+}
+
+/*#region  -- Classes --  */
+.red
+{
+     color: red;
+}
+
+.alignCenter
+{
+    text-align: center;
+}
+
+/* Footer selector is to remove top/bottom margin due to inputs and labels*/
+.margin0, footer > div.ui-checkbox > label.margin0
+{
+    margin-top: 0;
+    margin-bottom:0;
 }
 
 .leftForm
@@ -63,13 +79,29 @@ label.ui-input-text
 {
     clear:both
 }
+/*#endregion*/
 
+/*#region  -- Elements --  */
 h2
 {
     margin-top: 0.3em;
 }
 
-.alignCenter
+img
 {
-    text-align:center;
+     max-width: 100%;
 }
+/*#endregion*/
+
+/*#region  -- Ids --  */
+
+/* Prevent the header text and new character button breaking into two lines */
+section#home
+{
+    -moz-min-width: 300px;
+    -ms-min-width: 300px;
+    -o-min-width: 300px;
+    -webkit-min-width: 300px;
+    min-width: 300px;
+} 
+/*#endregion*/
