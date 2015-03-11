@@ -61,4 +61,10 @@
         this.description = description;
     }
 
+    lifeStory.SelectEntry = function selectEntry(key, value)
+    {
+        this.key = key;
+        this.value = value;
+    }
+
 })(window, lifeStory);

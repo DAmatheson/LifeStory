@@ -32,7 +32,7 @@ label.error {
 	color: red;
 }
 
-label.ui-input-text
+label.ui-input-text, label.ui-select
 {
     font-weight: bold;
 }

@@ -18,7 +18,7 @@
                 <nav data-role="navbar">
                     <ul>
                         <li>
-                            <a href="#home"  data-theme="c"
+                            <a href="#home" data-theme="c"
                                     class="ui-btn-active ui-state-persist">
                                 Home
                             </a>
@@ -38,14 +38,15 @@
                 <h2 class="left">Characters</h2>
 
                 <div class="right">
-                    <button class="ui-btn-inline" data-theme="b" data-mini="true" data-icon="plus">
-                        New Character
-                    </button>
+                    <a href="#characterCreation" data-role="button" class="ui-btn-inline" data-theme="b"
+                       data-mini="true" data-icon="plus">
+                            New Character
+                    </a>
                 </div>
-                
+
                 <ul id="dmFeedbackListing" class="clearBoth" data-role="listview">
                     <li data-theme="f">
-                        <a href="#dmEditFeedback">
+                        <a href="#">
                             <h1>Trogdor</h1>
                             <p>
                                 Trogg Burnunator
@@ -53,7 +54,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#dmEditFeedback">
+                        <a href="#">
                             <h1>Dudebro</h1>
                             <p>
                                 Human Warrior
@@ -65,13 +66,62 @@
             </div>
 
             <footer data-role="footer fieldcontain" data-position="fixed">
-                    <input type="checkbox" name="showDeceased" id="showDeceased" checked="checked" />
-                    <label for="showDeceased" class="margin0">Show deceased characters</label>
+                <input type="checkbox" name="showDeceased" id="showDeceased" checked="checked"/>
+                <label for="showDeceased" class="margin0">Show deceased characters</label>
             </footer>
         </section>
-        
+
+        <section id="characterCreation" class="page" data-role="page">
+            <header id="characterCreationHead" data-role="header" data-position="fixed">
+                <nav data-role="navbar">
+                    <ul>
+                        <li>
+                            <a href="#home" data-theme="c"
+                                class="ui-btn-active ui-state-persist">
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#customize" data-theme="c">Customize</a>
+                        </li>
+                        <li>
+                            <a href="#settings" data-theme="c">Settings</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+            <div class="ui-content" data-role="content">
+                <h2>Create A Character</h2>
+
+                <form id="createCharacterForm" data-ajax="false">
+                    <label for="characterName">Name</label>
+                    <input type="text" name="name" id="characterName" placeholder="Character Name"/>
+
+                    <label for="raceSelect">Race</label>
+                    <select id="raceSelect" name="race">
+                        <option>
+                            Loading Options...
+                        </option>
+                    </select>
+
+                    <label for="classSelect">Class</label>
+                    <select id="classSelect" name="class">
+                        <option>
+                            Loading Options...
+                        </option>
+                    </select>
+
+                    <label for="characterDetails">Character Details</label>
+                    <textarea id="characterDetails" name="details"></textarea>
+
+                    <button>Create Character</button>
+                </form>
+            </div>
+        </section>
+
         <section id="customize" class="page" data-role="page">
-            <header id="homeHeader" data-role="header" data-position="fixed">
+            <header id="customizeHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
                         <li>
@@ -99,14 +149,14 @@
                 <h2>Custom Races &amp; Classes</h2>
                 <div class="ui-grid-a my-breakpoint">
                     <div class="ui-block-a">
-                        <form class="leftForm" data-ajax="false">
+                        <form id="createRaceForm" class="leftForm" data-ajax="false">
                             <label for="raceName">Race Name:</label>
                             <input type="text" name="raceName" id="raceName" placeholder="Race Name" />
                             <button>Save New Race</button>
                         </form>
                     </div>
                     <div class="ui-block-b">
-                        <form class="rightForm" data-ajax="false">
+                        <form id="createClassForm" class="rightForm" data-ajax="false">
                             <label for="className">Class Name:</label>
                             <input type="text" name="className" id="className" placeholder="Class Name" />
                             <button>Save New Class</button>
@@ -117,7 +167,7 @@
         </section>
         
         <section id="settings" class="page" data-role="page">
-            <header id="homeHeader" data-role="header" data-position="fixed">
+            <header id="settingsHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
                         <li>

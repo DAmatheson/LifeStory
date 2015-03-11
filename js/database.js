@@ -276,7 +276,7 @@
     }
 
     // Gets the character count and passes it as the sole argument to callBack
-    dbLibrary.getCharacterCount = function (callBack)
+    dbLibrary.getCharacterCount = function (callback)
     {
         dbLibrary.getDb().readTransaction(function (tx)
         {
@@ -288,12 +288,62 @@
                 {
                     if (resultSet.rows.length > 0)
                     {
-                        callBack(resultSet.rows.item(0).count);
+                        callback(resultSet.rows.item(0).count);
                     }
                     else
                     {
-                        callBack(0);
+                        callback(0);
                     }
+                },
+                sqlErrorHandler);
+        });
+    };
+
+    // Converts the values from a resultSet into and array of key value SelectEntrys
+    // propertyName: the column name to pull the value from
+    // callback: the function to call with the results
+    function convertResultSetToSelectEntrys(transaction, resultSet, propertyName, callback)
+    {
+        var results = [];
+
+        for (var i = 0; i < resultSet.rows.length; i++)
+        {
+            results[i] = new lifeStory.SelectEntry(resultSet.rows.item(i).id,
+                resultSet.rows.item(i)[propertyName]);
+        }
+
+        callback(results);
+    }
+
+    // Gets the classes and passes them as the sole argument to callBack
+    dbLibrary.getClasses = function (callback)
+    {
+        dbLibrary.getDb().readTransaction(function (tx)
+        {
+            tx.executeSql(
+                'SELECT *' +
+                'FROM class',
+                null,
+                function (transaction, resultSet)
+                {
+                    convertResultSetToSelectEntrys(transaction, resultSet, 'name', callback);
+                },
+                sqlErrorHandler);
+        });
+    };
+
+    // Gets the races and passes them as the sole argument to callBack
+    dbLibrary.getRaces = function (callback)
+    {
+        dbLibrary.getDb().readTransaction(function (tx)
+        {
+            tx.executeSql(
+                'SELECT *' +
+                'FROM race',
+                null,
+                function(transaction, resultSet)
+                {
+                    convertResultSetToSelectEntrys(transaction, resultSet, 'name', callback);
                 },
                 sqlErrorHandler);
         });

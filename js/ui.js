@@ -17,6 +17,34 @@
 
     var uiLibrary = lifeStory.ui = {};
 
+    // Populate the select element matching selectElementId with key and values from data
+    uiLibrary.populateList = function (selectElementId, data)
+    {
+        if (!Array.isArray(data))
+        {
+            throw 'The data argument for populateList must be an array';
+        }
+        else if (data.length === 0)
+        {
+            throw 'The data argument for populateList must contain at least one element.';
+        }
+        else if (!(data[0] instanceof lifeStory.SelectEntry))
+        {
+            throw 'The entries in the data argument for populateList must be instances of SelectEntry';
+        }
+
+        var text = '';
+
+        for (var i = 0; i < data.length; i++)
+        {
+            text += '<option value="' + data[i].key + '">' + data[i].value + '</option>';
+        }
+
+        $('select#' + selectElementId).
+            html(text). // TODO: Switch this back to append if a fix is found for requiring an option entry for select menues
+            selectmenu('refresh');
+    };
+
     // TODO: Remove this once it is not longer needed
     // Usage example:
     //$('button#clearCharacters').on('tap',
