@@ -399,12 +399,93 @@
                         </a>
                     </div>
                     <div class="ui-block-b">
-                        <a href="#" data-role="button">
+                        <a href="#editEvent" data-role="button">
                             Edit
                         </a>
                     </div>
                 </fieldset>
             </footer>
+        </section>
+
+        <section id="editEvent" class="page" data-role="page">
+            <header id="editEventHeader" data-role="header" data-position="fixed">
+                <nav data-role="navbar">
+                    <ul>
+                        <li>
+                            <a href="#home" data-theme="c"
+                               class="ui-btn-active ui-state-persist">
+                                Characters
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#customize" data-theme="c">Customize</a>
+                        </li>
+                        <li>
+                            <a href="#settings" data-theme="c">Settings</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+            <div class="ui-content" data-role="content">
+                <h2 class="left">Edit Event</h2>
+                <div class="right">
+                    <a href="#eventDetails" data-role="button" class="ui-btn-inline" data-theme="c"
+                       data-mini="true" data-icon="back">
+                        Cancel
+                    </a>
+                </div>
+
+                <form id="editCharacterForm" class="clearBoth" data-ajax="false">
+                    <!-- TODO: consider refactoring to reduce number of div tags -->
+                    <div id="editCombatDetailInputs">
+                        <div id="editFirstEnemyInputs">
+                            <fieldset class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <label for="editEnemyName1">
+                                        What did you defeat?
+                                    </label>
+                                    <input type="text" id="editEnemyName1" name="editEnemyName1" placeholder="Name/type of enemy" value="Goblins" />
+                                </div>
+                                <div class="ui-block-b">
+                                    <label for="editEnemyCount1">
+                                        How many?
+                                    </label>
+                                    <input type="number" id="editEnemyCount1" name="editEnemyCount1" min="1" placeholder="Number of enemies" value="4" />
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <!-- TODO: assign unique id and name to each additional enemy -->
+                        <div id="editAdditionalEnemyInputs">
+
+                        </div>
+
+                        <button id="editAddEnemy" data-theme="c" data-icon="plus" data-mini="true">Add Another Enemy</button>
+                        <!-- TODO: facilitate removal of additional enemies one at a time -->
+                        <!-- TODO: hide this button if no additional enemies have been added -->
+                        <button data-theme="c" data-icon="minus" data-mini="true">Remove Last Enemy</button>
+                    </div>
+
+                    <div id="editEventDetailInputs" hidden>
+                        <label for="editEventName">
+                            What got you XP?
+                        </label>
+                        <input type="text" id="editEventName" name="editEventName" placeholder="Name/title of event" />
+                    </div>
+
+                    <label for="editXPAmount">How much XP was awarded?</label>
+                    <input type="number" id="editXPAmount" name="editXPAmount" min="0" placeholder="Total XP" value="400" />
+
+                    <label for="editNumberOfPCs">How many characters shared the XP?</label>
+                    <input type="number" id="editNumberOfPCs" name="editNumberOfPCs" min="1" placeholder="Number of player characters" value="4" />
+
+                    <label for="editEventDetails">Event Details</label>
+                    <textarea id="editEventDetails" name="editEventDetails">Notes about the event.</textarea>
+
+                    <button data-theme="b">Save</button>
+                </form>
+            </div>
         </section>
 
         <section id="characterDetails" class="page" data-role="page">
@@ -480,6 +561,21 @@
                     </tr>
                 </table>
             </div>
+
+            <footer data-role="footer fieldcontain" data-position="fixed">
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#" data-role="button" data-theme="a">
+                            Delete
+                        </a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#editCharacter" data-role="button">
+                            Edit
+                        </a>
+                    </div>
+                </fieldset>
+            </footer>
         </section>
 
         <section id="characterCreation" class="page" data-role="page">
@@ -503,9 +599,15 @@
             </header>
 
             <div class="ui-content" data-role="content">
-                <h2>Create A Character</h2>
+                <h2 class="left">Create A Character</h2>
+                <div class="right">
+                    <a href="#home" data-role="button" class="ui-btn-inline" data-theme="c"
+                       data-mini="true" data-icon="back">
+                        Cancel
+                    </a>
+                </div>
 
-                <form id="createCharacterForm" data-ajax="false">
+                <form id="createCharacterForm" class="clearBoth" data-ajax="false">
                     <label for="characterName">Name</label>
                     <input type="text" name="name" id="characterName" placeholder="Character Name"/>
 
@@ -539,6 +641,77 @@
 
                     <label for="details">Character Details</label>
                     <textarea id="details" name="details"></textarea>
+
+                    <button data-theme="b">Create Character</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="editCharacter" class="page" data-role="page">
+            <header id="editCharacterHeader" data-role="header" data-position="fixed">
+                <nav data-role="navbar">
+                    <ul>
+                        <li>
+                            <a href="#home" data-theme="c"
+                               class="ui-btn-active ui-state-persist">
+                                Characters
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#customize" data-theme="c">Customize</a>
+                        </li>
+                        <li>
+                            <a href="#settings" data-theme="c">Settings</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+            <div class="ui-content" data-role="content">
+                <h2 class="left">Edit Character</h2>
+                <div class="right">
+                    <a href="#characterDetails" data-role="button" class="ui-btn-inline" data-theme="c"
+                       data-mini="true" data-icon="back">
+                        Cancel
+                    </a>
+                </div>
+
+                <form id="editCharacterForm" class="clearBoth" data-ajax="false">
+                    <label for="editCharacterName">Name</label>
+                    <input type="text" name="name" id="editCharacterName" placeholder="Character Name" value="Trogdor" />
+
+                    <label for="editCharacterRaceSelect">
+                        Race
+                        <a href="#addRace" data-icon="plus" data-role="button"
+                           data-iconpos="notext" data-inline="true" data-theme="b">
+                            Add a Race
+                        </a>
+                    </label>
+                    <select id="editCharacterRaceSelect" name="race">
+                        <option>
+                            <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                            Loading Races...
+                        </option>
+                    </select>
+
+                    <label for="editCharacterClassSelect">
+                        Class
+                        <a href="#addClass" data-icon="plus" data-role="button"
+                           data-iconpos="notext" data-inline="true" data-theme="b">
+                            Add a Class
+                        </a>
+                    </label>
+
+
+                    <select id="editCharacterClassSelect" name="class">
+                        <option>
+                            <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                            Loading Classes...
+                        </option>
+                    </select>
+
+                    <label for="details">Character Details</label>
+                    <textarea id="details" name="details">Burninates the countryside.</textarea>
 
                     <button data-theme="b">Create Character</button>
                 </form>

@@ -30,6 +30,10 @@ $('section#customize').one('pageinit', function customizePageInit()
     lifeStory.ui.populateRaceAndClassList('deleteRaceSelect', 'deleteClassSelect');
 });
 
+$('section#editCharacter').one('pageinit', function customizePageInit() {
+    lifeStory.ui.populateRaceAndClassList('editCharacterRaceSelect', 'editCharacterClassSelect');
+});
+
 $('select#xpSource').on('change', function ()
 {
     var value = $('#xpSource option:selected').val();
@@ -43,11 +47,19 @@ $('select#xpSource').on('change', function ()
     }
 });
 
+// TODO: assign unique id and name to inputs, currently just copies the first enemy's html
 $('button#addEnemy').on('tap', function (event)
 {
     event.preventDefault();
     $('div#additionalEnemyInputs').append(
         $('div#firstEnemyInputs').html());
+});
+
+// TODO: assign unique id and name to inputs, currently just copies the first enemy's html
+$('button#editAddEnemy').on('tap', function (event) {
+    event.preventDefault();
+    $('div#editAdditionalEnemyInputs').append(
+        $('div#editFirstEnemyInputs').html());
 });
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
