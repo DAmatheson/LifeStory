@@ -44,17 +44,17 @@
                     </a>
                 </div>
 
-                <ul id="dmFeedbackListing" class="clearBoth" data-role="listview">
+                <ul id="characterList" class="clearBoth" data-role="listview">
                     <li data-theme="f">
-                        <a href="#">
+                        <a href="#eventLog">
                             <h1>Trogdor</h1>
                             <p>
-                                Trogg Burnunator
+                                Trogg Burninator
                             </p>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="#eventLog">
                             <h1>Dudebro</h1>
                             <p>
                                 Human Warrior
@@ -70,6 +70,87 @@
                 <label for="showDeceased" class="margin0" data-corners="false">
                     Show deceased characters
                 </label>
+            </footer>
+        </section>
+
+        <section id="eventLog" class="page" data-role="page" data-title="Life Story - Trogdor">
+            <header id="eventLogHeader" data-role="header" data-position="fixed">
+                <nav data-role="navbar">
+                    <ul>
+                        <li>
+                            <a href="#home" data-theme="c"
+                               class="ui-btn-active ui-state-persist">
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#customize" data-theme="c">Customize</a>
+                        </li>
+                        <li>
+                            <a href="#settings" data-theme="c">Settings</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+
+            <div class="ui-content" data-role="content">
+                <h2 class="left">Trogdor</h2>
+
+                <div class="right">
+                    <a href="#createEvent" data-role="button" class="ui-btn-inline" data-theme="b"
+                       data-mini="true" data-icon="plus">
+                        I Got XP!
+                    </a>
+                </div>
+
+                <!-- TODO: Decide on event sorting (ascending or descending by date) -->
+                <ul id="characterEvents" class="clearBoth" data-role="listview">
+                    <li>
+                        <h1>Trogdor was created</h1>
+                        <p>1st level Trogg Burninator</p>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <h1>Defeated: 4 Goblins</h1>
+                            <p>
+                                100XP
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <h1>Temple of The Flenseworm</h1>
+                            <p>
+                                75XP
+                            </p>
+                        </a>
+                    </li>
+                    <li data-theme="f">
+                        <a href="#">
+                            <h1>Died</h1>
+                            <p>
+                                Killed by: 1 Giant Diseased Rat
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <footer data-role="footer fieldcontain" data-position="fixed">
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <!-- TODO: Consider a light blue theme for resurrection, similar to f for death. -->
+                        <a href="#resurrectCharacter" data-role="button" data-theme="b">
+                            Resurrect
+                        </a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#characterDetails" data-role="button">
+                            Details
+                        </a>
+                    </div>
+                </fieldset>
             </footer>
         </section>
 
