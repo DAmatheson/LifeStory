@@ -140,7 +140,6 @@
             <footer data-role="footer fieldcontain" data-position="fixed">
                 <fieldset class="ui-grid-a">
                     <div class="ui-block-a">
-                        <!-- TODO: Consider a light blue theme for resurrection, similar to f for death. -->
                         <a href="#resurrectCharacter" data-role="button" data-theme="g">
                             Resurrect
                         </a>
@@ -237,12 +236,91 @@
                     <input type="number" id="xpAmount" name="xpAmount" min="0" placeholder="Total XP" />
 
                     <label for="numberOfPCs">How many characters shared the XP?</label>
-                    <input type="number" id="numberOfPCs" name="numberOfPCs" min="1" placeholder="Number of Player Characters" />
+                    <input type="number" id="numberOfPCs" name="numberOfPCs" min="1" placeholder="Number of player characters" />
 
                     <label for="eventDetails">Event Details</label>
                     <textarea id="eventDetails" name="eventDetails"></textarea>
 
                     <button data-theme="b">Save</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="characterDeath" class="page" data-role="page">
+            <header id="characterDeathHeader" data-role="header" data-position="fixed">
+                <nav data-role="navbar">
+                    <ul>
+                        <li>
+                            <a href="#home" data-theme="c"
+                               class="ui-btn-active ui-state-persist">
+                                Characters
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#customize" data-theme="c">Customize</a>
+                        </li>
+                        <li>
+                            <a href="#settings" data-theme="c">Settings</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+            <div class="ui-content" data-role="content">
+                <h2 class="left">Whoops!</h2>
+                <div class="right">
+                    <a href="#eventLog" data-role="button" class="ui-btn-inline" data-theme="c"
+                       data-mini="true" data-icon="back">
+                        Trogdor
+                    </a>
+                </div>
+
+                <form id="characterDeathForm" class="clearBoth" data-ajax="false">
+                    <label for="causeOfDeath">What killed you?</label>
+                    <input type="text" id="causeOfDeath" name="causeOfDeath" placeholder="Cause of death" />
+
+                    <label for="deathDetails">Death Details</label>
+                    <textarea id="deathDetails" name="deathDetails"></textarea>
+
+                    <button data-theme="f">Save</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="resurrectCharacter" class="page" data-role="page">
+            <header id="resurrectCharacterHeader" data-role="header" data-position="fixed">
+                <nav data-role="navbar">
+                    <ul>
+                        <li>
+                            <a href="#home" data-theme="c"
+                               class="ui-btn-active ui-state-persist">
+                                Characters
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#customize" data-theme="c">Customize</a>
+                        </li>
+                        <li>
+                            <a href="#settings" data-theme="c">Settings</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+            <div class="ui-content" data-role="content">
+                <h2 class="left">Welcome Back</h2>
+                <div class="right">
+                    <a href="#eventLog" data-role="button" class="ui-btn-inline" data-theme="c"
+                       data-mini="true" data-icon="back">
+                        Trogdor
+                    </a>
+                </div>
+
+                <form id="createCharacterForm" class="clearBoth" data-ajax="false">
+                    <label for="resurrectionDetails">How were you resurrected?</label>
+                    <textarea id="resurrectionDetails" name="resurrectionDetails"></textarea>
+
+                    <button data-theme="g">Resurrect Trogdor</button>
                 </form>
             </div>
         </section>
