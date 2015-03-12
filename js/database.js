@@ -69,7 +69,9 @@
                 'race_id INTEGER, ' +
                 'class_id INTEGER, ' +
                 'details TEXT, ' +
-                'living BOOLEAN NOT NULL' +
+                'living BOOLEAN NOT NULL,' +
+                'FOREIGN KEY (race_id) REFERENCES race (id),' +
+                'FOREIGN KEY (class_id) REFERENCES class (id)' +
             ');',
             null,
             null,
@@ -97,12 +99,13 @@
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS eventDetail ' +
             '(' +
-                'detail_id INTEGER, ' +
+                'detail_id INTEGER NOT NULL, ' +
                 'event_id INTEGER NOT NULL, ' +
                 'eventName VARCHAR(60) NOT NULL, ' +
                 'xp INTEGER, ' +
                 'numberOfCreatures INTEGER,' +
-                'PRIMARY KEY (detail_id, event_id)' +
+                'PRIMARY KEY (detail_id, event_id),' +
+                'FOREIGN KEY (event_id) REFERENCES event (id)' +
             ');',
             null,
             null,
@@ -114,9 +117,11 @@
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS characterEvent ' +
             '(' +
-                'character_id INTEGER, ' +
-                'event_id INTEGER,' +
-                'PRIMARY KEY (character_id, event_id)' +
+                'character_id INTEGER NOT NULL, ' +
+                'event_id INTEGER NOT NULL,' +
+                'PRIMARY KEY (character_id, event_id),' +
+                'FOREIGN KEY (event_id) REFERENCES event (id),' +
+                'FOREIGN KEY (character_id) REFERENCES character (id)' +
             ');',
             null,
             null,
