@@ -24,6 +24,24 @@ $('section#characterCreation').one('pageinit', function characterCreationPageIni
     });
 });
 
+$("select#xpSource").on("change", function () {
+    var value = $("#xpSource option:selected").val();
+    if (value === "combat") {
+        $("div#eventDetailInputs").hide();
+        $("div#combatDetailInputs").show();
+    }
+    else {
+        $("div#combatDetailInputs").hide();
+        $("div#eventDetailInputs").show();
+    }
+});
+
+$("button#addEnemy").on("tap", function (event) {
+    event.preventDefault();
+    $("div#additionalEnemyInputs").append(
+        $("div#firstEnemyInputs").html());
+});
+
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
 // Take undefined as parameter and don't pass anything to get an unchanged version of undefined.
 (function (window, undefined)
