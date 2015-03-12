@@ -5,6 +5,15 @@
  *      Isaac West, 2015.03.05: Created
  */
 
+$(function()
+{
+    // TODO: Only here to prevent query strings in the URL while form handling isn't set up
+    $('form').on('submit', function(event)
+    {
+        event.preventDefault();
+    });
+});
+
 $('section#home').one('pageinit', function homePageInit()
 {
     // Initialization stuff for the home page

@@ -193,6 +193,8 @@
         if (window.openDatabase === undefined)
         {
             //alert('WebSQL isn\'t supported in this browser.');
+            // TODO: Return dummy object that has all of the db functions?
+            // Need to do something to prevent errors when WebSQL isn't supported
         }
         else
         {

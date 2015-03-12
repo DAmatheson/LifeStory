@@ -23,7 +23,7 @@ Avoid unnecessary extra HTML elements
 Avoid inline styling wherever possible  
 Comment section which need work with a `// TODO:`  
 Use jQuery's `.one` for events which only need to run a single time  
-Follow the pattern of keeping functions groups by the functionality  
+Follow the pattern of keeping functions grouped by the functionality  
 Use Immediately Invoked Function Expressions (IIFE) to avoid global variables  
 Use the `tap` event instead of the `click` event  
 Use `console.log` or `console.error` to make detecting issues easier  
