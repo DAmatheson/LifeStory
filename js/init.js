@@ -21,6 +21,10 @@ $('section#customize').one('pageinit', function customizePageInit()
     lifeStory.ui.populateRaceAndClassList('deleteRaceSelect', 'deleteClassSelect');
 });
 
+$('section#editCharacter').one('pageinit', function customizePageInit() {
+    lifeStory.ui.populateRaceAndClassList('editCharacterRaceSelect', 'editCharacterClassSelect');
+});
+
 $('select#xpSource').on('change', function ()
 {
     var value = $('#xpSource option:selected').val();

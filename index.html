@@ -561,6 +561,21 @@
                     </tr>
                 </table>
             </div>
+
+            <footer data-role="footer fieldcontain" data-position="fixed">
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#" data-role="button" data-theme="a">
+                            Delete
+                        </a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#editCharacter" data-role="button">
+                            Edit
+                        </a>
+                    </div>
+                </fieldset>
+            </footer>
         </section>
 
         <section id="characterCreation" class="page" data-role="page">
@@ -584,9 +599,15 @@
             </header>
 
             <div class="ui-content" data-role="content">
-                <h2>Create A Character</h2>
+                <h2 class="left">Create A Character</h2>
+                <div class="right">
+                    <a href="#home" data-role="button" class="ui-btn-inline" data-theme="c"
+                       data-mini="true" data-icon="back">
+                        Cancel
+                    </a>
+                </div>
 
-                <form id="createCharacterForm" data-ajax="false">
+                <form id="createCharacterForm" class="clearBoth" data-ajax="false">
                     <label for="characterName">Name</label>
                     <input type="text" name="name" id="characterName" placeholder="Character Name"/>
 
@@ -620,6 +641,77 @@
 
                     <label for="details">Character Details</label>
                     <textarea id="details" name="details"></textarea>
+
+                    <button data-theme="b">Create Character</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="editCharacter" class="page" data-role="page">
+            <header id="editCharacterHeader" data-role="header" data-position="fixed">
+                <nav data-role="navbar">
+                    <ul>
+                        <li>
+                            <a href="#home" data-theme="c"
+                               class="ui-btn-active ui-state-persist">
+                                Characters
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#customize" data-theme="c">Customize</a>
+                        </li>
+                        <li>
+                            <a href="#settings" data-theme="c">Settings</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+            <div class="ui-content" data-role="content">
+                <h2 class="left">Edit Character</h2>
+                <div class="right">
+                    <a href="#characterDetails" data-role="button" class="ui-btn-inline" data-theme="c"
+                       data-mini="true" data-icon="back">
+                        Cancel
+                    </a>
+                </div>
+
+                <form id="editCharacterForm" class="clearBoth" data-ajax="false">
+                    <label for="editCharacterName">Name</label>
+                    <input type="text" name="name" id="editCharacterName" placeholder="Character Name" value="Trogdor" />
+
+                    <label for="editCharacterRaceSelect">
+                        Race
+                        <a href="#addRace" data-icon="plus" data-role="button"
+                           data-iconpos="notext" data-inline="true" data-theme="b">
+                            Add a Race
+                        </a>
+                    </label>
+                    <select id="editCharacterRaceSelect" name="race">
+                        <option>
+                            <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                            Loading Races...
+                        </option>
+                    </select>
+
+                    <label for="editCharacterClassSelect">
+                        Class
+                        <a href="#addClass" data-icon="plus" data-role="button"
+                           data-iconpos="notext" data-inline="true" data-theme="b">
+                            Add a Class
+                        </a>
+                    </label>
+
+
+                    <select id="editCharacterClassSelect" name="class">
+                        <option>
+                            <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                            Loading Classes...
+                        </option>
+                    </select>
+
+                    <label for="details">Character Details</label>
+                    <textarea id="details" name="details">Burninates the countryside.</textarea>
 
                     <button data-theme="b">Create Character</button>
                 </form>
