@@ -39,7 +39,7 @@
             'CREATE TABLE IF NOT EXISTS race ' +
             '(' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
-                'name VARCHAR(20) NOT NULL' +
+                'name VARCHAR(20) NOT NULL UNIQUE' +
             ');',
             null,
             null,
@@ -52,7 +52,7 @@
             'CREATE TABLE IF NOT EXISTS class ' +
             '(' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
-                'name VARCHAR(20) NOT NULL' +
+                'name VARCHAR(20) NOT NULL UNIQUE' +
             ');',
             null,
             null,
@@ -97,11 +97,12 @@
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS eventDetail ' +
             '(' +
-                'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+                'detail_id INTEGER, ' +
                 'event_id INTEGER NOT NULL, ' +
                 'eventName VARCHAR(60) NOT NULL, ' +
                 'xp INTEGER, ' +
-                'numberOfCreatures INTEGER' +
+                'numberOfCreatures INTEGER,' +
+                'PRIMARY KEY (detail_id, event_id)' +
             ');',
             null,
             null,
@@ -130,7 +131,7 @@
 
         defaultClasses.forEach(function(element)
         {
-            transaction.executeSql('INSERT INTO class (name) VALUES (?);',
+            transaction.executeSql('INSERT OR IGNORE INTO class (name) VALUES (?);',
                 [element],
                 null,
                 initializationError);
@@ -146,7 +147,7 @@
         names.forEach(function(element)
         {
             transaction.executeSql(
-                'INSERT INTO race (name) VALUES (?);',
+                'INSERT OR IGNORE INTO race (name) VALUES (?);',
                 [element],
                 null,
                 initializationError);
@@ -229,7 +230,7 @@
         dbLibrary.getDb().transaction(function(tx)
         {
             tx.executeSql(
-                'INSERT INTO race (name) VALUES (?);',
+                'INSERT OR IGNORE INTO race (name) VALUES (?);',
                 [race.name],
                 successCallback || null,
                 failureCallback || sqlErrorHandler);
@@ -246,7 +247,7 @@
 
         dbLibrary.getDb().transaction(function (tx)
         {
-            tx.executeSql('INSERT INTO class (name) VALUES (?);',
+            tx.executeSql('INSERT OR IGNORE INTO class (name) VALUES (?);',
                 [characterClass.name],
                 successCallback || null,
                 failureCallback || sqlErrorHandler);
@@ -359,6 +360,25 @@
 
             createCharacterTable();
         });
+    };
+
+    // TODO: Just for debugging purposes. Pass in danger as the argument for it to work
+    dbLibrary.dropAllTables = function(areYouSure)
+    {
+        if (areYouSure === 'danger')
+        {
+            dbLibrary.getDb().transaction(function (tx)
+            {
+                tx.executeSql('DROP TABLE IF EXISTS character', null, null, sqlErrorHandler);
+                tx.executeSql('DROP TABLE IF EXISTS characterEvent', null, null, sqlErrorHandler);
+                tx.executeSql('DROP TABLE IF EXISTS class', null, null, sqlErrorHandler);
+                tx.executeSql('DROP TABLE IF EXISTS event', null, null, sqlErrorHandler);
+                tx.executeSql('DROP TABLE IF EXISTS eventDetail', null, null, sqlErrorHandler);
+                tx.executeSql('DROP TABLE IF EXISTS race', null, null, sqlErrorHandler);
+
+                localStorage.setItem('dbInitialized', 'false');
+            });
+        }
     };
 
 })(lifeStory);
