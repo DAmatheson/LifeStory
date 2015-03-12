@@ -111,10 +111,11 @@
     function createCharacterEventTable(transaction)
     {
         transaction.executeSql(
-            'CREATE TABLE IF NOT EXISTS eventName ' +
+            'CREATE TABLE IF NOT EXISTS characterEvent ' +
             '(' +
-                'character_id INTEGER PRIMARY KEY, ' +
-                'event_id INTEGER PRIMARY KEY' +
+                'character_id INTEGER, ' +
+                'event_id INTEGER,' +
+                'PRIMARY KEY (character_id, event_id)' +
             ');',
             null,
             null,
