@@ -37,6 +37,12 @@ label.ui-input-text, label.ui-select
     font-weight: bold;
 }
 
+label > a[data-role="button"][data-iconpos="notext"][data-inline="true"]
+{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 /*#region  -- Classes --  */
 .red
 {
