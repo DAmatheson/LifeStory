@@ -45,6 +45,20 @@
             selectmenu('refresh');
     };
 
+    // Helper function to populate the race and class lists specified by the two arguments
+    uiLibrary.populateRaceAndClassList = function(raceListId, classListId)
+    {
+        lifeStory.db.getClasses(function (selectEntries)
+        {
+            uiLibrary.populateList(classListId, selectEntries);
+        });
+
+        lifeStory.db.getRaces(function (selectEntries)
+        {
+            uiLibrary.populateList(raceListId, selectEntries);
+        });
+    }
+
     // TODO: Remove this once it is not longer needed
     // Usage example:
     //$('button#clearCharacters').on('tap',

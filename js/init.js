@@ -13,46 +13,32 @@ $('section#home').one('pageinit', function homePageInit()
 
 $('section#characterCreation').one('pageinit', function characterCreationPageInit()
 {
-    lifeStory.db.getClasses(function(selectEntries)
-    {
-        lifeStory.ui.populateList('classSelect', selectEntries);
-    });
-
-    lifeStory.db.getRaces(function (selectEntries)
-    {
-        lifeStory.ui.populateList('raceSelect', selectEntries);
-    });
+    lifeStory.ui.populateRaceAndClassList('raceSelect', 'classSelect');
 });
 
 $('section#customize').one('pageinit', function customizePageInit()
 {
-    lifeStory.db.getClasses(function (selectEntries) {
-        lifeStory.ui.populateList('deleteClassSelect', selectEntries);
-    });
-
-    lifeStory.db.getRaces(function (selectEntries) {
-        lifeStory.ui.populateList('deleteRaceSelect', selectEntries);
-    });
+    lifeStory.ui.populateRaceAndClassList('deleteRaceSelect', 'deleteClassSelect');
 });
 
-$("select#xpSource").on("change", function ()
+$('select#xpSource').on('change', function ()
 {
-    var value = $("#xpSource option:selected").val();
-    if (value === "combat") {
-        $("div#eventDetailInputs").hide();
-        $("div#combatDetailInputs").show();
+    var value = $('#xpSource option:selected').val();
+    if (value === 'combat') {
+        $('div#eventDetailInputs').hide();
+        $('div#combatDetailInputs').show();
     }
     else {
-        $("div#combatDetailInputs").hide();
-        $("div#eventDetailInputs").show();
+        $('div#combatDetailInputs').hide();
+        $('div#eventDetailInputs').show();
     }
 });
 
-$("button#addEnemy").on("tap", function (event)
+$('button#addEnemy').on('tap', function (event)
 {
     event.preventDefault();
-    $("div#additionalEnemyInputs").append(
-        $("div#firstEnemyInputs").html());
+    $('div#additionalEnemyInputs').append(
+        $('div#firstEnemyInputs').html());
 });
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
