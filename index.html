@@ -155,7 +155,7 @@
         </section>
 
         <section id="characterDetails" class="page" data-role="page">
-            <header id="characterDetailHead" data-role="header" data-position="fixed">
+            <header id="characterDetailHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
                         <li>
@@ -230,12 +230,12 @@
         </section>
 
         <section id="characterCreation" class="page" data-role="page">
-            <header id="characterCreationHead" data-role="header" data-position="fixed">
+            <header id="characterCreationHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
                         <li>
                             <a href="#home" data-theme="c"
-                                class="ui-btn-active ui-state-persist">
+                                    class="ui-btn-active ui-state-persist">
                                 Characters
                             </a>
                         </li>
@@ -258,8 +258,8 @@
 
                     <label for="raceSelect">
                         Race
-                        <a href="#customize" data-icon="plus" data-role="button"
-                                data-iconpos="notext" data-inline="true">
+                        <a href="#addRace" data-icon="plus" data-role="button"
+                           data-iconpos="notext" data-inline="true" data-theme="b">
                             Add a Race
                         </a>
                     </label>
@@ -270,8 +270,8 @@
                     </select>
 
                     <label for="classSelect">Class
-                        <a href="#customize" data-icon="plus" data-role="button"
-                            data-iconpos="notext" data-inline="true">
+                        <a href="#addClass" data-icon="plus" data-role="button"
+                           data-iconpos="notext" data-inline="true" data-theme="b">
                             Add a Class
                         </a>
                     </label>
@@ -287,7 +287,95 @@
                     <label for="details">Character Details</label>
                     <textarea id="details" name="details"></textarea>
 
-                    <button>Create Character</button>
+                    <button data-theme="b">Create Character</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="addClass" class="page" data-role="page">
+            <header id="addClassHeader" data-role="header" data-position="fixed">
+                <nav data-role="navbar">
+                    <ul>
+                        <li>
+                            <a href="#home" data-theme="c">
+                                Characters
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#customize" data-theme="c"
+                                    class="ui-btn-active ui-state-persist">
+                                Customize
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#settings" data-theme="c">
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+
+            <div class="ui-content" data-role="content">
+                <h2 class="left">Add Custom Class</h2>
+
+                <div class="right">
+                    <a href="#characterCreation" data-role="button" class="ui-btn-inline" data-theme="c"
+                       data-mini="true" data-icon="back">
+                        Character Creation
+                    </a>
+                </div>
+
+                <!-- TODO: Make sure this returns to the character creation form on success -->
+                <form id="addClassForm" data-ajax="false" class="clearBoth">
+                    <label for="addClassName">Class Name:</label>
+                    <input type="text" name="className" id="addClassName" placeholder="Class Name"/>
+                    <button data-theme="b">Save New Class</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="addRace" class="page" data-role="page">
+            <header id="addRaceHeader" data-role="header" data-position="fixed">
+                <nav data-role="navbar">
+                    <ul>
+                        <li>
+                            <a href="#home" data-theme="c">
+                                Characters
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#customize" data-theme="c"
+                               class="ui-btn-active ui-state-persist">
+                                Customize
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#settings" data-theme="c">
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+
+            <div class="ui-content" data-role="content">
+                <h2 class="left">Add Custom Race</h2>
+
+                <div class="right">
+                    <a href="#characterCreation" data-role="button" class="ui-btn-inline" data-theme="c"
+                       data-mini="true" data-icon="back">
+                        Character Creation
+                    </a>
+                </div>
+
+                <!-- TODO: Make sure this returns to the character creation form on success -->
+                <form id="addRaceForm" data-ajax="false" class="clearBoth">
+                    <label for="addRaceName">Race Name:</label>
+                    <input type="text" name="raceName" id="addRaceName" placeholder="Race Name" />
+                    <button data-theme="b">Save New Race</button>
                 </form>
             </div>
         </section>
@@ -324,14 +412,14 @@
                         <form id="createRaceForm" class="leftForm" data-ajax="false">
                             <label for="raceName">Race Name:</label>
                             <input type="text" name="raceName" id="raceName" placeholder="Race Name" />
-                            <button>Save New Race</button>
+                            <button data-theme="b">Save New Race</button>
                         </form>
                     </div>
                     <div class="ui-block-b">
                         <form id="createClassForm" class="rightForm" data-ajax="false">
                             <label for="className">Class Name:</label>
                             <input type="text" name="className" id="className" placeholder="Class Name" />
-                            <button>Save New Class</button>
+                            <button data-theme="b">Save New Class</button>
                         </form>
                     </div>
                 </div>
