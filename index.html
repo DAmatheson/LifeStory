@@ -598,6 +598,37 @@
                         </form>
                     </div>
                 </div>
+                <br/>
+                <div class="ui-grid-a my-breakpoint">
+                    <div class="ui-block-a">
+                        <form id="deleteRaceForm" class="leftForm" data-ajax="false">
+                            <label for="deleteRaceSelect">
+                                Delete Race:
+                            </label>
+                            <select id="deleteRaceSelect" name="race">
+                                <option>
+                                    <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                                    Loading Races...
+                                </option>
+                            </select>
+                            <button data-theme="a">Delete Race</button>
+                        </form>
+                    </div>
+                    <div class="ui-block-b">
+                        <form id="deleteClassForm" class="rightForm" data-ajax="false">
+                            <label for="deleteClassSelect">
+                                Delete Class:
+                            </label>
+                            <select id="deleteClassSelect" name="class">
+                                <option>
+                                    <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                                    Loading Classes...
+                                </option>
+                            </select>
+                            <button data-theme="a">Delete Class</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </section>
         

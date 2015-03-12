@@ -24,7 +24,19 @@ $('section#characterCreation').one('pageinit', function characterCreationPageIni
     });
 });
 
-$("select#xpSource").on("change", function () {
+$('section#customize').one('pageinit', function customizePageInit()
+{
+    lifeStory.db.getClasses(function (selectEntries) {
+        lifeStory.ui.populateList('deleteClassSelect', selectEntries);
+    });
+
+    lifeStory.db.getRaces(function (selectEntries) {
+        lifeStory.ui.populateList('deleteRaceSelect', selectEntries);
+    });
+});
+
+$("select#xpSource").on("change", function ()
+{
     var value = $("#xpSource option:selected").val();
     if (value === "combat") {
         $("div#eventDetailInputs").hide();
@@ -36,7 +48,8 @@ $("select#xpSource").on("change", function () {
     }
 });
 
-$("button#addEnemy").on("tap", function (event) {
+$("button#addEnemy").on("tap", function (event)
+{
     event.preventDefault();
     $("div#additionalEnemyInputs").append(
         $("div#firstEnemyInputs").html());
