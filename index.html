@@ -111,7 +111,7 @@
                         <p>1st level Trogg Burninator</p>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="#eventDetails">
                             <h1>Defeated: 4 Goblins</h1>
                             <p>
                                 100XP
@@ -119,7 +119,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="#eventDetails">
                             <h1>Temple of The Flenseworm</h1>
                             <p>
                                 75XP
@@ -127,7 +127,7 @@
                         </a>
                     </li>
                     <li data-theme="f">
-                        <a href="#">
+                        <a href="#eventDetails">
                             <h1>Died</h1>
                             <p>
                                 Killed by: 1 Giant Diseased Rat
@@ -179,7 +179,7 @@
                 <div class="right">
                     <a href="#eventLog" data-role="button" class="ui-btn-inline" data-theme="c"
                        data-mini="true" data-icon="back">
-                        Back to Trogdor
+                        Trogdor
                     </a>
                 </div>
 
@@ -208,7 +208,7 @@
                                 </div>
                                 <div class="ui-block-b">
                                     <label for="enemyCount1">
-                                        How many of them?
+                                        How many?
                                     </label>
                                     <input type="number" id="enemyCount1" name="enemyCount1" min="1" placeholder="Number of enemies" />
                                 </div>
@@ -245,6 +245,88 @@
                     <button data-theme="b">Save</button>
                 </form>
             </div>
+        </section>
+
+        <section id="eventDetails" class="page" data-role="page">
+            <header id="eventDetailHeader" data-role="header" data-position="fixed">
+                <nav data-role="navbar">
+                    <ul>
+                        <li>
+                            <a href="#home" data-theme="c"
+                               class="ui-btn-active ui-state-persist">
+                                Characters
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#customize" data-theme="c">Customize</a>
+                        </li>
+                        <li>
+                            <a href="#settings" data-theme="c">Settings</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+            <div class="ui-content" data-role="content">
+                <h2 class="left">Trogdor</h2>
+
+                <div class="right">
+                    <a href="#eventLog" data-role="button" class="ui-btn-inline" data-theme="c"
+                       data-mini="true" data-icon="back">
+                        Trogdor
+                    </a>
+                </div>
+
+                <table class="clearBoth">
+                    <tr>
+                        <td class="tableLabel">
+                            Trogdor Defeated:
+                        </td>
+                        <td>
+                            4 Goblins
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tableLabel">
+                            He Got:
+                        </td>
+                        <td>
+                            100XP
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tableLabel">
+                            While in a group of:
+                        </td>
+                        <td>
+                            4 Characters
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tableLabel">
+                            Details:
+                        </td>
+                        <td>
+                            Notes about the event.
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <footer data-role="footer fieldcontain" data-position="fixed">
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#" data-role="button" data-theme="a">
+                            Delete
+                        </a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#" data-role="button">
+                            Edit
+                        </a>
+                    </div>
+                </fieldset>
+            </footer>
         </section>
 
         <section id="characterDetails" class="page" data-role="page">
@@ -513,6 +595,37 @@
                             <label for="className">Class Name:</label>
                             <input type="text" name="className" id="className" placeholder="Class Name" />
                             <button data-theme="b">Save New Class</button>
+                        </form>
+                    </div>
+                </div>
+                <br/>
+                <div class="ui-grid-a my-breakpoint">
+                    <div class="ui-block-a">
+                        <form id="deleteRaceForm" class="leftForm" data-ajax="false">
+                            <label for="deleteRaceSelect">
+                                Delete Race:
+                            </label>
+                            <select id="deleteRaceSelect" name="race">
+                                <option>
+                                    <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                                    Loading Races...
+                                </option>
+                            </select>
+                            <button data-theme="a">Delete Race</button>
+                        </form>
+                    </div>
+                    <div class="ui-block-b">
+                        <form id="deleteClassForm" class="rightForm" data-ajax="false">
+                            <label for="deleteClassSelect">
+                                Delete Class:
+                            </label>
+                            <select id="deleteClassSelect" name="class">
+                                <option>
+                                    <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                                    Loading Classes...
+                                </option>
+                            </select>
+                            <button data-theme="a">Delete Class</button>
                         </form>
                     </div>
                 </div>
