@@ -13,7 +13,7 @@
         <link href="css/custom.css" rel="stylesheet" />
     </head>
     <body>
-        <section id="home" class="page" data-role="page">
+        <section id="home" class="page" data-role="page" data-title="Life Story - Home">
             <header id="homeHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -67,7 +67,9 @@
 
             <footer data-role="footer fieldcontain" data-position="fixed">
                 <input type="checkbox" name="showDeceased" id="showDeceased" checked="checked"/>
-                <label for="showDeceased" class="margin0">Show deceased characters</label>
+                <label for="showDeceased" class="margin0" data-corners="false">
+                    Show deceased characters
+                </label>
             </footer>
         </section>
 
@@ -98,17 +100,31 @@
                     <label for="characterName">Name</label>
                     <input type="text" name="name" id="characterName" placeholder="Character Name"/>
 
-                    <label for="raceSelect">Race</label>
+                    <label for="raceSelect">
+                        Race
+                        <a href="#customize" data-icon="plus" data-role="button"
+                                data-iconpos="notext" data-inline="true">
+                            Add a Race
+                        </a>
+                    </label>
                     <select id="raceSelect" name="race">
-                        <option>
-                            Loading Options...
+                        <option> <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                            Loading Races...
                         </option>
                     </select>
 
-                    <label for="classSelect">Class</label>
+                    <label for="classSelect">Class
+                        <a href="#customize" data-icon="plus" data-role="button"
+                            data-iconpos="notext" data-inline="true">
+                            Add a Class
+                        </a>
+                    </label>
+
+
                     <select id="classSelect" name="class">
                         <option>
-                            Loading Options...
+                            <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                            Loading Classes...
                         </option>
                     </select>
 
