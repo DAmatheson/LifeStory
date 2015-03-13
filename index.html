@@ -205,17 +205,17 @@
                     <div id="combatDetailInputs">
                         <div id="firstEnemyInputs">
                             <fieldset class="ui-grid-a">
-                                <div class="ui-block-a rightPadHalf">
+                                <div class="ui-block-a rightPadHalf twoThirds">
                                     <label for="enemyName1">
-                                        What's defeated?
+                                        What did you defeat?
                                     </label>
-                                    <input type="text" id="enemyName1" name="enemyName1" placeholder="Name of Enemy" data-mini="true" />
+                                    <input type="text" id="enemyName1" name="enemyName1" data-mini="true" placeholder="Name / Type of Enemy" />
                                 </div>
-                                <div class="ui-block-b leftPadHalf">
+                                <div class="ui-block-b leftPadHalf oneThird">
                                     <label for="enemyCount1">
                                         How many?
                                     </label>
-                                    <input type="number" id="enemyCount1" name="enemyCount1" min="1" placeholder="Enemy Count" data-mini="true" />
+                                    <input type="number" id="enemyCount1" name="enemyCount1" data-mini="true" min="1" placeholder="Count" />
                                 </div>
                             </fieldset>
                         </div>
@@ -235,7 +235,7 @@
                         <label for="eventName">
                             What got you XP?
                         </label>
-                        <input type="text" id="eventName" name="eventName" placeholder="Name/title of event" />
+                        <input type="text" id="eventName" name="eventName" placeholder="Name / Title of Event" />
                     </div>
 
                     <label for="xpAmount">How much XP was awarded?</label>
@@ -452,17 +452,17 @@
                     <div id="editCombatDetailInputs">
                         <div id="editFirstEnemyInputs">
                             <fieldset class="ui-grid-a">
-                                <div class="ui-block-a">
+                                <div class="ui-block-a rightPadHalf twoThirds">
                                     <label for="editEnemyName1">
                                         What did you defeat?
                                     </label>
-                                    <input type="text" id="editEnemyName1" name="editEnemyName1" placeholder="Name/type of enemy" value="Goblins" />
+                                    <input type="text" id="editEnemyName1" name="editEnemyName1" data-mini="true" placeholder="Name / Type of Enemy" value="Goblins" />
                                 </div>
-                                <div class="ui-block-b">
+                                <div class="ui-block-b leftPadHalf oneThird">
                                     <label for="editEnemyCount1">
                                         How many?
                                     </label>
-                                    <input type="number" id="editEnemyCount1" name="editEnemyCount1" min="1" placeholder="Number of enemies" value="4" />
+                                    <input type="number" id="editEnemyCount1" name="editEnemyCount1" data-mini="true" min="1" placeholder="Count" value="4" />
                                 </div>
                             </fieldset>
                         </div>
@@ -482,14 +482,14 @@
                         <label for="editEventName">
                             What got you XP?
                         </label>
-                        <input type="text" id="editEventName" name="editEventName" placeholder="Name/title of event" />
+                        <input type="text" id="editEventName" name="editEventName" placeholder="Name / Title of Event" />
                     </div>
 
                     <label for="editXPAmount">How much XP was awarded?</label>
                     <input type="number" id="editXPAmount" name="editXPAmount" min="0" placeholder="Total XP" value="400" />
 
                     <label for="editNumberOfPCs">How many characters shared the XP?</label>
-                    <input type="number" id="editNumberOfPCs" name="editNumberOfPCs" min="1" placeholder="Number of player characters" value="4" />
+                    <input type="number" id="editNumberOfPCs" name="editNumberOfPCs" min="1" placeholder="Player Character Count" value="4" />
 
                     <label for="editEventDetails">Event Details</label>
                     <textarea id="editEventDetails" name="editEventDetails">Notes about the event.</textarea>

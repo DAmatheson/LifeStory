@@ -85,6 +85,16 @@ label > a[data-role="button"][data-iconpos="notext"][data-inline="true"]
 {
     clear:both
 }
+
+.ui-grid-a .ui-block-a.twoThirds
+{
+     width: 65%
+}
+
+.ui-grid-a .ui-block-b.oneThird
+{
+     width: 35%;
+} 
 /*#endregion*/
 
 /*#region  -- Elements --  */
