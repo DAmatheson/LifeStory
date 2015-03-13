@@ -52,14 +52,24 @@ $('button#addEnemy').on('tap', function (event)
 {
     event.preventDefault();
     $('div#additionalEnemyInputs').append(
-        $('div#firstEnemyInputs').clone().find('label').remove().end().children());
+        $('div#firstEnemyInputs').
+            clone(). // Clone the selected element
+            find('label'). // Find all child elements which are labels
+            remove(). // Remove them
+            end(). // Collapse the jQuery object down to keep only the remaining elements
+            children()); // Append the children of the selected element
 });
 
 // TODO: assign unique id and name to inputs, currently just copies the first enemy's html
 $('button#editAddEnemy').on('tap', function (event) {
     event.preventDefault();
     $('div#editAdditionalEnemyInputs').append(
-        $('div#firstEnemyInputs').clone().find('label').remove().end().children());
+        $('div#firstEnemyInputs').
+            clone(). // Clone the selected element
+            find('label'). // Find all child elements which are labels
+            remove(). // Remove them
+            end(). // Collapse the jQuery object down to keep only the remaining elements
+            children()); // Append the children of the selected element
 });
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
