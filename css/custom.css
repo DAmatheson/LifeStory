@@ -21,7 +21,7 @@
        clear: left;
    }
 
-   .leftForm, .rightForm
+   .rightPadHalf, .leftPadHalf
     {
        padding: 0 !important; /* HORRIBLE */
     }
@@ -61,12 +61,12 @@ label > a[data-role="button"][data-iconpos="notext"][data-inline="true"]
     margin-bottom:0;
 }
 
-.leftForm
+.rightPadHalf
 {
     padding-right: 0.5em;
 }
 
-.rightForm
+.leftPadHalf
 {
     padding-left: 0.5em;
 }

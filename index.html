@@ -7,10 +7,16 @@
 
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="author" content="Drew Matheson & Isaac West"/>
+
         <title>Life Story</title>
-        <link href="css/themes/jquery.mobile-1.1.2.min.css" rel="stylesheet" />
-        <link href="css/themes/LifeStory.css" rel="stylesheet" />
-        <link href="css/custom.css" rel="stylesheet" />
+
+        <link href="css/themes/jquery.mobile-1.1.2.min.css" rel="stylesheet"/>
+        <link href="css/themes/LifeStory.css" rel="stylesheet"/>
+        <link href="css/custom.css" rel="stylesheet"/>
     </head>
     <body>
         <section id="home" class="page" data-role="page" data-title="Life Story - Home">
@@ -182,7 +188,7 @@
                     </a>
                 </div>
 
-                <form id="createCharacterForm" class="clearBoth" data-ajax="false">
+                <form id="createEventForm" class="clearBoth" data-ajax="false">
                     <label for="xpSource">
                         What did you get XP from?
                     </label>
@@ -199,17 +205,17 @@
                     <div id="combatDetailInputs">
                         <div id="firstEnemyInputs">
                             <fieldset class="ui-grid-a">
-                                <div class="ui-block-a">
+                                <div class="ui-block-a rightPadHalf">
                                     <label for="enemyName1">
-                                        What did you defeat?
+                                        What's defeated?
                                     </label>
-                                    <input type="text" id="enemyName1" name="enemyName1" placeholder="Name/type of enemy" />
+                                    <input type="text" id="enemyName1" name="enemyName1" placeholder="Name of Enemy" data-mini="true" />
                                 </div>
-                                <div class="ui-block-b">
+                                <div class="ui-block-b leftPadHalf">
                                     <label for="enemyCount1">
                                         How many?
                                     </label>
-                                    <input type="number" id="enemyCount1" name="enemyCount1" min="1" placeholder="Number of enemies" />
+                                    <input type="number" id="enemyCount1" name="enemyCount1" min="1" placeholder="Enemy Count" data-mini="true" />
                                 </div>
                             </fieldset>
                         </div>
@@ -236,10 +242,10 @@
                     <input type="number" id="xpAmount" name="xpAmount" min="0" placeholder="Total XP" />
 
                     <label for="numberOfPCs">How many characters shared the XP?</label>
-                    <input type="number" id="numberOfPCs" name="numberOfPCs" min="1" placeholder="Number of player characters" />
+                    <input type="number" id="numberOfPCs" name="numberOfPCs" min="1" placeholder="Player Character Count" />
 
-                    <label for="eventDetails">Event Details</label>
-                    <textarea id="eventDetails" name="eventDetails"></textarea>
+                    <label for="eventDescription">Event Description</label>
+                    <textarea id="eventDescription" name="eventDescription"></textarea>
 
                     <button data-theme="b">Save</button>
                 </form>
@@ -316,7 +322,7 @@
                     </a>
                 </div>
 
-                <form id="createCharacterForm" class="clearBoth" data-ajax="false">
+                <form id="resurrectCharacterForm" class="clearBoth" data-ajax="false">
                     <label for="resurrectionDetails">How were you resurrected?</label>
                     <textarea id="resurrectionDetails" name="resurrectionDetails"></textarea>
 
@@ -358,7 +364,7 @@
                 <table class="clearBoth">
                     <tr>
                         <td class="tableLabel">
-                            Trogdor Defeated:
+                            Defeated:
                         </td>
                         <td>
                             4 Goblins
@@ -366,7 +372,7 @@
                     </tr>
                     <tr>
                         <td class="tableLabel">
-                            He Got:
+                            Got:
                         </td>
                         <td>
                             100XP
@@ -374,7 +380,7 @@
                     </tr>
                     <tr>
                         <td class="tableLabel">
-                            While in a group of:
+                            In a group of:
                         </td>
                         <td>
                             4 Characters
@@ -382,9 +388,14 @@
                     </tr>
                     <tr>
                         <td class="tableLabel">
-                            Details:
+                            Description:
                         </td>
                         <td>
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
                             Notes about the event.
                         </td>
                     </tr>
@@ -436,7 +447,7 @@
                     </a>
                 </div>
 
-                <form id="editCharacterForm" class="clearBoth" data-ajax="false">
+                <form id="editEventForm" class="clearBoth" data-ajax="false">
                     <!-- TODO: consider refactoring to reduce number of div tags -->
                     <div id="editCombatDetailInputs">
                         <div id="editFirstEnemyInputs">
@@ -599,7 +610,7 @@
             </header>
 
             <div class="ui-content" data-role="content">
-                <h2 class="left">Create A Character</h2>
+                <h2 class="left">New Character</h2>
                 <div class="right">
                     <a href="#home" data-role="button" class="ui-btn-inline" data-theme="c"
                        data-mini="true" data-icon="back">
@@ -710,8 +721,8 @@
                         </option>
                     </select>
 
-                    <label for="details">Character Details</label>
-                    <textarea id="details" name="details">Burninates the countryside.</textarea>
+                    <label for="editDetails">Character Details</label>
+                    <textarea id="editDetails" name="details">Burninates the countryside.</textarea>
 
                     <button data-theme="b">Save Changes</button>
                 </form>
@@ -729,7 +740,7 @@
                         </li>
                         <li>
                             <a href="#customize" data-theme="c"
-                                    class="ui-btn-active ui-state-persist">
+                               class="ui-btn-active ui-state-persist">
                                 Customize
                             </a>
                         </li>
@@ -744,12 +755,12 @@
 
 
             <div class="ui-content" data-role="content">
-                <h2 class="left">Add Custom Class</h2>
+                <h2 class="left">New Class</h2>
 
                 <div class="right">
                     <a href="#characterCreation" data-role="button" class="ui-btn-inline" data-theme="c"
                        data-mini="true" data-icon="back">
-                        Character Creation
+                        New Character
                     </a>
                 </div>
 
@@ -757,7 +768,7 @@
                 <form id="addClassForm" data-ajax="false" class="clearBoth">
                     <label for="addClassName">Class Name:</label>
                     <input type="text" name="className" id="addClassName" placeholder="Class Name"/>
-                    <button data-theme="b">Save New Class</button>
+                    <button data-theme="b">Save New Custom Class</button>
                 </form>
             </div>
         </section>
@@ -788,12 +799,12 @@
 
 
             <div class="ui-content" data-role="content">
-                <h2 class="left">Add Custom Race</h2>
+                <h2 class="left">New Race</h2>
 
                 <div class="right">
                     <a href="#characterCreation" data-role="button" class="ui-btn-inline" data-theme="c"
                        data-mini="true" data-icon="back">
-                        Character Creation
+                        New Character
                     </a>
                 </div>
 
@@ -801,7 +812,7 @@
                 <form id="addRaceForm" data-ajax="false" class="clearBoth">
                     <label for="addRaceName">Race Name:</label>
                     <input type="text" name="raceName" id="addRaceName" placeholder="Race Name" />
-                    <button data-theme="b">Save New Race</button>
+                    <button data-theme="b">Save New Custom Race</button>
                 </form>
             </div>
         </section>
@@ -835,14 +846,14 @@
                 <h2>Custom Races &amp; Classes</h2>
                 <div class="ui-grid-a my-breakpoint">
                     <div class="ui-block-a">
-                        <form id="createRaceForm" class="leftForm" data-ajax="false">
+                        <form id="createRaceForm" class="rightPadHalf" data-ajax="false">
                             <label for="raceName">Race Name:</label>
                             <input type="text" name="raceName" id="raceName" placeholder="Race Name" />
                             <button data-theme="b">Save New Race</button>
                         </form>
                     </div>
                     <div class="ui-block-b">
-                        <form id="createClassForm" class="rightForm" data-ajax="false">
+                        <form id="createClassForm" class="leftPadHalf" data-ajax="false">
                             <label for="className">Class Name:</label>
                             <input type="text" name="className" id="className" placeholder="Class Name" />
                             <button data-theme="b">Save New Class</button>
@@ -852,7 +863,7 @@
                 <br/>
                 <div class="ui-grid-a my-breakpoint">
                     <div class="ui-block-a">
-                        <form id="deleteRaceForm" class="leftForm" data-ajax="false">
+                        <form id="deleteRaceForm" class="rightPadHalf" data-ajax="false">
                             <label for="deleteRaceSelect">
                                 Delete Race:
                             </label>
@@ -866,7 +877,7 @@
                         </form>
                     </div>
                     <div class="ui-block-b">
-                        <form id="deleteClassForm" class="rightForm" data-ajax="false">
+                        <form id="deleteClassForm" class="leftPadHalf" data-ajax="false">
                             <label for="deleteClassSelect">
                                 Delete Class:
                             </label>
