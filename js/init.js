@@ -52,14 +52,14 @@ $('button#addEnemy').on('tap', function (event)
 {
     event.preventDefault();
     $('div#additionalEnemyInputs').append(
-        $('div#firstEnemyInputs').html());
+        $('div#firstEnemyInputs').clone().find('label').remove().end().children());
 });
 
 // TODO: assign unique id and name to inputs, currently just copies the first enemy's html
 $('button#editAddEnemy').on('tap', function (event) {
     event.preventDefault();
     $('div#editAdditionalEnemyInputs').append(
-        $('div#editFirstEnemyInputs').html());
+        $('div#firstEnemyInputs').clone().find('label').remove().end().children());
 });
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
