@@ -48,9 +48,9 @@ $('select#xpSource').on('change', function ()
 });
 
 // TODO: assign unique id and name to inputs, currently just copies the first enemy's html
-$('button#addEnemy').on('tap', function (event)
+$('button#addEnemy').on('tap', function ()
 {
-    event.preventDefault();
+    // TODO: Make the copy not copy the field values.
     $('div#additionalEnemyInputs').append(
         $('div#firstEnemyInputs').
             clone(). // Clone the selected element
@@ -60,16 +60,27 @@ $('button#addEnemy').on('tap', function (event)
             children()); // Append the children of the selected element
 });
 
+$('button#removeEnemy').on('tap', function ()
+{
+    $('div#additionalEnemyInputs fieldset.ui-grid-a:last').remove();
+});
+
 // TODO: assign unique id and name to inputs, currently just copies the first enemy's html
-$('button#editAddEnemy').on('tap', function (event) {
-    event.preventDefault();
+$('button#editAddEnemy').on('tap', function ()
+{
+    // TODO: Make the copy not copy the field values.
     $('div#editAdditionalEnemyInputs').append(
-        $('div#firstEnemyInputs').
+        $('div#editFirstEnemyInputs').
             clone(). // Clone the selected element
             find('label'). // Find all child elements which are labels
             remove(). // Remove them
             end(). // Collapse the jQuery object down to keep only the remaining elements
             children()); // Append the children of the selected element
+});
+
+$('button#editRemoveEnemy').on('tap', function()
+{
+    $('div#editAdditionalEnemyInputs fieldset.ui-grid-a:last').remove();
 });
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
