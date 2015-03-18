@@ -27,7 +27,20 @@ $('#createCharacter').one('pageinit', function createCharacterPageInit()
 
 $('#customize').one('pageinit', function customizePageInit()
 {
+    lifeStory.validation.handleRaceForm('createRaceForm');
+    lifeStory.validation.handleClassForm('createClassForm');
+
     lifeStory.ui.populateRaceAndClassList('deleteRaceSelect', 'deleteClassSelect');
+});
+
+$('#addClass').one('pageinit', function addClassPageInit()
+{
+    lifeStory.validation.handleClassForm('addClassForm');
+});
+
+$('#addRace').one('pageinit', function addRacePageInit()
+{
+    lifeStory.validation.handleRaceForm('addRaceForm');
 });
 
 $('#editCharacter').one('pageinit', function customizePageInit() {

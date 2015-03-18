@@ -1,4 +1,4 @@
-﻿/* database.js
+﻿/* ui.js
  * Purpose: UI functions for LifeStory
  *
  * Revision History: 

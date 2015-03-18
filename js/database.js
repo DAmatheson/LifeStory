@@ -259,11 +259,21 @@
     }
 
     // Saves the Race to the database and calls the corresponding success or failure callback
-    dbLibrary.addRace = function addRace(race, successCallback, failureCallback)
+    dbLibrary.addRace = function addRace(race, successCallback, failureCallback, callbackData)
     {
         if (!(race instanceof lifeStory.Race))
         {
             throw 'race parameter to addRace must be an instance of lifeStory.Race';
+        }
+
+        if (successCallback)
+        {
+            var passedInCallback = successCallback;
+
+            successCallback = function(transaction, resultSet)
+            {
+                passedInCallback(transaction, resultSet, callbackData);
+            }
         }
 
         dbLibrary.getDb().transaction(function(tx)

@@ -1,4 +1,4 @@
-﻿/* database.js
+﻿/* dataClasses.js
  * Purpose: Data classes for LifeStory
  *
  * Revision History: 
