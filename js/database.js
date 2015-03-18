@@ -78,7 +78,7 @@
             initializationError);
     }
 
-    function creatEventTypeTable(transaction)
+    function createEventTypeTable(transaction)
     {
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS eventType ' +
@@ -197,7 +197,7 @@
             createRaceTable(tx);
             createClassTable(tx);
             createCharacterTable(tx);
-            creatEventTypeTable(tx);
+            createEventTypeTable(tx);
             createEventTable(tx);
             createEventDetailTable(tx);
             createCharacterEventTable(tx);
@@ -397,7 +397,7 @@
         {
             tx.executeSql('DROP TABLE IF EXISTS character', null, null, sqlErrorHandler);
 
-            createCharacterTable();
+            createCharacterTable(tx);
         });
     };
 

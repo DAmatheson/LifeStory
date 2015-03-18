@@ -113,6 +113,15 @@ $('#editRemoveEnemy').on('tap', function()
     lifeStory.ui.removeInputSet(removeElementSelector, removeButtonSelector);
 });
 
+$('#clearCharacters').on('tap', function ()
+{
+    // TODO: Use a better looking confirmation
+    if (confirm('Are you sure you want to delete all characters? This cannot be undone.'))
+    {
+        lifeStory.db.clearCharacterTable();
+    }
+});
+
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
 // Take undefined as parameter and don't pass anything to get an unchanged version of undefined.
 (function (window, undefined)
