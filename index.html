@@ -39,12 +39,11 @@
                 </nav>
             </header>
 
-
             <div class="ui-content" data-role="content">
                 <h2 class="left">Characters</h2>
 
                 <div class="right">
-                    <a href="#characterCreation" data-role="button" class="ui-btn-inline" data-theme="b"
+                    <a href="#createCharacter" data-role="button" class="ui-btn-inline" data-theme="b"
                        data-mini="true" data-icon="plus">
                             New Character
                     </a>
@@ -68,7 +67,6 @@
                         </a>
                     </li>
                 </ul>
-
             </div>
 
             <footer data-role="footer fieldcontain" data-position="fixed">
@@ -98,7 +96,6 @@
                     </ul>
                 </nav>
             </header>
-
 
             <div class="ui-content" data-role="content">
                 <h2 class="left">Trogdor</h2>
@@ -187,32 +184,22 @@
                     </a>
                 </div>
 
-                <form id="createEventForm" class="clearBoth" data-ajax="false">
-                    <label for="xpSource">
-                        What did you get XP from?
-                    </label>
-                    <select id="xpSource" name="xpSource">
-                        <option value="combat">
-                            Combat
-                        </option>
-                        <option value="event">
-                            An Event
-                        </option>
+                <form id="createEventForm" class="clearBoth">
+                    <label for="eventType">What did you get XP from?</label>
+                    <select id="eventType" name="eventType">
+                        <option value="1">Combat</option>
+                        <option value="2">An Event</option>
                     </select>
 
                     <div id="combatDetailInputs">
                         <fieldset id="enemyInputsTemplate" class="ui-grid-a">
                             <div class="ui-block-a rightPadHalf twoThirds">
-                                <label for="enemyName">
-                                    What did you defeat?
-                                </label>
+                                <label for="enemyName">What did you defeat?</label>
                                 <input type="text" id="enemyName" name="enemyName[]" data-mini="true" placeholder="Name / Type of Enemy" />
                             </div>
                             <div class="ui-block-b leftPadHalf oneThird">
-                                <label for="enemyCount">
-                                    How many?
-                                </label>
-                                <input type="number" id="enemyCount" name="enemyCount[]" data-mini="true" min="1" placeholder="Count" />
+                                <label for="enemyCount">How many?</label>
+                                <input type="number" id="enemyCount" name="creatureCount[]" data-mini="true" min="1" placeholder="Count" />
                             </div>
                         </fieldset>
 
@@ -221,28 +208,26 @@
                     </div>
 
                     <div id="eventDetailInputs" hidden>
-                        <label for="eventName">
-                            What got you XP?
-                        </label>
+                        <label for="eventName">What got you XP?</label>
                         <input type="text" id="eventName" name="eventName" placeholder="Name / Title of Event" />
                     </div>
 
                     <label for="xpAmount">How much XP was awarded?</label>
-                    <input type="number" id="xpAmount" name="xpAmount" min="0" placeholder="Total XP" />
+                    <input type="number" id="xpAmount" name="xp" min="0" placeholder="Total XP" />
 
                     <label for="numberOfPCs">How many characters shared the XP?</label>
-                    <input type="number" id="numberOfPCs" name="numberOfPCs" min="1" placeholder="Player Character Count" />
+                    <input type="number" id="numberOfPCs" name="characterCount" min="1" placeholder="Player Character Count" />
 
                     <label for="eventDescription">Event Description</label>
-                    <textarea id="eventDescription" name="eventDescription"></textarea>
+                    <textarea id="eventDescription" name="description"></textarea>
 
                     <button data-theme="b">Save</button>
                 </form>
             </div>
         </section>
 
-        <section id="characterDeath" class="page" data-role="page">
-            <header id="characterDeathHeader" data-role="header" data-position="fixed">
+        <section id="deathEvent" class="page" data-role="page">
+            <header id="deathEventHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
                         <li>
@@ -270,20 +255,20 @@
                     </a>
                 </div>
 
-                <form id="characterDeathForm" class="clearBoth" data-ajax="false">
+                <form id="deathEventForm" class="clearBoth">
                     <label for="causeOfDeath">What killed you?</label>
-                    <input type="text" id="causeOfDeath" name="causeOfDeath" placeholder="Cause of death" />
+                    <input type="text" id="causeOfDeath" name="eventName" placeholder="Cause of death" />
 
                     <label for="deathDetails">Death Details</label>
-                    <textarea id="deathDetails" name="deathDetails"></textarea>
+                    <textarea id="deathDetails" name="details"></textarea>
 
                     <button data-theme="f">Save</button>
                 </form>
             </div>
         </section>
 
-        <section id="resurrectCharacter" class="page" data-role="page">
-            <header id="resurrectCharacterHeader" data-role="header" data-position="fixed">
+        <section id="resurrectEvent" class="page" data-role="page">
+            <header id="resurrectEventHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
                         <li>
@@ -311,9 +296,9 @@
                     </a>
                 </div>
 
-                <form id="resurrectCharacterForm" class="clearBoth" data-ajax="false">
+                <form id="resurrectEventForm" class="clearBoth">
                     <label for="resurrectionDetails">How were you resurrected?</label>
-                    <textarea id="resurrectionDetails" name="resurrectionDetails"></textarea>
+                    <textarea id="resurrectionDetails" name="details"></textarea>
 
                     <button data-theme="g">Resurrect Trogdor</button>
                 </form>
@@ -436,20 +421,21 @@
                     </a>
                 </div>
 
-                <form id="editEventForm" class="clearBoth" data-ajax="false">
+                <form id="editEventForm" class="clearBoth">
+                    <input type="hidden" name="id"/>
+                    <input type="hidden" name="eventTypeId"/> <!-- TODO: Make this a select if we wish to allow changing the event type -->
+
                     <div id="editCombatDetailInputs">
                         <fieldset id="editEnemyInputsTemplate" class="ui-grid-a">
+                            <input type="hidden" name="eventDetailId[]"/>
+
                             <div class="ui-block-a rightPadHalf twoThirds">
-                                <label for="editEnemyName">
-                                    What did you defeat?
-                                </label>
-                                <input type="text" id="editEnemyName" name="editEnemyName[]" data-mini="true" placeholder="Name / Type of Enemy" value="Goblins" />
+                                <label for="editEnemyName">What did you defeat?</label>
+                                <input type="text" id="editEnemyName" name="enemyName[]" data-mini="true" placeholder="Name / Type of Enemy" value="Goblins"/>
                             </div>
                             <div class="ui-block-b leftPadHalf oneThird">
-                                <label for="editEnemyCount">
-                                    How many?
-                                </label>
-                                <input type="number" id="editEnemyCount" name="editEnemyCount[]" data-mini="true" min="1" placeholder="Count" value="4" />
+                                <label for="editEnemyCount">How many?</label>
+                                <input type="number" id="editEnemyCount" name="creatureCount[]" data-mini="true" min="1" placeholder="Count" value="4"/>
                             </div>
                         </fieldset>
 
@@ -458,20 +444,18 @@
                     </div>
 
                     <div id="editEventDetailInputs" hidden>
-                        <label for="editEventName">
-                            What got you XP?
-                        </label>
-                        <input type="text" id="editEventName" name="editEventName" placeholder="Name / Title of Event" />
+                        <label for="editEventName">What got you XP?</label>
+                        <input type="text" id="editEventName" name="eventName" placeholder="Name / Title of Event"/>
                     </div>
 
                     <label for="editXPAmount">How much XP was awarded?</label>
-                    <input type="number" id="editXPAmount" name="editXPAmount" min="0" placeholder="Total XP" value="400" />
+                    <input type="number" id="editXPAmount" name="xp" min="0" placeholder="Total XP" value="400"/>
 
                     <label for="editNumberOfPCs">How many characters shared the XP?</label>
-                    <input type="number" id="editNumberOfPCs" name="editNumberOfPCs" min="1" placeholder="Player Character Count" value="4" />
+                    <input type="number" id="editNumberOfPCs" name="characterCount" min="1" placeholder="Player Character Count" value="4"/>
 
                     <label for="editEventDetails">Event Details</label>
-                    <textarea id="editEventDetails" name="editEventDetails">Notes about the event.</textarea>
+                    <textarea id="editEventDetails" name="description">Notes about the event.</textarea>
 
                     <button data-theme="b">Save Changes</button>
                 </form>
@@ -568,8 +552,8 @@
             </footer>
         </section>
 
-        <section id="characterCreation" class="page" data-role="page">
-            <header id="characterCreationHeader" data-role="header" data-position="fixed">
+        <section id="createCharacter" class="page" data-role="page">
+            <header id="createCharacterHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
                         <li>
@@ -597,7 +581,7 @@
                     </a>
                 </div>
 
-                <form id="createCharacterForm" class="clearBoth" data-ajax="false">
+                <form id="createCharacterForm" class="clearBoth">
                     <label for="characterName">Name</label>
                     <input type="text" name="name" id="characterName" placeholder="Character Name"/>
 
@@ -608,7 +592,7 @@
                             Add a Race
                         </a>
                     </label>
-                    <select id="raceSelect" name="race">
+                    <select id="raceSelect" name="raceId">
                         <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Races...
                         </option>
@@ -620,9 +604,7 @@
                             Add a Class
                         </a>
                     </label>
-
-
-                    <select id="classSelect" name="class">
+                    <select id="classSelect" name="classId">
                         <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Classes...
                         </option>
@@ -665,18 +647,20 @@
                     </a>
                 </div>
 
-                <form id="editCharacterForm" class="clearBoth" data-ajax="false">
+                <form id="editCharacterForm" class="clearBoth">
+                    <input type="hidden" name="id"/>
+
                     <label for="editCharacterName">Name</label>
-                    <input type="text" name="name" id="editCharacterName" placeholder="Character Name" value="Trogdor" />
+                    <input type="text" name="name" id="editCharacterName" placeholder="Character Name" value="Trogdor"/>
 
                     <label for="editCharacterRaceSelect">
                         Race
                         <a href="#addRace" data-icon="plus" data-role="button"
-                           data-iconpos="notext" data-inline="true" data-theme="b">
+                                data-iconpos="notext" data-inline="true" data-theme="b">
                             Add a Race
                         </a>
                     </label>
-                    <select id="editCharacterRaceSelect" name="race">
+                    <select id="editCharacterRaceSelect" name="raceId">
                         <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Races...
                         </option>
@@ -685,13 +669,11 @@
                     <label for="editCharacterClassSelect">
                         Class
                         <a href="#addClass" data-icon="plus" data-role="button"
-                           data-iconpos="notext" data-inline="true" data-theme="b">
+                                data-iconpos="notext" data-inline="true" data-theme="b">
                             Add a Class
                         </a>
                     </label>
-
-
-                    <select id="editCharacterClassSelect" name="class">
+                    <select id="editCharacterClassSelect" name="classId">
                         <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Classes...
                         </option>
@@ -729,21 +711,21 @@
                 </nav>
             </header>
 
-
             <div class="ui-content" data-role="content">
                 <h2 class="left">New Class</h2>
 
                 <div class="right">
-                    <a href="#characterCreation" data-role="button" class="ui-btn-inline" data-theme="c"
+                    <a href="#createCharacter" data-role="button" class="ui-btn-inline" data-theme="c"
                        data-mini="true" data-icon="back">
                         New Character
                     </a>
                 </div>
 
                 <!-- TODO: Make sure this returns to the character creation form on success -->
-                <form id="addClassForm" data-ajax="false" class="clearBoth">
+                <form id="addClassForm" class="clearBoth">
                     <label for="addClassName">Class Name:</label>
                     <input type="text" name="className" id="addClassName" placeholder="Class Name"/>
+
                     <button data-theme="b">Save New Custom Class</button>
                 </form>
             </div>
@@ -773,21 +755,21 @@
                 </nav>
             </header>
 
-
             <div class="ui-content" data-role="content">
                 <h2 class="left">New Race</h2>
 
                 <div class="right">
-                    <a href="#characterCreation" data-role="button" class="ui-btn-inline" data-theme="c"
+                    <a href="#createCharacter" data-role="button" class="ui-btn-inline" data-theme="c"
                        data-mini="true" data-icon="back">
                         New Character
                     </a>
                 </div>
 
                 <!-- TODO: Make sure this returns to the character creation form on success -->
-                <form id="addRaceForm" data-ajax="false" class="clearBoth">
+                <form id="addRaceForm" class="clearBoth">
                     <label for="addRaceName">Race Name:</label>
-                    <input type="text" name="raceName" id="addRaceName" placeholder="Race Name" />
+                    <input type="text" name="raceName" id="addRaceName" placeholder="Race Name"/>
+
                     <button data-theme="b">Save New Custom Race</button>
                 </form>
             </div>
@@ -817,29 +799,30 @@
                 </nav>
             </header>
 
-
             <div class="ui-content" data-role="content">
                 <h2>Custom Races &amp; Classes</h2>
                 <div class="ui-grid-a my-breakpoint">
                     <div class="ui-block-a">
-                        <form id="createRaceForm" class="rightPadHalf" data-ajax="false">
+                        <form id="createRaceForm" class="rightPadHalf">
                             <label for="raceName">Race Name:</label>
-                            <input type="text" name="raceName" id="raceName" placeholder="Race Name" />
+                            <input type="text" name="raceName" id="raceName" placeholder="Race Name"/>
                             <button data-theme="b">Save New Race</button>
                         </form>
                     </div>
                     <div class="ui-block-b">
-                        <form id="createClassForm" class="leftPadHalf" data-ajax="false">
+                        <form id="createClassForm" class="leftPadHalf">
                             <label for="className">Class Name:</label>
-                            <input type="text" name="className" id="className" placeholder="Class Name" />
+                            <input type="text" name="className" id="className" placeholder="Class Name"/>
                             <button data-theme="b">Save New Class</button>
                         </form>
                     </div>
                 </div>
+
                 <br/>
+
                 <div class="ui-grid-a my-breakpoint">
                     <div class="ui-block-a">
-                        <form id="deleteRaceForm" class="rightPadHalf" data-ajax="false">
+                        <form id="deleteRaceForm" class="rightPadHalf">
                             <label for="deleteRaceSelect">
                                 Delete Race:
                             </label>
@@ -852,7 +835,7 @@
                         </form>
                     </div>
                     <div class="ui-block-b">
-                        <form id="deleteClassForm" class="leftPadHalf" data-ajax="false">
+                        <form id="deleteClassForm" class="leftPadHalf">
                             <label for="deleteClassSelect">
                                 Delete Class:
                             </label>
@@ -889,7 +872,6 @@
                     </ul>
                 </nav>
             </header>
-
 
             <div class="ui-content" data-role="content">
                 <button data-theme="a">Reset to Default Races</button>

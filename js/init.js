@@ -20,7 +20,7 @@ $('#home').one('pageinit', function homePageInit()
     lifeStory.db.getDb(); // TODO: Just for testing that the db initialization works
 });
 
-$('#characterCreation').one('pageinit', function characterCreationPageInit()
+$('#createCharacter').one('pageinit', function createCharacterPageInit()
 {
     lifeStory.ui.populateRaceAndClassList('raceSelect', 'classSelect');
 });
@@ -44,9 +44,9 @@ $('#editEvent').one('pageinit', function createEventPageInit()
     $('#editRemoveEnemy').closest('.ui-btn').hide();
 });
 
-$('#xpSource').on('change', function ()
+$('#eventType').on('change', function ()
 {
-    if ($('#xpSource option:selected').val() === 'combat')
+    if ($('#eventType option:selected').val() === 'combat')
     {
         $('#eventDetailInputs').hide();
         $('#combatDetailInputs').show();

@@ -107,12 +107,9 @@ img
 {
      max-width: 100%;
 }
-/*#endregion*/
-
-/*#region  -- Ids --  */
 
 /* Prevent the header text and new character button breaking into two lines */
-section#home
+html, body, section
 {
     -moz-min-width: 300px;
     -ms-min-width: 300px;
@@ -120,4 +117,7 @@ section#home
     -webkit-min-width: 300px;
     min-width: 300px;
 } 
+/*#endregion*/
+
+/*#region  -- Ids --  */
 /*#endregion*/

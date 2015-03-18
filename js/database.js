@@ -78,16 +78,31 @@
             initializationError);
     }
 
+    function creatEventTypeTable(transaction)
+    {
+        transaction.executeSql(
+            'CREATE TABLE IF NOT EXISTS eventType ' +
+            '(' +
+                'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+                'name VARCHAR(20) NOT NULL UNIQUE' +
+            ');',
+            null,
+            null,
+            initializationError);
+    }
+
     function createEventTable(transaction)
     {
 
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS event ' +
             '(' +
-                'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
-                'numberOfPCs INTEGER, ' +
+                'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
+                'eventType_id INTEGER NOT NULL, ' +
+                'characterCount INTEGER, ' +
                 'date DATE NOT NULL, ' +
-                'description TEXT' +
+                'description TEXT,' +
+                'FOREIGN KEY (eventType_id) REFERENCES eventType (id)' +
             ');',
             null,
             null,
@@ -99,11 +114,11 @@
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS eventDetail ' +
             '(' +
-                'detail_id INTEGER NOT NULL, ' +
+                'detail_id INTEGER NOT NULL, ' + // TODO: Figure out how to make this auto increment
                 'event_id INTEGER NOT NULL, ' +
                 'eventName VARCHAR(60) NOT NULL, ' +
                 'xp INTEGER, ' +
-                'numberOfCreatures INTEGER,' +
+                'creatureCount INTEGER,' +
                 'PRIMARY KEY (detail_id, event_id),' +
                 'FOREIGN KEY (event_id) REFERENCES event (id)' +
             ');',
@@ -159,6 +174,21 @@
         });
     }
 
+    // Insert event type records
+    function insertEventTypes(transaction)
+    {
+        var names = ['Combat', 'Non-Combat', 'Resurrect', 'Death'];
+
+        names.forEach(function (element)
+        {
+            transaction.executeSql(
+                'INSERT OR IGNORE INTO eventType (name) VALUES (?);',
+                [element],
+                null,
+                initializationError);
+        });
+    }
+
     // Creates the database tables and inserts default records
     function initializeTables(database)
     {
@@ -167,12 +197,14 @@
             createRaceTable(tx);
             createClassTable(tx);
             createCharacterTable(tx);
+            creatEventTypeTable(tx);
             createEventTable(tx);
             createEventDetailTable(tx);
             createCharacterEventTable(tx);
 
             insertDefaultClasses(tx);
             insertDefaultRaces(tx);
+            insertEventTypes(tx);
         });
 
         if (localStorage.getItem('dbInitializationError') !== 'true')
