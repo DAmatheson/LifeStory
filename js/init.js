@@ -115,10 +115,17 @@ $('#editRemoveEnemy').on('tap', function()
 
 $('#clearCharacters').on('tap', function ()
 {
-    // TODO: Use a better looking confirmation
+    // TODO: Use a better looking confirmation, consider http://jsfiddle.net/taditdash/vvjj8/
     if (confirm('Are you sure you want to delete all characters? This cannot be undone.'))
     {
         lifeStory.db.clearCharacterTable();
+    }
+});
+
+$('#resetDatabase').on('tap', function () {
+    // TODO: Use a better looking confirmation
+    if (confirm('Are you sure you want to reset the database? This will delete all characters, events, custom races, and custom classes. This cannot be undone.')) {
+        lifeStory.db.resetDatabase();
     }
 });
 
