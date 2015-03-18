@@ -142,7 +142,7 @@
             <footer data-role="footer fieldcontain" data-position="fixed">
                 <fieldset class="ui-grid-a">
                     <div class="ui-block-a">
-                        <a href="#resurrectCharacter" data-role="button" data-theme="g">
+                        <a href="#resurrectEvent" data-role="button" data-theme="g">
                             Resurrect
                         </a>
                     </div>
@@ -427,15 +427,15 @@
 
                     <div id="editCombatDetailInputs">
                         <fieldset id="editEnemyInputsTemplate" class="ui-grid-a">
-                            <input type="hidden" name="eventDetailId[]"/>
+                            <input type="hidden" name="eventDetailId"/>
 
                             <div class="ui-block-a rightPadHalf twoThirds">
                                 <label for="editEnemyName">What did you defeat?</label>
-                                <input type="text" id="editEnemyName" name="enemyName[]" data-mini="true" placeholder="Name / Type of Enemy" value="Goblins"/>
+                                <input type="text" id="editEnemyName" name="enemyName" data-mini="true" placeholder="Name / Type of Enemy" value="Goblins"/>
                             </div>
                             <div class="ui-block-b leftPadHalf oneThird">
                                 <label for="editEnemyCount">How many?</label>
-                                <input type="number" id="editEnemyCount" name="creatureCount[]" data-mini="true" min="1" placeholder="Count" value="4"/>
+                                <input type="number" id="editEnemyCount" name="creatureCount" data-mini="true" min="1" placeholder="Count" value="4"/>
                             </div>
                         </fieldset>
 

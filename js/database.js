@@ -65,11 +65,11 @@
             'CREATE TABLE IF NOT EXISTS character ' +
             '(' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
-                'name VARCHAR(50) NOT NULL, ' +
                 'race_id INTEGER, ' +
                 'class_id INTEGER, ' +
+                'name VARCHAR(50) NOT NULL, ' +
+                'living BOOLEAN NOT NULL DEFAULT 1,' +
                 'details TEXT, ' +
-                'living BOOLEAN NOT NULL,' +
                 'FOREIGN KEY (race_id) REFERENCES race (id),' +
                 'FOREIGN KEY (class_id) REFERENCES class (id)' +
             ');',
@@ -100,7 +100,8 @@
                 'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
                 'eventType_id INTEGER NOT NULL, ' +
                 'characterCount INTEGER, ' +
-                'date DATE NOT NULL, ' +
+                'date DATE NOT NULL DEFAULT CURRENT_DATE, ' +
+                'xp INTEGER, ' +
                 'description TEXT,' +
                 'FOREIGN KEY (eventType_id) REFERENCES eventType (id)' +
             ');',
@@ -114,12 +115,11 @@
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS eventDetail ' +
             '(' +
-                'detail_id INTEGER NOT NULL, ' + // TODO: Figure out how to make this auto increment
+                'detail_id INTEGER NOT NULL, ' +
                 'event_id INTEGER NOT NULL, ' +
                 'eventName VARCHAR(60) NOT NULL, ' +
-                'xp INTEGER, ' +
-                'creatureCount INTEGER,' +
-                'PRIMARY KEY (detail_id, event_id),' +
+                'creatureCount INTEGER, ' +
+                'PRIMARY KEY (detail_id, event_id), ' +
                 'FOREIGN KEY (event_id) REFERENCES event (id)' +
             ');',
             null,

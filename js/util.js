@@ -16,4 +16,25 @@
 
     var utilLibrary = lifeStory.util = {};
 
+    utilLibrary.fetchEventDetails = function(formId, inputSetContainer)
+    {
+        var eventDetailItems = [];
+
+        var $form = $('#' + formId);
+
+        var eventId = $form.find('[name=id]').val();
+
+        $(inputSetContainer, $form).each(function(index, element)
+        {
+            var detailId = $('[name=eventDetailId]', element).val() || index + 1;
+            var eventName = $('[name=enemyName]', element).val();
+            var creatureCount = $('[name=creatureCount]', element).val() || null;
+
+            eventDetailItems[index] = new lifeStory.EventDetail(detailId, eventId, eventName,
+                creatureCount);
+        });
+
+        return eventDetailItems;
+    };
+
 })(window, lifeStory, jQuery);

@@ -15,7 +15,6 @@
         throw 'lifeStory is required by dataClasses but is undefined.';
     }
 
-    // TODO: Remove id or figure out what to do with it on all classes
     lifeStory.Race = function race(name)
     {
         this.id = null;
@@ -31,33 +30,34 @@
     lifeStory.Character = function character(name, raceId, classId, details, living)
     {
         this.id = null;
-        this.name = name;
         this.raceId = raceId;
         this.classId = classId;
-        this.details = details;
+        this.name = name;
         this.living = living;
+        this.details = details;
     }
 
-    lifeStory.EventName = function eventName(name)
+    lifeStory.EventType = function eventType(name)
     {
         this.id = null;
         this.name = name;
     }
 
-    lifeStory.Event = function event(eventNameId, experience, numOfCreatures)
+    lifeStory.EventDetail = function eventDetail(detailId, eventId, eventName, creatureCount)
     {
-        this.id = null;
-        this.eventNameId = eventNameId;
-        this.experience = experience;
-        this.numberOfCreatures = numOfCreatures;
+        this.id = detailId;
+        this.eventId = eventId;
+        this.eventName = eventName;
+        this.creatureCount = creatureCount;
     }
 
-    lifeStory.EventDetail = function eventDetail(eventId, date, numOfCharacters, description)
+    lifeStory.Event = function event(eventTypeId, date, characterCount, experience, description)
     {
         this.id = null;
-        this.eventId = eventId;
+        this.eventTypeId = eventTypeId;
+        this.characterCount = characterCount;
         this.date = date;
-        this.numberOfCharacters = numOfCharacters;
+        this.experience = experience;
         this.description = description;
     }
 
