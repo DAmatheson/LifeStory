@@ -5,7 +5,7 @@
  *      Drew Matheson, 2015.03.18: Created
  */
 
-(function (window, lifeStory, $, undefined)
+(function(window, lifeStory, $, undefined)
 {
     'use strict';
 
@@ -24,6 +24,8 @@
 
     function setupFormValidation(formId, submitHandler, rules, messages, submitCallbackData)
     {
+        // If callback data is passed in, set up a function to call the submit handler with
+        // the form and that callback data
         if (submitCallbackData)
         {
             var passedInSubmitHandler = submitHandler;
@@ -31,7 +33,7 @@
             submitHandler = function(form)
             {
                 passedInSubmitHandler(form, submitCallbackData);
-            }
+            };
         }
 
         $('#' + formId).validate(
@@ -42,7 +44,7 @@
         });
     }
 
-    validationLibrary.handleRaceForm = function(formId)
+    validationLibrary.handleRaceForm = function(formId, redirectToPageIdOnSubmit)
     {
         var rules = { raceName: classRaceNameRules };
 
@@ -57,12 +59,16 @@
 
         var submitHandler = lifeStory.util.saveRaceToDb;
 
-        var callbackData = { redirectToPageId: 'createCharacter', formIdToReset: formId }
+        var callbackData =
+        {
+            redirectToPageId: redirectToPageIdOnSubmit,
+            formIdToReset: formId
+        };
 
         setupFormValidation(formId, submitHandler, rules, messages, callbackData);
     };
 
-    validationLibrary.handleClassForm = function (formId)
+    validationLibrary.handleClassForm = function(formId)
     {
         var rules = { className: classRaceNameRules };
 
@@ -80,21 +86,31 @@
         setupFormValidation(formId, submitHandler, rules, messages);
     };
 
-    validationLibrary.createCharacterValidate = function ()
+    validationLibrary.handleCharacterForm = function(formId, isNewCharacterForm)
     {
-        $('#createCharacterForm').validate(
+        var rules =
         {
-            rules: {
-                name: {
-                    required: true
-                }
-            },
-            messages: {
-                name: {
-                    required: "Your character must have a name."
-                }
+            name:
+            {
+                required: true
             }
-        });
-    }
+        };
 
+        var messages =
+        {
+            name:
+            {
+                required: 'Your character must have a name.'
+            }
+        }
+
+        if (isNewCharacterForm)
+        {
+            setupFormValidation(formId, lifeStory.util.saveCharacterToDb, rules, messages);
+        }
+        else
+        {
+            // TODO: Code for edit character form
+        }
+    };
 })(window, lifeStory, jQuery);

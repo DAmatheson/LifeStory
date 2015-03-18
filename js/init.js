@@ -23,7 +23,7 @@ $('#home').one('pageinit', function homePageInit()
 $('#createCharacter').one('pageinit', function createCharacterPageInit()
 {
     lifeStory.ui.populateRaceAndClassList('raceSelect', 'classSelect');
-    lifeStory.validation.createCharacterValidate();
+    lifeStory.validation.handleCharacterForm('createCharacterForm', true);
 });
 
 $('#customize').one('pageinit', function customizePageInit()
@@ -41,7 +41,7 @@ $('#addClass').one('pageinit', function addClassPageInit()
 
 $('#addRace').one('pageinit', function addRacePageInit()
 {
-    lifeStory.validation.handleRaceForm('addRaceForm');
+    lifeStory.validation.handleRaceForm('addRaceForm', 'createCharacter');
 });
 
 $('#editCharacter').one('pageinit', function customizePageInit() {
@@ -56,26 +56,6 @@ $('#createEvent').one('pageinit', function createEventPageInit()
 $('#editEvent').one('pageinit', function createEventPageInit()
 {
     $('#editRemoveEnemy').closest('.ui-btn').hide();
-});
-
-$('#createCharacterForm').on('submit', function () {
-    if ($(this).valid())
-    {
-        var newCharacter = new lifeStory.Character(
-            $('#characterName').val(),
-            $('#raceSelect').val(),
-            $('#classSelect').val(),
-            $('#details').val(),
-            true);
-
-        lifeStory.db.insertCharacter(
-            newCharacter,
-            function ()
-            {
-                // TODO: show character's event log
-            },
-            null);
-    }
 });
 
 $('#eventType').on('change', function ()

@@ -304,11 +304,11 @@
     }
 
     // Saves the Character into the database and calls the corresponding success or failure callback
-    dbLibrary.insertCharacter = function insertCharacter(character, successCallback, failureCallback)
+    dbLibrary.addCharacter = function insertCharacter(character, successCallback, failureCallback)
     {
         if (!(character instanceof lifeStory.Character))
         {
-            throw 'character parameter to insertCharacter must be an instance of lifeStory.Character';
+            throw 'character parameter to addCharacter must be an instance of lifeStory.Character';
         }
 
         dbLibrary.getDb().transaction(function (tx)

@@ -16,6 +16,13 @@
 
     var utilLibrary = lifeStory.util = {};
 
+    function dbFailure(alertMessage, transaction, error)
+    {
+        alert(alertMessage);
+
+        console.error(error.message, transaction, error);
+    }
+
     utilLibrary.createEventDetailsFromInput = function(formId, inputSetContainer)
     {
         var eventDetailItems = [];
@@ -37,11 +44,31 @@
         return eventDetailItems;
     };
 
+    function createCharacterFromInput($inputs)
+    {
+        var newCharacter = new lifeStory.Character(
+            $('[name=name]').val(),
+            $('[name=raceId]').val(),
+            $('[name=classId]').val(),
+            $('[name=details]').val(),
+            $('[name=living]').val() || true);
+
+        return newCharacter;
+    }
+
     function createRaceFromInput($inputs)
     {
         var raceName = $inputs.filter('[name=raceName]').val();
 
         return new lifeStory.Race(raceName);
+    }
+
+    // Returns a new class object populated with the values from the passed in inputs
+    function createClassFromInput($inputs)
+    {
+        var className = $inputs.filter('[name=className').val();
+
+        return new lifeStory.CharacterClass(className);
     }
 
     // Callback function for successfully saving a race
@@ -57,9 +84,7 @@
     // Callback function for failure to save a race
     function saveRaceFailure(transaction, error)
     {
-        alert('Failed to create the new race.');
-
-        console.error(error.message, transaction, error);
+        dbFailure('Failed to create the new race.', transaction, error);
     }
 
     utilLibrary.saveRaceToDb = function (form, callbackData)
@@ -68,31 +93,21 @@
 
         lifeStory.db.addRace(createRaceFromInput($inputs), saveRaceSuccess, saveRaceFailure, callbackData);
 
-        $('button', form).blur(); // TODO: Confirm this works
+        $('button', form).blur();
     };
-
-    // Returns a new class object populated with the values from the passed in inputs
-    function createClassFromInput($inputs)
-    {
-        var className = $inputs.filter('[name=className').val();
-
-        return new lifeStory.CharacterClass(className);
-    }
 
     // Callback function for successfully saving a class
     function saveClassSuccess(transaction, resultSet)
     {
         alert('New custom class created.');
 
-        $.mobile.changePage('#dmViewFeedback'); // TODO: Figure out how to decide which page to redirect to
+        $.mobile.changePage('#dmViewFeedback'); // TODO: Duplicate callbackData logic from saveRaceToDb
     }
 
     // Callback function for failure to save a class
     function saveClassFailure(transaction, error)
     {
-        alert('Failed to create the new class.');
-
-        console.error(error.message, transaction, error);
+        dbFailure('Failed to create the new class.', transaction, error);
     }
 
     // Gets the form data and calls db.addClass
@@ -102,7 +117,26 @@
 
         lifeStory.db.addClass(createClassFromInput($inputs), saveClassSuccess, saveClassFailure);
 
-        $('button', form).blur(); // TODO: Confirm this works
+        $('button', form).blur(); // TODO: Duplicate callbackData logic from saveRaceToDb
+    };
+
+    function saveCharacterSuccess(transaction, resultSet)
+    {
+        alert('New character created.');
+
+        //$.mobile.changePage(); // TODO: Show the created character's event log
+    }
+
+    function saveCharacterFailure(transaction, error)
+    {
+        dbFailure('Failed to create the character.', transaction, error);
+    }
+
+    utilLibrary.saveCharacterToDb = function(form)
+    {
+        var $inputs = $('input:not(button)', form);
+
+        lifeStory.db.addCharacter(createCharacterFromInput($inputs), saveCharacterSuccess, saveCharacterFailure);
     };
 
 })(window, lifeStory, jQuery);
