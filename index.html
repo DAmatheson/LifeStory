@@ -110,7 +110,6 @@
                     </a>
                 </div>
 
-                <!-- TODO: Decide on event sorting (ascending or descending by date) -->
                 <ul id="characterEvents" class="clearBoth" data-role="listview">
                     <li>
                         <h1>Trogdor was created</h1>
@@ -201,33 +200,23 @@
                         </option>
                     </select>
 
-                    <!-- TODO: consider refactoring to reduce number of div tags -->
                     <div id="combatDetailInputs">
-                        <div id="firstEnemyInputs">
-                            <fieldset class="ui-grid-a">
-                                <div class="ui-block-a rightPadHalf twoThirds">
-                                    <label for="enemyName1">
-                                        What did you defeat?
-                                    </label>
-                                    <input type="text" id="enemyName1" name="enemyName1" data-mini="true" placeholder="Name / Type of Enemy" />
-                                </div>
-                                <div class="ui-block-b leftPadHalf oneThird">
-                                    <label for="enemyCount1">
-                                        How many?
-                                    </label>
-                                    <input type="number" id="enemyCount1" name="enemyCount1" data-mini="true" min="1" placeholder="Count" />
-                                </div>
-                            </fieldset>
-                        </div>
-
-                        <!-- TODO: assign unique id and name to each additional enemy -->
-                        <div id="additionalEnemyInputs">
-
-                        </div>
+                        <fieldset id="enemyInputsTemplate" class="ui-grid-a">
+                            <div class="ui-block-a rightPadHalf twoThirds">
+                                <label for="enemyName">
+                                    What did you defeat?
+                                </label>
+                                <input type="text" id="enemyName" name="enemyName[]" data-mini="true" placeholder="Name / Type of Enemy" />
+                            </div>
+                            <div class="ui-block-b leftPadHalf oneThird">
+                                <label for="enemyCount">
+                                    How many?
+                                </label>
+                                <input type="number" id="enemyCount" name="enemyCount[]" data-mini="true" min="1" placeholder="Count" />
+                            </div>
+                        </fieldset>
 
                         <button id="addEnemy" type="button" data-theme="c" data-icon="plus" data-mini="true">Add Another Enemy</button>
-                        <!-- TODO: facilitate removal of additional enemies one at a time -->
-                        <!-- TODO: hide this button if no additional enemies have been added -->
                         <button id="removeEnemy" type="button" data-theme="c" data-icon="minus" data-mini="true">Remove Last Enemy</button>
                     </div>
 
@@ -448,33 +437,23 @@
                 </div>
 
                 <form id="editEventForm" class="clearBoth" data-ajax="false">
-                    <!-- TODO: consider refactoring to reduce number of div tags -->
                     <div id="editCombatDetailInputs">
-                        <div id="editFirstEnemyInputs">
-                            <fieldset class="ui-grid-a">
-                                <div class="ui-block-a rightPadHalf twoThirds">
-                                    <label for="editEnemyName1">
-                                        What did you defeat?
-                                    </label>
-                                    <input type="text" id="editEnemyName1" name="editEnemyName1" data-mini="true" placeholder="Name / Type of Enemy" value="Goblins" />
-                                </div>
-                                <div class="ui-block-b leftPadHalf oneThird">
-                                    <label for="editEnemyCount1">
-                                        How many?
-                                    </label>
-                                    <input type="number" id="editEnemyCount1" name="editEnemyCount1" data-mini="true" min="1" placeholder="Count" value="4" />
-                                </div>
-                            </fieldset>
-                        </div>
-
-                        <!-- TODO: assign unique id and name to each additional enemy -->
-                        <div id="editAdditionalEnemyInputs">
-
-                        </div>
+                        <fieldset id="editEnemyInputsTemplate" class="ui-grid-a">
+                            <div class="ui-block-a rightPadHalf twoThirds">
+                                <label for="editEnemyName">
+                                    What did you defeat?
+                                </label>
+                                <input type="text" id="editEnemyName" name="editEnemyName[]" data-mini="true" placeholder="Name / Type of Enemy" value="Goblins" />
+                            </div>
+                            <div class="ui-block-b leftPadHalf oneThird">
+                                <label for="editEnemyCount">
+                                    How many?
+                                </label>
+                                <input type="number" id="editEnemyCount" name="editEnemyCount[]" data-mini="true" min="1" placeholder="Count" value="4" />
+                            </div>
+                        </fieldset>
 
                         <button id="editAddEnemy" type="button" data-theme="c" data-icon="plus" data-mini="true">Add Another Enemy</button>
-                        <!-- TODO: facilitate removal of additional enemies one at a time -->
-                        <!-- TODO: hide this button if no additional enemies have been added -->
                         <button id="editRemoveEnemy" type="button" data-theme="c" data-icon="minus" data-mini="true">Remove Last Enemy</button>
                     </div>
 
@@ -630,7 +609,7 @@
                         </a>
                     </label>
                     <select id="raceSelect" name="race">
-                        <option> <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                        <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Races...
                         </option>
                     </select>
@@ -644,8 +623,7 @@
 
 
                     <select id="classSelect" name="class">
-                        <option>
-                            <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                        <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Classes...
                         </option>
                     </select>
@@ -699,8 +677,7 @@
                         </a>
                     </label>
                     <select id="editCharacterRaceSelect" name="race">
-                        <option>
-                            <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                        <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Races...
                         </option>
                     </select>
@@ -715,8 +692,7 @@
 
 
                     <select id="editCharacterClassSelect" name="class">
-                        <option>
-                            <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                        <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Classes...
                         </option>
                     </select>
@@ -868,8 +844,7 @@
                                 Delete Race:
                             </label>
                             <select id="deleteRaceSelect" name="race">
-                                <option>
-                                    <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                                <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                                     Loading Races...
                                 </option>
                             </select>
@@ -882,8 +857,7 @@
                                 Delete Class:
                             </label>
                             <select id="deleteClassSelect" name="class">
-                                <option>
-                                    <!-- TODO: This option is only here because jQM 1.1.2 errors out without an option -->
+                                <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                                     Loading Classes...
                                 </option>
                             </select>

@@ -5,82 +5,91 @@
  *      Isaac West, 2015.03.05: Created
  */
 
+// TODO: Only here to prevent query strings in the URL while form handling isn't set up
 $(function()
 {
-    // TODO: Only here to prevent query strings in the URL while form handling isn't set up
     $('form').on('submit', function(event)
     {
         event.preventDefault();
     });
 });
 
-$('section#home').one('pageinit', function homePageInit()
+$('#home').one('pageinit', function homePageInit()
 {
     // Initialization stuff for the home page
     lifeStory.db.getDb(); // TODO: Just for testing that the db initialization works
 });
 
-$('section#characterCreation').one('pageinit', function characterCreationPageInit()
+$('#characterCreation').one('pageinit', function characterCreationPageInit()
 {
     lifeStory.ui.populateRaceAndClassList('raceSelect', 'classSelect');
 });
 
-$('section#customize').one('pageinit', function customizePageInit()
+$('#customize').one('pageinit', function customizePageInit()
 {
     lifeStory.ui.populateRaceAndClassList('deleteRaceSelect', 'deleteClassSelect');
 });
 
-$('section#editCharacter').one('pageinit', function customizePageInit() {
+$('#editCharacter').one('pageinit', function customizePageInit() {
     lifeStory.ui.populateRaceAndClassList('editCharacterRaceSelect', 'editCharacterClassSelect');
 });
 
-$('select#xpSource').on('change', function ()
+$('#createEvent').one('pageinit', function createEventPageInit()
 {
-    var value = $('#xpSource option:selected').val();
-    if (value === 'combat') {
-        $('div#eventDetailInputs').hide();
-        $('div#combatDetailInputs').show();
+    $('#removeEnemy').closest('.ui-btn').hide();
+});
+
+$('#editEvent').one('pageinit', function createEventPageInit()
+{
+    $('#editRemoveEnemy').closest('.ui-btn').hide();
+});
+
+$('#xpSource').on('change', function ()
+{
+    if ($('#xpSource option:selected').val() === 'combat')
+    {
+        $('#eventDetailInputs').hide();
+        $('#combatDetailInputs').show();
     }
-    else {
-        $('div#combatDetailInputs').hide();
-        $('div#eventDetailInputs').show();
+    else
+    {
+        $('#combatDetailInputs').hide();
+        $('#eventDetailInputs').show();
     }
 });
 
-// TODO: assign unique id and name to inputs, currently just copies the first enemy's html
-$('button#addEnemy').on('tap', function ()
+$('#addEnemy').on('tap', function ()
 {
-    // TODO: Make the copy not copy the field values.
-    $('div#additionalEnemyInputs').append(
-        $('div#firstEnemyInputs').
-            clone(). // Clone the selected element
-            find('label'). // Find all child elements which are labels
-            remove(). // Remove them
-            end(). // Collapse the jQuery object down to keep only the remaining elements
-            children()); // Append the children of the selected element
+    var appendToSelector = '#combatDetailInputs fieldset:last';
+    var templateElementId = 'enemyInputsTemplate';
+    var removeButtonSelector = '#removeEnemy';
+
+    lifeStory.ui.duplicateInputSet(appendToSelector, templateElementId, removeButtonSelector);
 });
 
-$('button#removeEnemy').on('tap', function ()
+$('#removeEnemy').on('tap', function ()
 {
-    $('div#additionalEnemyInputs fieldset.ui-grid-a:last').remove();
+    var removeButtonSelector = '#removeEnemy';
+    var removeElementSelector = '#combatDetailInputs fieldset:last:not(#enemyInputsTemplate)';
+
+    lifeStory.ui.removeInputSet(removeElementSelector, removeButtonSelector);
 });
 
-// TODO: assign unique id and name to inputs, currently just copies the first enemy's html
-$('button#editAddEnemy').on('tap', function ()
+$('#editAddEnemy').on('tap', function ()
 {
-    // TODO: Make the copy not copy the field values.
-    $('div#editAdditionalEnemyInputs').append(
-        $('div#editFirstEnemyInputs').
-            clone(). // Clone the selected element
-            find('label'). // Find all child elements which are labels
-            remove(). // Remove them
-            end(). // Collapse the jQuery object down to keep only the remaining elements
-            children()); // Append the children of the selected element
+    var appendToSelector = '#editCombatDetailInputs fieldset:last';
+    var templateElementId = 'editEnemyInputsTemplate';
+    var removeButtonSelector = '#editRemoveEnemy';
+
+    lifeStory.ui.duplicateInputSet(appendToSelector, templateElementId, removeButtonSelector);
 });
 
-$('button#editRemoveEnemy').on('tap', function()
+$('#editRemoveEnemy').on('tap', function()
 {
-    $('div#editAdditionalEnemyInputs fieldset.ui-grid-a:last').remove();
+    var removeButtonSelector = '#editRemoveEnemy';
+    var removeElementSelector = '#editCombatDetailInputs fieldset:last:not(#editEnemyInputsTemplate)';
+
+    lifeStory.ui.removeInputSet(removeElementSelector, removeButtonSelector);
 });
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables

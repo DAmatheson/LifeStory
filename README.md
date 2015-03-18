@@ -28,5 +28,4 @@ Use Immediately Invoked Function Expressions (IIFE) to avoid global variables
 Use the `tap` event instead of the `click` event  
 Use `console.log` or `console.error` to make detecting issues easier  
 Create guard conditions at the beginning of functions which expect data classes as arguments  
-
-  
+Use only id as the jQuery selector if possible for best performance  

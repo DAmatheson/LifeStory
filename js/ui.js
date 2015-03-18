@@ -40,10 +40,39 @@
             text += '<option value="' + data[i].key + '">' + data[i].value + '</option>';
         }
 
-        $('select#' + selectElementId).
-            html(text). // TODO: Switch this back to append if a fix is found for requiring an option entry for select menues
+        $('#' + selectElementId).
+            children().remove().end(). // Remove the placeholder option which prevents an error in jQM 1.1.2
+            append(text).
             selectmenu('refresh');
     };
+
+    uiLibrary.duplicateInputSet = function (appendToSelector, templateElementId, removeButtonSelector)
+    {
+        if ($(appendToSelector + ':not(#' + templateElementId + ')').length === 0)
+        {
+            $(removeButtonSelector).closest('.ui-btn').show();
+        }
+
+        $(appendToSelector).after(
+            $('#' + templateElementId).
+                clone().
+                removeAttr('id'). // Remove id from the clone
+                find('label').remove(). // Find and remove the labels
+                end().// Collapse the jQuery object down to keep only the remaining elements
+                find('input').removeAttr('id').val(''). // Find the inputs and remove their ids and values
+                end() // Collapse the jQuery object down again
+        );
+    }
+
+    uiLibrary.removeInputSet = function (toRemoveSelector, removeButtonSelector)
+    {
+        $(toRemoveSelector).remove();
+
+        if ($(toRemoveSelector).length === 0)
+        {
+            $(removeButtonSelector).closest('.ui-btn').hide();
+        }
+    }
 
     // Helper function to populate the race and class lists specified by the two arguments
     uiLibrary.populateRaceAndClassList = function(raceListId, classListId)
