@@ -79,4 +79,22 @@
 
         setupFormValidation(formId, submitHandler, rules, messages);
     };
+
+    validationLibrary.createCharacterValidate = function ()
+    {
+        $('#createCharacterForm').validate(
+        {
+            rules: {
+                name: {
+                    required: true
+                }
+            },
+            messages: {
+                name: {
+                    required: "Your character must have a name."
+                }
+            }
+        });
+    }
+
 })(window, lifeStory, jQuery);

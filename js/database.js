@@ -415,10 +415,9 @@
     dbLibrary.resetDatabase = function()
     {
         dbLibrary.dropAllTables('danger');
-        initializeTables(dbLibrary.getDb());
-    }
+    };
 
-    // Drops all tables, used for reseting the database
+    // Drops all tables, used for resetting the database
     // Pass 'danger' as an argument to confirm the action
     dbLibrary.dropAllTables = function(areYouSure)
     {

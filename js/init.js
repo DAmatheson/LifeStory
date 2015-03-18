@@ -23,7 +23,7 @@ $('#home').one('pageinit', function homePageInit()
 $('#createCharacter').one('pageinit', function createCharacterPageInit()
 {
     lifeStory.ui.populateRaceAndClassList('raceSelect', 'classSelect');
-    lifeStory.util.createCharacterValidate();
+    lifeStory.validation.createCharacterValidate();
 });
 
 $('#customize').one('pageinit', function customizePageInit()
