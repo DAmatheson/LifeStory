@@ -315,11 +315,30 @@
         {
             tx.executeSql(
                 'INSERT INTO character ' +
-                    '(name, race_id, class_Id, details, living) ' +
+                    '(name, race_id, class_id, details, living) ' +
                 'VALUES (?, ?, ?, ?, ?)',
                 [
                     character.name, character.raceId, character.classId,
                     character.details, character.living
+                ],
+                successCallback || null,
+                failureCallback || sqlErrorHandler);
+        });
+    }
+
+    dbLibrary.updateCharacter = function insertCharacter(character, successCallback, failureCallback) {
+        if (!(character instanceof lifeStory.Character)) {
+            throw 'character parameter to updateCharacter must be an instance of lifeStory.Character';
+        }
+
+        dbLibrary.getDb().transaction(function (tx) {
+            tx.executeSql(
+                'UPDATE character SET ' +
+                    'name = ?, race_id = ?, class_id = ?, details = ?, living = ? ' +
+                'WHERE id = ?',
+                [
+                    character.name, character.raceId, character.classId,
+                    character.details, character.living, localStorage.getItem('currentCharacter') // TODO: get current character id properly
                 ],
                 successCallback || null,
                 failureCallback || sqlErrorHandler);

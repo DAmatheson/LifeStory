@@ -139,4 +139,20 @@
         lifeStory.db.addCharacter(createCharacterFromInput($inputs), saveCharacterSuccess, saveCharacterFailure);
     };
 
+    function updateCharacterSuccess(transaction, resultSet) {
+        alert('Character updated.');
+
+        //$.mobile.changePage(); // TODO: Show the character's details page
+    }
+
+    function updateCharacterFailure(transaction, error) {
+        dbFailure('Failed to update the character.', transaction, error);
+    }
+
+    utilLibrary.updateCharacterInDb = function (form) {
+        var $inputs = $('input:not(button)', form);
+
+        lifeStory.db.updateCharacter(createCharacterFromInput($inputs), updateCharacterSuccess, updateCharacterFailure);
+    };
+
 })(window, lifeStory, jQuery);

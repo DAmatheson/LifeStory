@@ -110,7 +110,7 @@
         }
         else
         {
-            // TODO: Code for edit character form
+            setupFormValidation(formId, lifeStory.util.updateCharacterInDb, rules, messages);
         }
     };
 })(window, lifeStory, jQuery);

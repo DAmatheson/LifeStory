@@ -46,6 +46,7 @@ $('#addRace').one('pageinit', function addRacePageInit()
 
 $('#editCharacter').one('pageinit', function customizePageInit() {
     lifeStory.ui.populateRaceAndClassList('editCharacterRaceSelect', 'editCharacterClassSelect');
+    lifeStory.validation.handleCharacterForm('editCharacterForm');
 });
 
 $('#createEvent').one('pageinit', function createEventPageInit()
