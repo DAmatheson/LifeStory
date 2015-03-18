@@ -66,7 +66,7 @@
     // Returns a new class object populated with the values from the passed in inputs
     function createClassFromInput($inputs)
     {
-        var className = $inputs.filter('[name=className').val();
+        var className = $inputs.filter('[name=className]').val();
 
         return new lifeStory.CharacterClass(className);
     }
@@ -101,7 +101,7 @@
     {
         alert('New custom class created.');
 
-        $.mobile.changePage('#dmViewFeedback'); // TODO: Duplicate callbackData logic from saveRaceToDb
+        //$.mobile.changePage('#dmViewFeedback'); // TODO: Duplicate callbackData logic from saveRaceToDb
     }
 
     // Callback function for failure to save a class
