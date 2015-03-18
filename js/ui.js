@@ -88,35 +88,39 @@
         });
     }
 
-    // TODO: Remove this once it is not longer needed
-    // Usage example:
-    //$('button#clearCharacters').on('tap',
-    //    { countDisplaySelector: '#selector' },
-    //    lifeStory.ui.confirmClearCharactersTable);
-
     // Confirms the user wants to clear the character table. If so, clears the table.
-    uiLibrary.confirmClearCharactersTable = function (e)
+    uiLibrary.confirmClearCharactersTable = function ()
     {
-        // Create a local copy of the event data so that it is captured in the callback's closure
-        var eventData = e.data;
-
         // This must be done this way because the confirm dialog will be shown before a value
         // is returned from getCharacterCount if a callback isn't use.
         lifeStory.db.getCharacterCount(function (characterCount)
         {
-            var result = confirm('All (' + characterCount +
-                ') character records will be deleted permanently. Continue?');
+            // TODO: Use a better looking confirmation, consider http://jsfiddle.net/taditdash/vvjj8/
+            var result = confirm('Are you sure you want to delete all (' + characterCount +
+                ') characters permanently? This cannot be undone.');
 
             if (result === true)
             {
                 lifeStory.db.clearCharacterTable();
+            }
+        });
+    };
 
-                if (eventData !== undefined && eventData !== null &&
-                    eventData.countDisplaySelector !== undefined &&
-                    eventData.countDisplaySelector !== null)
-                {
-                    $(eventData.countDisplaySelector).text('0');
-                }
+    // Confirms the user wants to clear the database. If so, clears the database.
+    uiLibrary.confirmClearDatabase = function ()
+    {
+        // This must be done this way because the confirm dialog will be shown before a value
+        // is returned from getCharacterCount if a callback isn't use.
+        lifeStory.db.getCharacterCount(function (characterCount)
+        {
+            // TODO: Use a better looking confirmation, consider http://jsfiddle.net/taditdash/vvjj8/
+            var result = confirm('Are you sure you want to delete all data? This will delete all ('
+                 + characterCount + ') characters, their events, and custom races and classes ' +
+                'permanently. This cannot be undone.');
+
+            if (result === true)
+            {
+                lifeStory.db.dropAllTables();
             }
         });
     };

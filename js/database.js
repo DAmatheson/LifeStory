@@ -326,8 +326,10 @@
         });
     }
 
-    dbLibrary.updateCharacter = function insertCharacter(character, successCallback, failureCallback) {
-        if (!(character instanceof lifeStory.Character)) {
+    dbLibrary.updateCharacter = function insertCharacter(character, successCallback, failureCallback)
+    {
+        if (!(character instanceof lifeStory.Character))
+        {
             throw 'character parameter to updateCharacter must be an instance of lifeStory.Character';
         }
 
@@ -430,31 +432,22 @@
         });
     };
 
-    // Resets the database
-    dbLibrary.resetDatabase = function()
-    {
-        dbLibrary.dropAllTables('danger');
-    };
-
     // Drops all tables, used for resetting the database
     // Pass 'danger' as an argument to confirm the action
-    dbLibrary.dropAllTables = function(areYouSure)
+    dbLibrary.dropAllTables = function()
     {
-        if (areYouSure === 'danger')
+        dbLibrary.getDb().transaction(function (tx)
         {
-            dbLibrary.getDb().transaction(function (tx)
-            {
-                tx.executeSql('DROP TABLE IF EXISTS character', null, null, sqlErrorHandler);
-                tx.executeSql('DROP TABLE IF EXISTS characterEvent', null, null, sqlErrorHandler);
-                tx.executeSql('DROP TABLE IF EXISTS class', null, null, sqlErrorHandler);
-                tx.executeSql('DROP TABLE IF EXISTS event', null, null, sqlErrorHandler);
-                tx.executeSql('DROP TABLE IF EXISTS eventType', null, null, sqlErrorHandler);
-                tx.executeSql('DROP TABLE IF EXISTS eventDetail', null, null, sqlErrorHandler);
-                tx.executeSql('DROP TABLE IF EXISTS race', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS character', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS characterEvent', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS class', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS event', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS eventType', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS eventDetail', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS race', null, null, sqlErrorHandler);
 
-                localStorage.setItem('dbInitialized', 'false');
-            });
-        }
+            localStorage.setItem('dbInitialized', 'false');
+        });
     };
 
 })(lifeStory);

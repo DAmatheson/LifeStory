@@ -107,21 +107,9 @@ $('#editRemoveEnemy').on('tap', function()
     lifeStory.ui.removeInputSet(removeElementSelector, removeButtonSelector);
 });
 
-$('#clearCharacters').on('tap', function ()
-{
-    // TODO: Use a better looking confirmation, consider http://jsfiddle.net/taditdash/vvjj8/
-    if (confirm('Are you sure you want to delete all characters? This cannot be undone.'))
-    {
-        lifeStory.db.clearCharacterTable();
-    }
-});
+$('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharactersTable);
 
-$('#resetDatabase').on('tap', function () {
-    // TODO: Use a better looking confirmation
-    if (confirm('Are you sure you want to reset the database? This will delete all characters, events, custom races, and custom classes. This cannot be undone.')) {
-        lifeStory.db.resetDatabase();
-    }
-});
+$('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
 // Take undefined as parameter and don't pass anything to get an unchanged version of undefined.

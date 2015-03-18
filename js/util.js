@@ -33,9 +33,9 @@
 
         $(inputSetContainer, $form).each(function(index, element)
         {
-            var detailId = $('[name=eventDetailId]', element).val() || index + 1;
-            var eventName = $('[name=enemyName]', element).val();
-            var creatureCount = $('[name=creatureCount]', element).val() || null;
+            var detailId = element.filter('[name=eventDetailId]').val() || index + 1;
+            var eventName = element.filter('[name=enemyName]').val();
+            var creatureCount = element.filter('[name=creatureCount]').val() || null;
 
             eventDetailItems[index] = new lifeStory.EventDetail(detailId, eventId, eventName,
                 creatureCount);
@@ -44,28 +44,40 @@
         return eventDetailItems;
     };
 
-    function createCharacterFromInput($inputs)
+    function filterFormToOnlyInputs(form)
     {
-        var newCharacter = new lifeStory.Character(
-            $('[name=name]').val(),
-            $('[name=raceId]').val(),
-            $('[name=classId]').val(),
-            $('[name=details]').val(),
-            $('[name=living]').val() || true);
+        return $(':input:not(button)', form);
+    }
+
+    function createCharacterFromInput(form)
+    {
+        var $inputs = filterFormToOnlyInputs(form);
+
+        var newCharacter = new lifeStory.Character();
+
+        newCharacter.name = $inputs.filter('[name=name]').val();
+        newCharacter.raceId = $inputs.filter('[name=raceId]').val();
+        newCharacter.classId = $inputs.filter('[name=classId]').val();
+        newCharacter.living = $inputs.filter('[name=living]').val() || true; // TODO: Figure out if webSQL converts true to 1 automatically or if this needs to be 1
+        newCharacter.details = $inputs.filter('[name=details]').val();
 
         return newCharacter;
     }
 
-    function createRaceFromInput($inputs)
+    function createRaceFromInput(form)
     {
+        var $inputs = filterFormToOnlyInputs(form);
+
         var raceName = $inputs.filter('[name=raceName]').val();
 
         return new lifeStory.Race(raceName);
     }
 
     // Returns a new class object populated with the values from the passed in inputs
-    function createClassFromInput($inputs)
+    function createClassFromInput(form)
     {
+        var $inputs = filterFormToOnlyInputs(form);
+
         var className = $inputs.filter('[name=className]').val();
 
         return new lifeStory.CharacterClass(className);
@@ -89,9 +101,7 @@
 
     utilLibrary.saveRaceToDb = function (form, callbackData)
     {
-        var $inputs = $(':input:not(button)', form);
-
-        lifeStory.db.addRace(createRaceFromInput($inputs), saveRaceSuccess, saveRaceFailure, callbackData);
+        lifeStory.db.addRace(createRaceFromInput(form), saveRaceSuccess, saveRaceFailure, callbackData);
 
         $('button', form).blur();
     };
@@ -113,9 +123,7 @@
     // Gets the form data and calls db.addClass
     utilLibrary.saveClassToDb = function (form)
     {
-        var $inputs = $(':input:not(button)', form); // TODO: Consider removing : before input
-
-        lifeStory.db.addClass(createClassFromInput($inputs), saveClassSuccess, saveClassFailure);
+        lifeStory.db.addClass(createClassFromInput(form), saveClassSuccess, saveClassFailure);
 
         $('button', form).blur(); // TODO: Duplicate callbackData logic from saveRaceToDb
     };
@@ -134,25 +142,26 @@
 
     utilLibrary.saveCharacterToDb = function(form)
     {
-        var $inputs = $('input:not(button)', form);
-
-        lifeStory.db.addCharacter(createCharacterFromInput($inputs), saveCharacterSuccess, saveCharacterFailure);
+        lifeStory.db.addCharacter(createCharacterFromInput(form), saveCharacterSuccess,
+            saveCharacterFailure);
     };
 
-    function updateCharacterSuccess(transaction, resultSet) {
+    function updateCharacterSuccess(transaction, resultSet)
+    {
         alert('Character updated.');
 
         //$.mobile.changePage(); // TODO: Show the character's details page
     }
 
-    function updateCharacterFailure(transaction, error) {
+    function updateCharacterFailure(transaction, error)
+    {
         dbFailure('Failed to update the character.', transaction, error);
     }
 
-    utilLibrary.updateCharacterInDb = function (form) {
-        var $inputs = $('input:not(button)', form);
-
-        lifeStory.db.updateCharacter(createCharacterFromInput($inputs), updateCharacterSuccess, updateCharacterFailure);
+    utilLibrary.updateCharacterInDb = function (form)
+    {
+        lifeStory.db.updateCharacter(createCharacterFromInput(form), updateCharacterSuccess,
+            updateCharacterFailure);
     };
 
 })(window, lifeStory, jQuery);
