@@ -23,6 +23,7 @@ $('#home').one('pageinit', function homePageInit()
 $('#createCharacter').one('pageinit', function createCharacterPageInit()
 {
     lifeStory.ui.populateRaceAndClassList('raceSelect', 'classSelect');
+    lifeStory.util.createCharacterValidate();
 });
 
 $('#customize').one('pageinit', function customizePageInit()
@@ -55,6 +56,26 @@ $('#createEvent').one('pageinit', function createEventPageInit()
 $('#editEvent').one('pageinit', function createEventPageInit()
 {
     $('#editRemoveEnemy').closest('.ui-btn').hide();
+});
+
+$('#createCharacterForm').on('submit', function () {
+    if ($(this).valid())
+    {
+        var newCharacter = new lifeStory.Character(
+            $('#characterName').val(),
+            $('#raceSelect').val(),
+            $('#classSelect').val(),
+            $('#details').val(),
+            true);
+
+        lifeStory.db.insertCharacter(
+            newCharacter,
+            function ()
+            {
+                // TODO: show character's event log
+            },
+            null);
+    }
 });
 
 $('#eventType').on('change', function ()
@@ -103,6 +124,22 @@ $('#editRemoveEnemy').on('tap', function()
     var removeElementSelector = '#editCombatDetailInputs fieldset:last:not(#editEnemyInputsTemplate)';
 
     lifeStory.ui.removeInputSet(removeElementSelector, removeButtonSelector);
+});
+
+$('#clearCharacters').on('tap', function ()
+{
+    // TODO: Use a better looking confirmation, consider http://jsfiddle.net/taditdash/vvjj8/
+    if (confirm('Are you sure you want to delete all characters? This cannot be undone.'))
+    {
+        lifeStory.db.clearCharacterTable();
+    }
+});
+
+$('#resetDatabase').on('tap', function () {
+    // TODO: Use a better looking confirmation
+    if (confirm('Are you sure you want to reset the database? This will delete all characters, events, custom races, and custom classes. This cannot be undone.')) {
+        lifeStory.db.resetDatabase();
+    }
 });
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables

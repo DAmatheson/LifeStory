@@ -78,7 +78,7 @@
             initializationError);
     }
 
-    function creatEventTypeTable(transaction)
+    function createEventTypeTable(transaction)
     {
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS eventType ' +
@@ -119,7 +119,7 @@
                 'event_id INTEGER NOT NULL, ' +
                 'name VARCHAR(60) NOT NULL, ' +
                 'creatureCount INTEGER, ' +
-                'PRIMARY KEY (detail_id, event_id), ' +
+                'PRIMARY KEY (id, event_id), ' +
                 'FOREIGN KEY (event_id) REFERENCES event (id)' +
             ');',
             null,
@@ -197,7 +197,7 @@
             createRaceTable(tx);
             createClassTable(tx);
             createCharacterTable(tx);
-            creatEventTypeTable(tx);
+            createEventTypeTable(tx);
             createEventTable(tx);
             createEventDetailTable(tx);
             createCharacterEventTable(tx);
@@ -407,11 +407,19 @@
         {
             tx.executeSql('DROP TABLE IF EXISTS character', null, null, sqlErrorHandler);
 
-            createCharacterTable();
+            createCharacterTable(tx);
         });
     };
 
-    // TODO: Just for debugging purposes. Pass in danger as the argument for it to work
+    // Resets the database
+    dbLibrary.resetDatabase = function()
+    {
+        dbLibrary.dropAllTables('danger');
+        initializeTables(dbLibrary.getDb());
+    }
+
+    // Drops all tables, used for reseting the database
+    // Pass 'danger' as an argument to confirm the action
     dbLibrary.dropAllTables = function(areYouSure)
     {
         if (areYouSure === 'danger')
@@ -422,6 +430,7 @@
                 tx.executeSql('DROP TABLE IF EXISTS characterEvent', null, null, sqlErrorHandler);
                 tx.executeSql('DROP TABLE IF EXISTS class', null, null, sqlErrorHandler);
                 tx.executeSql('DROP TABLE IF EXISTS event', null, null, sqlErrorHandler);
+                tx.executeSql('DROP TABLE IF EXISTS eventType', null, null, sqlErrorHandler);
                 tx.executeSql('DROP TABLE IF EXISTS eventDetail', null, null, sqlErrorHandler);
                 tx.executeSql('DROP TABLE IF EXISTS race', null, null, sqlErrorHandler);
 

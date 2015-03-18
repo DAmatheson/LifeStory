@@ -105,4 +105,21 @@
         $('button', form).blur(); // TODO: Confirm this works
     };
 
+    utilLibrary.createCharacterValidate = function ()
+    {
+        $('#createCharacterForm').validate(
+        {
+            rules: {
+                name: {
+                    required:true
+                }
+            },
+            messages: {
+                name: {
+                    required:"Your character must have a name."
+                }
+            }
+        });
+    }
+
 })(window, lifeStory, jQuery);
