@@ -47,7 +47,7 @@
     {
         this.id = detailId;
         this.eventId = eventId;
-        this.eventName = eventName;
+        this.name = eventName;
         this.creatureCount = creatureCount;
     }
 

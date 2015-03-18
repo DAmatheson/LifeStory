@@ -115,9 +115,9 @@
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS eventDetail ' +
             '(' +
-                'detail_id INTEGER NOT NULL, ' +
+                'id INTEGER NOT NULL, ' +
                 'event_id INTEGER NOT NULL, ' +
-                'eventName VARCHAR(60) NOT NULL, ' +
+                'name VARCHAR(60) NOT NULL, ' +
                 'creatureCount INTEGER, ' +
                 'PRIMARY KEY (detail_id, event_id), ' +
                 'FOREIGN KEY (event_id) REFERENCES event (id)' +
