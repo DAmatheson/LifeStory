@@ -6,6 +6,7 @@
  */
 
 // Extend lifeStory with database functions located under lifeStory.db
+
 (function(lifeStory, undefined)
 {
     'use strict';
@@ -224,9 +225,10 @@
     {
         if (window.openDatabase === undefined)
         {
-            //alert('WebSQL isn\'t supported in this browser.');
+            alert('WebSQL isn\'t supported in this browser.');
             // TODO: Return dummy object that has all of the db functions?
             // Need to do something to prevent errors when WebSQL isn't supported
+
         }
         else
         {
@@ -259,8 +261,17 @@
     }
 
     // Saves the Race to the database and calls the corresponding success or failure callback
-    dbLibrary.addRace = function addRace(race, successCallback, failureCallback, callbackData)
+    lifeStory.db.addRace = function addRace(race, successCallback, failureCallback, callbackData)
     {
+        // TODO: Either switch everything to this style of comments or remove it
+        /// <summary>
+        ///     Saves the race to the database and calls the corresponding success or failure callback
+        /// </summary>
+        /// <param name="race" type="lifeStory.Race">Race to add to the database</param>
+        /// <param name="successCallback" type="">Optional, function to be called on successful save</param>
+        /// <param name="failureCallback" type="">Optional, function to be called on failed save</param>
+        /// <param name="callbackData" type="">Optional, additional data to pass to the success callback</param>
+
         if (!(race instanceof lifeStory.Race))
         {
             throw 'race parameter to addRace must be an instance of lifeStory.Race';

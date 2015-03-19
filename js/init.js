@@ -107,9 +107,12 @@ $('#editRemoveEnemy').on('tap', function()
     lifeStory.ui.removeInputSet(removeElementSelector, removeButtonSelector);
 });
 
-$('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharactersTable);
+$(function()
+{
+    $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharactersTable);
 
-$('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
+    $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
+});
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
 // Take undefined as parameter and don't pass anything to get an unchanged version of undefined.
