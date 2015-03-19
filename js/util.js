@@ -111,7 +111,7 @@
     {
         alert('New custom class created.');
 
-        //$.mobile.changePage('#dmViewFeedback'); // TODO: Duplicate callbackData logic from saveRaceToDb
+        //$.mobile.changePage('#'); // TODO: Duplicate callbackData logic from saveRaceToDb
     }
 
     // Callback function for failure to save a class

@@ -226,9 +226,19 @@
         if (window.openDatabase === undefined)
         {
             alert('WebSQL isn\'t supported in this browser.');
-            // TODO: Return dummy object that has all of the db functions?
-            // Need to do something to prevent errors when WebSQL isn't supported
 
+            // Dummy database object which prevents errors in browsers without WebSQL support
+            db =
+            {
+                readTransaction: function ()
+                {
+                    console.error('WebSQL isn\'t supported in this browser.');
+                },
+                transaction: function ()
+                {
+                    console.error('WebSQL isn\'t supported in this browser.');
+                }
+            };
         }
         else
         {
@@ -237,13 +247,11 @@
 
             // Ensure the database has been initialized as openDatabase will only call
             // initializeDatabase if the database doesn't exist.
-            // The database can exist without being initialized if dmLibrary.db.cleaDb is used
+            // The database can exist without being initialized if lifeStory.db.dropAllTables is used
             if (localStorage.getItem('dbInitialized') !== 'true')
             {
                 initializeTables(db);
             }
-
-            return db;
         }
     }
 
