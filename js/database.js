@@ -266,7 +266,7 @@
 
         // return the database
         return db;
-    }
+    };
 
     // Saves the Race to the database and calls the corresponding success or failure callback
     lifeStory.db.addRace = function addRace(race, successCallback, failureCallback, callbackData)
@@ -276,9 +276,15 @@
         ///     Saves the race to the database and calls the corresponding success or failure callback
         /// </summary>
         /// <param name="race" type="lifeStory.Race">Race to add to the database</param>
-        /// <param name="successCallback" type="">Optional, function to be called on successful save</param>
-        /// <param name="failureCallback" type="">Optional, function to be called on failed save</param>
-        /// <param name="callbackData" type="">Optional, additional data to pass to the success callback</param>
+        /// <param name="successCallback" type="function">
+        ///     Optional, function to be called on successful save
+        /// </param>
+        /// <param name="failureCallback" type="function">
+        ///     Optional, function to be called on failed save
+        /// </param>
+        /// <param name="callbackData" type="object">
+        ///     Optional, additional data to pass to the success callback
+        /// </param>
 
         if (!(race instanceof lifeStory.Race))
         {
@@ -292,7 +298,7 @@
             successCallback = function(transaction, resultSet)
             {
                 passedInCallback(transaction, resultSet, callbackData);
-            }
+            };
         }
 
         dbLibrary.getDb().transaction(function(tx)
@@ -303,7 +309,7 @@
                 successCallback || null,
                 failureCallback || sqlErrorHandler);
         });
-    }
+    };
 
     // Saves the CharacterClass to the database and calls the corresponding success or failure callback
     dbLibrary.addClass = function addClass(characterClass, successCallback, failureCallback)
@@ -313,14 +319,14 @@
             throw 'characterClass parameter to addClass must be an instance of lifeStory.CharacterClass';
         }
 
-        dbLibrary.getDb().transaction(function (tx)
+        dbLibrary.getDb().transaction(function(tx)
         {
             tx.executeSql('INSERT OR IGNORE INTO class (name) VALUES (?);',
                 [characterClass.name],
                 successCallback || null,
                 failureCallback || sqlErrorHandler);
         });
-    }
+    };
 
     // Saves the Character into the database and calls the corresponding success or failure callback
     dbLibrary.addCharacter = function insertCharacter(character, successCallback, failureCallback)
@@ -330,7 +336,7 @@
             throw 'character parameter to addCharacter must be an instance of lifeStory.Character';
         }
 
-        dbLibrary.getDb().transaction(function (tx)
+        dbLibrary.getDb().transaction(function(tx)
         {
             tx.executeSql(
                 'INSERT INTO character ' +
@@ -343,7 +349,7 @@
                 successCallback || null,
                 failureCallback || sqlErrorHandler);
         });
-    }
+    };
 
     dbLibrary.updateCharacter = function insertCharacter(character, successCallback, failureCallback)
     {
@@ -352,10 +358,11 @@
             throw 'character parameter to updateCharacter must be an instance of lifeStory.Character';
         }
 
-        dbLibrary.getDb().transaction(function (tx) {
+        dbLibrary.getDb().transaction(function(tx)
+        {
             tx.executeSql(
-                'UPDATE character SET ' +
-                    'name = ?, race_id = ?, class_id = ?, details = ?, living = ? ' +
+                'UPDATE character' +
+                'SET name = ?, race_id = ?, class_id = ?, details = ?, living = ? ' +
                 'WHERE id = ?',
                 [
                     character.name, character.raceId, character.classId,
@@ -364,7 +371,7 @@
                 successCallback || null,
                 failureCallback || sqlErrorHandler);
         });
-    }
+    };
 
     // Gets the character count and passes it as the sole argument to callBack
     dbLibrary.getCharacterCount = function (callback)
@@ -469,4 +476,4 @@
         });
     };
 
-})(lifeStory);
+})(window.lifeStory);

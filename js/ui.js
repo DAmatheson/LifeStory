@@ -17,6 +17,30 @@
 
     var uiLibrary = lifeStory.ui = {};
 
+    // Filters the character list to remove deceased characters if the source checkbox is unchecked
+    uiLibrary.filterCharacterList = function()
+    {
+        var $listItems = $('#characterList').children();
+
+        if ($(this).is(':checked'))
+        {
+            $listItems.each(function(index, element)
+            {
+                $(element).removeClass('ui-screen-hidden');
+            });
+        }
+        else
+        {
+            $listItems.each(function(index, element)
+            {
+                if ($(element).attr('data-theme') === 'f')
+                {
+                    $(element).addClass('ui-screen-hidden');
+                }
+            });
+        }
+    };
+
     // Populate the select element matching selectElementId with key and values from data
     uiLibrary.populateList = function (selectElementId, data)
     {
@@ -41,12 +65,12 @@
         }
 
         $('#' + selectElementId).
-            children().remove().end(). // Remove the placeholder option which prevents an error in jQM 1.1.2
+            children().remove().end(). // Remove placeholder option which prevents an error in jQM 1.1.2
             append(text).
             selectmenu('refresh');
     };
 
-    uiLibrary.duplicateInputSet = function (appendToSelector, templateElementId, removeButtonSelector)
+    uiLibrary.duplicateInputSet = function(appendToSelector, templateElementId, removeButtonSelector)
     {
         if ($(appendToSelector + ':not(#' + templateElementId + ')').length === 0)
         {
@@ -58,13 +82,13 @@
                 clone().
                 removeAttr('id'). // Remove id from the clone
                 find('label').remove(). // Find and remove the labels
-                end().// Collapse the jQuery object down to keep only the remaining elements
+                end(). // Collapse the jQuery object down to keep only the remaining elements
                 find('input').removeAttr('id').val(''). // Find the inputs and remove their ids and values
                 end() // Collapse the jQuery object down again
         );
-    }
+    };
 
-    uiLibrary.removeInputSet = function (toRemoveSelector, removeButtonSelector)
+    uiLibrary.removeInputSet = function(toRemoveSelector, removeButtonSelector)
     {
         $(toRemoveSelector).remove();
 
@@ -72,21 +96,21 @@
         {
             $(removeButtonSelector).closest('.ui-btn').hide();
         }
-    }
+    };
 
     // Helper function to populate the race and class lists specified by the two arguments
     uiLibrary.populateRaceAndClassList = function(raceListId, classListId)
     {
-        lifeStory.db.getClasses(function (selectEntries)
+        lifeStory.db.getClasses(function(selectEntries)
         {
             uiLibrary.populateList(classListId, selectEntries);
         });
 
-        lifeStory.db.getRaces(function (selectEntries)
+        lifeStory.db.getRaces(function(selectEntries)
         {
             uiLibrary.populateList(raceListId, selectEntries);
         });
-    }
+    };
 
     // Confirms the user wants to clear the character table. If so, clears the table.
     uiLibrary.confirmClearCharactersTable = function ()
@@ -125,4 +149,4 @@
         });
     };
 
-})(window, lifeStory, jQuery);
+})(window, window.lifeStory, jQuery);

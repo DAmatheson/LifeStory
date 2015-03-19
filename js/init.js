@@ -5,19 +5,22 @@
  *      Isaac West, 2015.03.05: Created
  */
 
-// TODO: Only here to prevent query strings in the URL while form handling isn't set up
 $(function()
 {
+    $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharactersTable);
+    $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
+
+    // TODO: Only here to prevent query strings in the URL while form handling isn't set up
     $('form').on('submit', function(event)
     {
         event.preventDefault();
     });
 });
 
+// Initialization stuff for the home page
 $('#home').one('pageinit', function homePageInit()
 {
-    // Initialization stuff for the home page
-    lifeStory.db.getDb(); // TODO: Just for testing that the db initialization works
+    $('#showDeceased').change(lifeStory.ui.filterCharacterList);
 });
 
 $('#createCharacter').one('pageinit', function createCharacterPageInit()
@@ -105,13 +108,6 @@ $('#editRemoveEnemy').on('tap', function()
     var removeElementSelector = '#editCombatDetailInputs fieldset:last:not(#editEnemyInputsTemplate)';
 
     lifeStory.ui.removeInputSet(removeElementSelector, removeButtonSelector);
-});
-
-$(function()
-{
-    $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharactersTable);
-
-    $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
 });
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables

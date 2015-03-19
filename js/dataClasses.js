@@ -19,13 +19,13 @@
     {
         this.id = null;
         this.name = name;
-    }
+    };
 
     lifeStory.CharacterClass = function characterClass(name)
     {
         this.id = null;
         this.name = name;
-    }
+    };
 
     lifeStory.Character = function character(name, raceId, classId, details, living)
     {
@@ -35,13 +35,13 @@
         this.name = name;
         this.living = living;
         this.details = details;
-    }
+    };
 
     lifeStory.EventType = function eventType(name)
     {
         this.id = null;
         this.name = name;
-    }
+    };
 
     lifeStory.EventDetail = function eventDetail(detailId, eventId, eventName, creatureCount)
     {
@@ -49,7 +49,7 @@
         this.eventId = eventId;
         this.name = eventName;
         this.creatureCount = creatureCount;
-    }
+    };
 
     lifeStory.Event = function event(eventTypeId, date, characterCount, experience, description)
     {
@@ -59,12 +59,12 @@
         this.date = date;
         this.experience = experience;
         this.description = description;
-    }
+    };
 
     lifeStory.SelectEntry = function selectEntry(key, value)
     {
         this.key = key;
         this.value = value;
-    }
+    };
 
-})(window, lifeStory);
+})(window, window.lifeStory);

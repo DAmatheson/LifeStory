@@ -23,6 +23,11 @@
         console.error(error.message, transaction, error);
     }
 
+    function filterToOnlyInputs(element)
+    {
+        return $(':input:not(button)', element);
+    }
+
     utilLibrary.createEventDetailsFromInput = function(formId, inputSetContainer)
     {
         var eventDetailItems = [];
@@ -31,27 +36,31 @@
 
         var eventId = $form.find('[name=id]').val();
 
-        $(inputSetContainer, $form).each(function(index, element)
-        {
-            var detailId = element.filter('[name=eventDetailId]').val() || index + 1;
-            var eventName = element.filter('[name=enemyName]').val();
-            var creatureCount = element.filter('[name=creatureCount]').val() || null;
+        var detailCounter = 0;
 
-            eventDetailItems[index] = new lifeStory.EventDetail(detailId, eventId, eventName,
-                creatureCount);
+        $(inputSetContainer, $form).each(function()
+        {
+            var $inputs = filterToOnlyInputs(this);
+
+            var detailId = $inputs.filter('[name=eventDetailId]').val() || detailCounter + 1;
+            var eventName = $inputs.filter('[name=enemyName]').val();
+            var creatureCount = $inputs.filter('[name=creatureCount]').val() || null;
+
+            if (eventName && creatureCount)
+            {
+                eventDetailItems.push(new lifeStory.EventDetail(detailId, eventId, eventName,
+                    creatureCount));
+
+                detailCounter++;
+            }
         });
 
         return eventDetailItems;
     };
 
-    function filterFormToOnlyInputs(form)
-    {
-        return $(':input:not(button)', form);
-    }
-
     function createCharacterFromInput(form)
     {
-        var $inputs = filterFormToOnlyInputs(form);
+        var $inputs = filterToOnlyInputs(form);
 
         var newCharacter = new lifeStory.Character();
 
@@ -66,7 +75,7 @@
 
     function createRaceFromInput(form)
     {
-        var $inputs = filterFormToOnlyInputs(form);
+        var $inputs = filterToOnlyInputs(form);
 
         var raceName = $inputs.filter('[name=raceName]').val();
 
@@ -76,7 +85,7 @@
     // Returns a new class object populated with the values from the passed in inputs
     function createClassFromInput(form)
     {
-        var $inputs = filterFormToOnlyInputs(form);
+        var $inputs = filterToOnlyInputs(form);
 
         var className = $inputs.filter('[name=className]').val();
 
@@ -164,4 +173,4 @@
             updateCharacterFailure);
     };
 
-})(window, lifeStory, jQuery);
+})(window, window.lifeStory, jQuery);

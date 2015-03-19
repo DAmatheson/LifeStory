@@ -102,7 +102,7 @@
             {
                 required: 'Your character must have a name.'
             }
-        }
+        };
 
         if (isNewCharacterForm)
         {
@@ -113,4 +113,4 @@
             setupFormValidation(formId, lifeStory.util.updateCharacterInDb, rules, messages);
         }
     };
-})(window, lifeStory, jQuery);
+})(window, window.lifeStory, jQuery);
