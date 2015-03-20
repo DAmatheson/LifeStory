@@ -20,25 +20,11 @@
     // Filters the character list to remove deceased characters if the source checkbox is unchecked
     uiLibrary.filterCharacterList = function()
     {
-        var $listItems = $('#characterList').children();
+        var hideDead = !this.checked; // We show when checked, so flip the value
 
-        if ($(this).is(':checked'))
-        {
-            $listItems.each(function(index, element)
-            {
-                $(element).removeClass('ui-screen-hidden');
-            });
-        }
-        else
-        {
-            $listItems.each(function(index, element)
-            {
-                if ($(element).attr('data-theme') === 'f')
-                {
-                    $(element).addClass('ui-screen-hidden');
-                }
-            });
-        }
+        // Add class if hideDead is true, otherwise remove it
+        $('#characterList li[data-theme=f]').toggleClass('ui-screen-hidden', hideDead);
+
     };
 
     // Populate the select element matching selectElementId with key and values from data
