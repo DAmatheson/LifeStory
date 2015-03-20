@@ -57,7 +57,7 @@
             }
         };
 
-        var submitHandler = lifeStory.util.saveRaceToDb;
+        var submitHandler = lifeStory.dataAccess.saveRaceToDb;
 
         var callbackData =
         {
@@ -87,7 +87,7 @@
             formIdToReset: formId
         };
 
-        var submitHandler = lifeStory.util.saveClassToDb;
+        var submitHandler = lifeStory.dataAccess.saveClassToDb;
 
         setupFormValidation(formId, submitHandler, rules, messages, callbackData);
     };
@@ -114,11 +114,11 @@
 
         if (isNewCharacterForm)
         {
-            setupFormValidation(formId, lifeStory.util.saveCharacterToDb, rules, messages);
+            setupFormValidation(formId, lifeStory.dataAccess.saveCharacterToDb, rules, messages);
         }
         else
         {
-            setupFormValidation(formId, lifeStory.util.updateCharacterInDb, rules, messages);
+            setupFormValidation(formId, lifeStory.dataAccess.updateCharacterInDb, rules, messages);
         }
     };
 })(window, window.lifeStory, jQuery);

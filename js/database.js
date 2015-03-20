@@ -268,7 +268,7 @@
         return db;
     };
 
-    lifeStory.db.addRace = function addRace(race, successCallback, failureCallback, callbackData)
+    dbLibrary.addRace = function addRace(race, successCallback, failureCallback)
     {
         /// <summary>
         ///     Saves the race to the database and calls the corresponding success or failure callback
@@ -279,9 +279,6 @@
         /// </param>
         /// <param name="failureCallback" type="function">
         ///     Optional, function to be called on failed save
-        /// </param>
-        /// <param name="callbackData" type="object">
-        ///     Optional, additional data to pass to the success callback
         /// </param>
 
         if (!(race instanceof lifeStory.Race))
@@ -300,7 +297,7 @@
     };
 
     // Saves the CharacterClass to the database and calls the corresponding success or failure callback
-    dbLibrary.addClass = function addClass(characterClass, successCallback, failureCallback, callbackData)
+    dbLibrary.addClass = function addClass(characterClass, successCallback, failureCallback)
     {
         if (!(characterClass instanceof lifeStory.CharacterClass))
         {
