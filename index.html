@@ -19,7 +19,7 @@
         <link href="css/custom.css" rel="stylesheet"/>
     </head>
     <body>
-        <section id="home" class="page" data-role="page" data-title="Life Story - Home">
+        <section id="home" data-role="page" data-title="Home - Life Story">
             <header id="homeHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -77,13 +77,14 @@
             </footer>
         </section>
 
-        <section id="eventLog" class="page" data-role="page" data-title="Life Story - Trogdor">
+        <!-- TODO LOW PRIORITY: Dynamically replace Trogdor with current character's name-->
+        <section id="eventLog" data-role="page" data-title="Trogdor - Life Story">
             <header id="eventLogHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
                         <li>
                             <a href="#home" data-theme="c"
-                                    class="ui-btn-active ui-state-persist">
+                               class="ui-btn-active ui-state-persist">
                                 Characters
                             </a>
                         </li>
@@ -102,7 +103,7 @@
 
                 <div class="right">
                     <a href="#createEvent" data-role="button" class="ui-btn-inline" data-theme="b"
-                            data-mini="true" data-icon="plus">
+                       data-mini="true" data-icon="plus">
                         I Got XP!
                     </a>
                 </div>
@@ -155,7 +156,7 @@
             </footer>
         </section>
 
-        <section id="createEvent" class="page" data-role="page">
+        <section id="createEvent" data-role="page" data-title="New Event - Life Story">
             <header id="createEventHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -226,7 +227,7 @@
             </div>
         </section>
 
-        <section id="deathEvent" class="page" data-role="page">
+        <section id="deathEvent" data-role="page" data-title="Death - Life Story">
             <header id="deathEventHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -267,7 +268,7 @@
             </div>
         </section>
 
-        <section id="resurrectEvent" class="page" data-role="page">
+        <section id="resurrectEvent" data-role="page" data-title="Resurrect  - Life Story">
             <header id="resurrectEventHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -305,7 +306,7 @@
             </div>
         </section>
 
-        <section id="eventDetails" class="page" data-role="page">
+        <section id="eventDetails" data-role="page" data-title="Event Details - Life Story">
             <header id="eventDetailHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -364,9 +365,7 @@
                         <td class="tableLabel">
                             Description:
                         </td>
-                        <td>
-                            
-                        </td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -392,7 +391,7 @@
             </footer>
         </section>
 
-        <section id="editEvent" class="page" data-role="page">
+        <section id="editEvent" data-role="page" data-title="Edit Event - Life Story">
             <header id="editEventHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -422,20 +421,20 @@
                 </div>
 
                 <form id="editEventForm" class="clearBoth">
-                    <input type="hidden" name="id"/>
-                    <input type="hidden" name="eventTypeId"/> <!-- TODO: Make this a select if we wish to allow changing the event type -->
+                    <input type="hidden" name="id" />
+                    <input type="hidden" name="eventTypeId" /> <!-- TODO: Make this a select if we wish to allow changing the event type -->
 
                     <div id="editCombatDetailInputs">
                         <fieldset id="editEnemyInputsTemplate" class="ui-grid-a">
-                            <input type="hidden" name="eventDetailId"/>
+                            <input type="hidden" name="eventDetailId" />
 
                             <div class="ui-block-a rightPadHalf twoThirds">
                                 <label for="editEnemyName">What did you defeat?</label>
-                                <input type="text" id="editEnemyName" name="enemyName" data-mini="true" placeholder="Name / Type of Enemy" value="Goblins"/>
+                                <input type="text" id="editEnemyName" name="enemyName" data-mini="true" placeholder="Name / Type of Enemy" value="Goblins" />
                             </div>
                             <div class="ui-block-b leftPadHalf oneThird">
                                 <label for="editEnemyCount">How many?</label>
-                                <input type="number" id="editEnemyCount" name="creatureCount" data-mini="true" min="1" placeholder="Count" value="4"/>
+                                <input type="number" id="editEnemyCount" name="creatureCount" data-mini="true" min="1" placeholder="Count" value="4" />
                             </div>
                         </fieldset>
 
@@ -445,14 +444,14 @@
 
                     <div id="editEventDetailInputs" hidden>
                         <label for="editEventName">What got you XP?</label>
-                        <input type="text" id="editEventName" name="eventName" placeholder="Name / Title of Event"/>
+                        <input type="text" id="editEventName" name="eventName" placeholder="Name / Title of Event" />
                     </div>
 
                     <label for="editXPAmount">How much XP was awarded?</label>
-                    <input type="number" id="editXPAmount" name="xp" min="0" placeholder="Total XP" value="400"/>
+                    <input type="number" id="editXPAmount" name="xp" min="0" placeholder="Total XP" value="400" />
 
                     <label for="editNumberOfPCs">How many characters shared the XP?</label>
-                    <input type="number" id="editNumberOfPCs" name="characterCount" min="1" placeholder="Player Character Count" value="4"/>
+                    <input type="number" id="editNumberOfPCs" name="characterCount" min="1" placeholder="Player Character Count" value="4" />
 
                     <label for="editEventDetails">Event Details</label>
                     <textarea id="editEventDetails" name="description">Notes about the event.</textarea>
@@ -462,7 +461,7 @@
             </div>
         </section>
 
-        <section id="characterDetails" class="page" data-role="page">
+        <section id="characterDetails" data-role="page" data-title="Trogdor Details - Life Story">
             <header id="characterDetailHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -552,13 +551,13 @@
             </footer>
         </section>
 
-        <section id="createCharacter" class="page" data-role="page">
+        <section id="createCharacter" data-role="page" data-title="Create Character - Life Story">
             <header id="createCharacterHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
                         <li>
                             <a href="#home" data-theme="c"
-                                    class="ui-btn-active ui-state-persist">
+                               class="ui-btn-active ui-state-persist">
                                 Characters
                             </a>
                         </li>
@@ -583,7 +582,7 @@
 
                 <form id="createCharacterForm" class="clearBoth">
                     <label for="characterName">Name</label>
-                    <input type="text" name="name" id="characterName" placeholder="Character Name"/>
+                    <input type="text" name="name" id="characterName" placeholder="Character Name" />
 
                     <label for="raceSelect">
                         Race
@@ -593,19 +592,22 @@
                         </a>
                     </label>
                     <select id="raceSelect" name="raceId">
-                        <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
+                        <option>
+                            <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Races...
                         </option>
                     </select>
 
-                    <label for="classSelect">Class
+                    <label for="classSelect">
+                        Class
                         <a href="#addClass" data-icon="plus" data-role="button"
                            data-iconpos="notext" data-inline="true" data-theme="b">
                             Add a Class
                         </a>
                     </label>
                     <select id="classSelect" name="classId">
-                        <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
+                        <option>
+                            <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Classes...
                         </option>
                     </select>
@@ -618,7 +620,7 @@
             </div>
         </section>
 
-        <section id="editCharacter" class="page" data-role="page">
+        <section id="editCharacter" data-role="page" data-title="Edit Trogdor - Life Story">
             <header id="editCharacterHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -648,20 +650,21 @@
                 </div>
 
                 <form id="editCharacterForm" class="clearBoth">
-                    <input type="hidden" name="id"/>
+                    <input type="hidden" name="id" />
 
                     <label for="editCharacterName">Name</label>
-                    <input type="text" name="name" id="editCharacterName" placeholder="Character Name" value="Trogdor"/>
+                    <input type="text" name="name" id="editCharacterName" placeholder="Character Name" value="Trogdor" />
 
                     <label for="editCharacterRaceSelect">
                         Race
                         <a href="#addRace" data-icon="plus" data-role="button"
-                                data-iconpos="notext" data-inline="true" data-theme="b">
+                           data-iconpos="notext" data-inline="true" data-theme="b">
                             Add a Race
                         </a>
                     </label>
                     <select id="editCharacterRaceSelect" name="raceId">
-                        <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
+                        <option>
+                            <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Races...
                         </option>
                     </select>
@@ -669,12 +672,13 @@
                     <label for="editCharacterClassSelect">
                         Class
                         <a href="#addClass" data-icon="plus" data-role="button"
-                                data-iconpos="notext" data-inline="true" data-theme="b">
+                           data-iconpos="notext" data-inline="true" data-theme="b">
                             Add a Class
                         </a>
                     </label>
                     <select id="editCharacterClassSelect" name="classId">
-                        <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
+                        <option>
+                            <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Classes...
                         </option>
                     </select>
@@ -687,7 +691,7 @@
             </div>
         </section>
 
-        <section id="addClass" class="page" data-role="page">
+        <section id="addClass" data-role="page" data-title="Add Class - Life Story">
             <header id="addClassHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -697,7 +701,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#customize" data-theme="c" 
+                            <a href="#customize" data-theme="c"
                                class="ui-btn-active ui-state-persist">
                                 Customize
                             </a>
@@ -724,14 +728,14 @@
                 <!-- TODO: Make sure this returns to the character creation form on success -->
                 <form id="addClassForm" class="clearBoth">
                     <label for="addClassName">Class Name:</label>
-                    <input type="text" name="className" id="addClassName" placeholder="Class Name"/>
+                    <input type="text" name="className" id="addClassName" placeholder="Class Name" />
 
                     <button data-theme="b">Save New Custom Class</button>
                 </form>
             </div>
         </section>
 
-        <section id="addRace" class="page" data-role="page">
+        <section id="addRace" data-role="page" data-title="Add Race - Life Story">
             <header id="addRaceHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -768,14 +772,14 @@
                 <!-- TODO: Make sure this returns to the character creation form on success -->
                 <form id="addRaceForm" class="clearBoth">
                     <label for="addRaceName">Race Name:</label>
-                    <input type="text" name="raceName" id="addRaceName" placeholder="Race Name"/>
+                    <input type="text" name="raceName" id="addRaceName" placeholder="Race Name" />
 
                     <button data-theme="b">Save New Custom Race</button>
                 </form>
             </div>
         </section>
 
-        <section id="customize" class="page" data-role="page">
+        <section id="customize" data-role="page" data-title="Customize - Life Story">
             <header id="customizeHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -786,7 +790,7 @@
                         </li>
                         <li>
                             <a href="#customize" data-theme="c"
-                                    class="ui-btn-active ui-state-persist">
+                               class="ui-btn-active ui-state-persist">
                                 Customize
                             </a>
                         </li>
@@ -805,20 +809,20 @@
                     <div class="ui-block-a">
                         <form id="createRaceForm" class="rightPadHalf">
                             <label for="raceName">Race Name:</label>
-                            <input type="text" name="raceName" id="raceName" placeholder="Race Name"/>
+                            <input type="text" name="raceName" id="raceName" placeholder="Race Name" />
                             <button data-theme="b">Save New Race</button>
                         </form>
                     </div>
                     <div class="ui-block-b">
                         <form id="createClassForm" class="leftPadHalf">
                             <label for="className">Class Name:</label>
-                            <input type="text" name="className" id="className" placeholder="Class Name"/>
+                            <input type="text" name="className" id="className" placeholder="Class Name" />
                             <button data-theme="b">Save New Class</button>
                         </form>
                     </div>
                 </div>
 
-                <br/>
+                <br />
 
                 <div class="ui-grid-a my-breakpoint">
                     <div class="ui-block-a">
@@ -827,7 +831,8 @@
                                 Delete Race:
                             </label>
                             <select id="deleteRaceSelect" name="race">
-                                <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
+                                <option>
+                                    <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                                     Loading Races...
                                 </option>
                             </select>
@@ -840,7 +845,8 @@
                                 Delete Class:
                             </label>
                             <select id="deleteClassSelect" name="class">
-                                <option> <!-- Note: Only here because jQM 1.1.2 errors out without it -->
+                                <option>
+                                    <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                                     Loading Classes...
                                 </option>
                             </select>
@@ -851,7 +857,7 @@
             </div>
         </section>
         
-        <section id="settings" class="page" data-role="page">
+        <section id="settings" data-role="page" data-title="Settings - Life Story">
             <header id="settingsHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -865,7 +871,7 @@
                         </li>
                         <li>
                             <a href="#settings" data-theme="c"
-                                    class="ui-btn-active ui-state-persist">
+                               class="ui-btn-active ui-state-persist">
                                 Settings
                             </a>
                         </li>

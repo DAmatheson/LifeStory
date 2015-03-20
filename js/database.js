@@ -150,10 +150,10 @@
         var defaultClasses = ['Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk',
             'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'];
 
-        defaultClasses.forEach(function(element)
+        defaultClasses.forEach(function(item)
         {
             transaction.executeSql('INSERT OR IGNORE INTO class (name) VALUES (?);',
-                [element],
+                [item],
                 null,
                 initializationError);
         });
@@ -165,11 +165,11 @@
         var names = ['Dwarf', 'Human', 'Halfling', 'Elf', 'Half-elf',
             'Half-orc', 'Gnome', 'Dragonborn', 'Tiefling'];
 
-        names.forEach(function(element)
+        names.forEach(function(item)
         {
             transaction.executeSql(
                 'INSERT OR IGNORE INTO race (name) VALUES (?);',
-                [element],
+                [item],
                 null,
                 initializationError);
         });
@@ -180,11 +180,11 @@
     {
         var names = ['Combat', 'Non-Combat', 'Resurrect', 'Death'];
 
-        names.forEach(function (element)
+        names.forEach(function (item)
         {
             transaction.executeSql(
                 'INSERT OR IGNORE INTO eventType (name) VALUES (?);',
-                [element],
+                [item],
                 null,
                 initializationError);
         });
