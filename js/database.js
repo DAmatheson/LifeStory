@@ -388,8 +388,9 @@
         dbLibrary.getDb().readTransaction(function (tx)
         {
             tx.executeSql(
-                'SELECT *' +
-                'FROM class',
+                'SELECT * ' +
+                'FROM class ' +
+                'ORDER BY name',
                 null,
                 function (transaction, resultSet)
                 {
@@ -405,8 +406,9 @@
         dbLibrary.getDb().readTransaction(function (tx)
         {
             tx.executeSql(
-                'SELECT *' +
-                'FROM race',
+                'SELECT * ' +
+                'FROM race ' +
+                'ORDER BY name',
                 null,
                 function(transaction, resultSet)
                 {
