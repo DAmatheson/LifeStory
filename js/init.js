@@ -25,7 +25,11 @@ $('#home').one('pageinit', function homePageInit()
 
 $('#createCharacter').one('pageinit', function createCharacterPageInit()
 {
-    lifeStory.ui.populateRaceAndClassList('raceSelect', 'classSelect');
+    $(this).on('pagebeforeshow', function()
+    {
+        lifeStory.ui.populateRaceAndClassList('raceSelect', 'classSelect');
+    });
+    
     lifeStory.validation.handleCharacterForm('createCharacterForm', true);
 });
 
@@ -39,7 +43,7 @@ $('#customize').one('pageinit', function customizePageInit()
 
 $('#addClass').one('pageinit', function addClassPageInit()
 {
-    lifeStory.validation.handleClassForm('addClassForm');
+    lifeStory.validation.handleClassForm('addClassForm', 'createCharacter');
 });
 
 $('#addRace').one('pageinit', function addRacePageInit()
@@ -54,26 +58,26 @@ $('#editCharacter').one('pageinit', function customizePageInit() {
 
 $('#createEvent').one('pageinit', function createEventPageInit()
 {
+    $('#eventType').on('change', function ()
+    {
+        if ($('#eventType option:selected').val() === 'combat')
+        {
+            $('#eventDetailInputs').hide();
+            $('#combatDetailInputs').show();
+        }
+        else
+        {
+            $('#combatDetailInputs').hide();
+            $('#eventDetailInputs').show();
+        }
+    });
+
     $('#removeEnemy').closest('.ui-btn').hide();
 });
 
 $('#editEvent').one('pageinit', function createEventPageInit()
 {
     $('#editRemoveEnemy').closest('.ui-btn').hide();
-});
-
-$('#eventType').on('change', function ()
-{
-    if ($('#eventType option:selected').val() === 'combat')
-    {
-        $('#eventDetailInputs').hide();
-        $('#combatDetailInputs').show();
-    }
-    else
-    {
-        $('#combatDetailInputs').hide();
-        $('#eventDetailInputs').show();
-    }
 });
 
 $('#addEnemy').on('tap', function ()

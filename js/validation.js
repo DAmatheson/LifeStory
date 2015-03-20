@@ -68,7 +68,7 @@
         setupFormValidation(formId, submitHandler, rules, messages, callbackData);
     };
 
-    validationLibrary.handleClassForm = function(formId)
+    validationLibrary.handleClassForm = function(formId, redirectToPageIdOnSubmit)
     {
         var rules = { className: classRaceNameRules };
 
@@ -81,9 +81,15 @@
             }
         };
 
+        var callbackData =
+        {
+            redirectToPageId: redirectToPageIdOnSubmit,
+            formIdToReset: formId
+        };
+
         var submitHandler = lifeStory.util.saveClassToDb;
 
-        setupFormValidation(formId, submitHandler, rules, messages);
+        setupFormValidation(formId, submitHandler, rules, messages, callbackData);
     };
 
     validationLibrary.handleCharacterForm = function(formId, isNewCharacterForm)
@@ -92,7 +98,8 @@
         {
             name:
             {
-                required: true
+                required: true,
+                rangelength: [1, 50]
             }
         };
 
@@ -100,7 +107,8 @@
         {
             name:
             {
-                required: 'Your character must have a name.'
+                required: 'Your character must have a name.',
+                rangelength: 'Your character\'s name must be between 1 and 50 characters long.'
             }
         };
 

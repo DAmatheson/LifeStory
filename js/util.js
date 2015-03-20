@@ -23,7 +23,7 @@
         console.error(error.message, transaction, error);
     }
 
-    function filterToOnlyInputs(element)
+    function reduceToOnlyInputs(element)
     {
         return $(':input:not(button)', element);
     }
@@ -40,10 +40,10 @@
 
         $(inputSetContainer, $form).each(function()
         {
-            var $inputs = filterToOnlyInputs(this);
+            var $inputs = reduceToOnlyInputs(this);
 
             var detailId = $inputs.filter('[name=eventDetailId]').val() || detailCounter + 1;
-            var eventName = $inputs.filter('[name=enemyName]').val();
+            var eventName = $inputs.filter('[name=enemyName]').val().trim();
             var creatureCount = $inputs.filter('[name=creatureCount]').val() || null;
 
             if (eventName && creatureCount)
@@ -60,24 +60,24 @@
 
     function createCharacterFromInput(form)
     {
-        var $inputs = filterToOnlyInputs(form);
+        var $inputs = reduceToOnlyInputs(form);
 
         var newCharacter = new lifeStory.Character();
 
-        newCharacter.name = $inputs.filter('[name=name]').val();
+        newCharacter.name = $inputs.filter('[name=name]').val().trim();
         newCharacter.raceId = $inputs.filter('[name=raceId]').val();
         newCharacter.classId = $inputs.filter('[name=classId]').val();
-        newCharacter.living = $inputs.filter('[name=living]').val() || true; // TODO: Figure out if webSQL converts true to 1 automatically or if this needs to be 1
-        newCharacter.details = $inputs.filter('[name=details]').val();
+        newCharacter.living = $inputs.filter('[name=living]').val() || true; // TODO: true = WHERE living = 'true'; 1 = WHERE living = 1; Which is preferable?
+        newCharacter.details = $inputs.filter('[name=details]').val().trim() || null;
 
         return newCharacter;
     }
 
     function createRaceFromInput(form)
     {
-        var $inputs = filterToOnlyInputs(form);
+        var $inputs = reduceToOnlyInputs(form);
 
-        var raceName = $inputs.filter('[name=raceName]').val();
+        var raceName = $inputs.filter('[name=raceName]').val().trim();
 
         return new lifeStory.Race(raceName);
     }
@@ -85,11 +85,32 @@
     // Returns a new class object populated with the values from the passed in inputs
     function createClassFromInput(form)
     {
-        var $inputs = filterToOnlyInputs(form);
+        var $inputs = reduceToOnlyInputs(form);
 
-        var className = $inputs.filter('[name=className]').val();
+        var className = $inputs.filter('[name=className]').val().trim();
 
         return new lifeStory.CharacterClass(className);
+    }
+
+    function modifySuccessCallback(successCallback, callbackData)
+    {
+        /// <summary>
+        ///     Modifies the success callback to pass in additional callback data <br/>
+        ///     Only modifies the callback if additional callback data is passed in
+        /// </summary>
+        /// <param name="successCallback" type="function">The intended success callback function</param>
+        /// <param name="callbackData" type="any">Additional data to pass to the success callback</param>
+        /// <returns type="function">The modified success callback</returns>
+
+        if (successCallback && callbackData)
+        {
+            return function (transaction, resultSet)
+            {
+                successCallback(transaction, resultSet, callbackData);
+            };
+        }
+
+        return successCallback;
     }
 
     // Callback function for successfully saving a race
@@ -110,17 +131,21 @@
 
     utilLibrary.saveRaceToDb = function (form, callbackData)
     {
-        lifeStory.db.addRace(createRaceFromInput(form), saveRaceSuccess, saveRaceFailure, callbackData);
+        var successCallback = modifySuccessCallback(saveRaceSuccess, callbackData);
+
+        lifeStory.db.addRace(createRaceFromInput(form), successCallback, saveRaceFailure, callbackData);
 
         $('button', form).blur();
     };
 
     // Callback function for successfully saving a class
-    function saveClassSuccess(transaction, resultSet)
+    function saveClassSuccess(transaction, resultSet, callbackData)
     {
+        $('#' + callbackData.formIdToReset).trigger('reset');
+
         alert('New custom class created.');
 
-        //$.mobile.changePage('#'); // TODO: Duplicate callbackData logic from saveRaceToDb
+        $.mobile.changePage('#' + callbackData.redirectToPageId);
     }
 
     // Callback function for failure to save a class
@@ -130,11 +155,13 @@
     }
 
     // Gets the form data and calls db.addClass
-    utilLibrary.saveClassToDb = function (form)
+    utilLibrary.saveClassToDb = function (form, callbackData)
     {
-        lifeStory.db.addClass(createClassFromInput(form), saveClassSuccess, saveClassFailure);
+        var successCallback = modifySuccessCallback(saveClassSuccess, callbackData);
 
-        $('button', form).blur(); // TODO: Duplicate callbackData logic from saveRaceToDb
+        lifeStory.db.addClass(createClassFromInput(form), successCallback, saveClassFailure, callbackData);
+
+        $('button', form).blur();
     };
 
     function saveCharacterSuccess(transaction, resultSet)
@@ -172,5 +199,25 @@
         lifeStory.db.updateCharacter(createCharacterFromInput(form), updateCharacterSuccess,
             updateCharacterFailure);
     };
+
+    utilLibrary.convertToSelectEntrys = function(resultSet, valueName, callback)
+    {
+        /// <summary>
+        ///     Converts the values from a resultSet into an array of key value lifeStory.SelectEntrys
+        /// </summary>
+        /// <param name="resultSet" type="">The result set</param>
+        /// <param name="valueName" type="string">The column name to pull the value from</param>
+        /// <param name="callback" type="function">The function to call with the converted results</param>
+
+        var results = [];
+
+        for (var i = 0; i < resultSet.rows.length; i++)
+        {
+            results[i] = new lifeStory.SelectEntry(resultSet.rows.item(i).id,
+                resultSet.rows.item(i)[valueName]);
+        }
+
+        callback(results);
+    }
 
 })(window, window.lifeStory, jQuery);

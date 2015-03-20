@@ -268,10 +268,8 @@
         return db;
     };
 
-    // Saves the Race to the database and calls the corresponding success or failure callback
     lifeStory.db.addRace = function addRace(race, successCallback, failureCallback, callbackData)
     {
-        // TODO: Either switch everything to this style of comments or remove it
         /// <summary>
         ///     Saves the race to the database and calls the corresponding success or failure callback
         /// </summary>
@@ -291,16 +289,6 @@
             throw 'race parameter to addRace must be an instance of lifeStory.Race';
         }
 
-        if (successCallback)
-        {
-            var passedInCallback = successCallback;
-
-            successCallback = function(transaction, resultSet)
-            {
-                passedInCallback(transaction, resultSet, callbackData);
-            };
-        }
-
         dbLibrary.getDb().transaction(function(tx)
         {
             tx.executeSql(
@@ -312,7 +300,7 @@
     };
 
     // Saves the CharacterClass to the database and calls the corresponding success or failure callback
-    dbLibrary.addClass = function addClass(characterClass, successCallback, failureCallback)
+    dbLibrary.addClass = function addClass(characterClass, successCallback, failureCallback, callbackData)
     {
         if (!(characterClass instanceof lifeStory.CharacterClass))
         {
@@ -397,22 +385,6 @@
         });
     };
 
-    // Converts the values from a resultSet into and array of key value SelectEntrys
-    // propertyName: the column name to pull the value from
-    // callback: the function to call with the results
-    function convertResultSetToSelectEntrys(transaction, resultSet, propertyName, callback)
-    {
-        var results = [];
-
-        for (var i = 0; i < resultSet.rows.length; i++)
-        {
-            results[i] = new lifeStory.SelectEntry(resultSet.rows.item(i).id,
-                resultSet.rows.item(i)[propertyName]);
-        }
-
-        callback(results);
-    }
-
     // Gets the classes and passes them as the sole argument to callBack
     dbLibrary.getClasses = function (callback)
     {
@@ -424,7 +396,7 @@
                 null,
                 function (transaction, resultSet)
                 {
-                    convertResultSetToSelectEntrys(transaction, resultSet, 'name', callback);
+                    lifeStory.util.convertToSelectEntrys(resultSet, 'name', callback);
                 },
                 sqlErrorHandler);
         });
@@ -441,7 +413,7 @@
                 null,
                 function(transaction, resultSet)
                 {
-                    convertResultSetToSelectEntrys(transaction, resultSet, 'name', callback);
+                    lifeStory.util.convertToSelectEntrys(resultSet, 'name', callback);
                 },
                 sqlErrorHandler);
         });
