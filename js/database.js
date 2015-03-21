@@ -456,7 +456,7 @@
         {
             tx.executeSql(
                 'SELECT c.id, c.name, living, ' +
-                'race.name AS raceName, class.name AS className ' +
+                    'race.name AS raceName, class.name AS className ' +
                 'FROM character c ' +
                     'JOIN class ' +
                         'ON c.class_id = class.id ' +
@@ -493,12 +493,16 @@
         {
             tx.executeSql(
                 'SELECT c.id, race_id, class_id, c.name, living, details, ' +
-                'race.name AS raceName, class.name AS className ' +
+                    'race.name AS raceName, class.name AS className, SUM(e.xp) AS experience ' +
                 'FROM character c ' +
                     'JOIN class ' +
                         'ON c.class_id = class.id ' +
                     'JOIN race ' +
                         'ON c.race_id = race.id ' +
+                    'LEFT OUTER JOIN characterEvent ce ' +
+                        'ON c.id = ce.character_id ' +
+                    'LEFT OUTER JOIN event e ' +
+                        'ON ce.event_id = e.id ' +
                 'WHERE c.id = ?;',
                 [characterId],
                 function(transaction, resultSet)
@@ -514,6 +518,7 @@
                     character.details = row.details;
                     character.raceName = row.raceName;
                     character.className = row.className;
+                    character.experience = row.experience;
 
                     callback(character);
                 },
@@ -529,7 +534,7 @@
 
             tx.executeSql(
                 'SELECT e.id AS id, eventType_id, characterCount, date, xp, description, ' +
-                'et.name AS eventTypeName ' +
+                    'et.name AS eventTypeName ' +
                 'FROM event e ' +
                     'JOIN eventType et ' +
                         'ON e.eventType_id = et.id ' +
@@ -601,7 +606,7 @@
         {
             tx.executeSql(
                 'SELECT e.id, eventType_id, characterCount, date, xp, description, ' +
-                'eventType.name AS eventTypeName ' +
+                    'eventType.name AS eventTypeName ' +
                 'FROM event e JOIN eventType ' +
                     'ON e.eventType_id = eventType.id ' +
                 'WHERE id = ?;',

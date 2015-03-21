@@ -38,6 +38,7 @@
 
         this.raceName = null;
         this.className = null;
+        this.experience = null;
     };
 
     lifeStory.EventType = function eventType(name)

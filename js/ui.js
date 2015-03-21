@@ -239,7 +239,7 @@
 
                 $('[data-property=name]', $currentItem).text(character.name);
                 $('[data-property=raceName]', $currentItem).text(character.raceName);
-                $('[data-property=className]', $currentItem).text(character.clasName);
+                $('[data-property=className]', $currentItem).text(character.className);
 
                 if (!character.living)
                 {
@@ -361,16 +361,17 @@
             $detailsTable.find('[data-property=race]').text(character.raceName);
             $detailsTable.find('[data-property=class]').text(character.className);
             $detailsTable.find('[data-property=living]').text(character.living); // TODO: Change this when the value for living is decided
-            $detailsTable.find('[data-property=experience]').text(Math.floor(character.experience)); // TODO: Calculate level based on experience instead
+            $detailsTable.find('[data-property=level]').text(Math.floor(character.experience) || 0); // TODO: Calculate level based on experience instead
 
             if (character.details)
             {
                 $detailsTable.find('[data-property=details]').text(character.details).
-                    parent().removeClass('ui-screen-hidden');
+                    parent().prev().removeClass('ui-screen-hidden');
             }
             else
             {
-                $detailsTable.find('[data-property=details]').parent().addClass('ui-screen-hidden');
+                $detailsTable.find('[data-property=details]').text('').
+                    parent().prev().addClass('ui-screen-hidden');
             }
         });
     };
