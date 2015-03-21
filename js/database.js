@@ -450,6 +450,189 @@
         });
     };
 
+    dbLibrary.getCharacters = function (callback)
+    {
+        dbLibrary.getDb().readTransaction(function (tx)
+        {
+            tx.executeSql(
+                'SELECT c.id, c.name, living, ' +
+                'race.name AS raceName, class.name AS className ' +
+                'FROM character c ' +
+                    'JOIN class ' +
+                        'ON c.class_id = class.id ' +
+                    'JOIN race ' +
+                        'ON c.race_id = race.id;',
+                null,
+                function (transaction, resultSet)
+                {
+                    var characters = [];
+
+                    for (var i = 0; i < resultSet.rows.length; i++)
+                    {
+                        var row = resultSet.rows.item(i);
+                        var character = new lifeStory.Character();
+
+                        character.id = row.id;
+                        character.name = row.name;
+                        character.living = row.living;
+                        character.className = row.className;
+                        character.raceName = row.raceName;
+
+                        characters[i] = character;
+                    }
+
+                    callback(characters);
+                },
+                sqlErrorHandler);
+        });
+    };
+
+    dbLibrary.getCharacter = function(characterId, callback)
+    {
+        dbLibrary.getDb().readTransaction(function(tx)
+        {
+            tx.executeSql(
+                'SELECT c.id, race_id, class_id, c.name, living, details, ' +
+                'race.name AS raceName, class.name AS className ' +
+                'FROM character c ' +
+                    'JOIN class ' +
+                        'ON c.class_id = class.id ' +
+                    'JOIN race' +
+                        'ON c.race_id = race.id ' +
+                'WHERE id = ?;',
+                [characterId],
+                function(transaction, resultSet)
+                {
+                    var row = resultSet.rows.item(0);
+
+                    var race = new lifeStory.Race();
+                    race.name = row.raceName;
+                    race.id = row.race_id;
+
+                    var characterClass = new lifeStory.CharacterClass();
+                    characterClass.name = row.className;
+                    characterClass.id = row.class_id;
+
+                    var character = new lifeStory.Character();
+                    character.id = row.id;
+                    character.name = row.name;
+                    character.raceId = row.race_id;
+                    character.classId = row.class_id;
+                    character.living = row.living;
+                    character.details = row.details;
+                    character.race = race;
+                    character.characterClass = characterClass;
+
+                    callback(character);
+                },
+                sqlErrorHandler);
+        });
+    };
+
+    dbLibrary.getCharactersEvents = function(characterId, callback)
+    {
+        dbLibrary.getDb().readTransaction(function(tx)
+        {
+            var event = lifeStory.Event();
+
+            tx.executeSql(
+                'SELECT e.id AS id, eventType_id, characterCount, date, xp, description, ' +
+                'et.name AS eventTypeName ' +
+                'FROM event e ' +
+                    'JOIN eventType et ' +
+                        'ON e.eventType_id = et.id ' +
+                    'JOIN characterEvent ce ' +
+                        'ON e.id = ce.event_id ' +
+                'WHERE ce.character_id = ?;',
+                [characterId],
+                function(transaction, resultSet)
+                {
+                    var events = [];
+
+                    for (var i = 0; i < resultSet.rows.length; i++)
+                    {
+                        var row = resultSet.rows.item(i);
+                        var event = new lifeStory.Event();
+
+                        event.id = row.id;
+                        event.eventTypeId = row.eventType_id;
+                        event.characterCount = row.characterCount;
+                        event.date = row.date;
+                        event.experience = row.xp;
+                        event.description = row.description;
+                        event.eventTypeName = row.eventTypeName;
+                    }
+
+                    callback(events);
+                },
+                sqlErrorHandler);
+        });
+    };
+
+    dbLibrary.getEventsDetails = function(event, callback)
+    {
+        dbLibrary.getDb().readTransaction(function(tx)
+        {
+            tx.executeSql(
+                'SELECT id, event_id, name, creatureCount ' +
+                'FROM eventDetail ' +
+                'WHERE event_id = ?;',
+                [event.Id],
+                function(transaction, resultSet)
+                {
+                    var eventDetails = [];
+
+                    for (var i = 0; i < resultSet.rows.length; i++)
+                    {
+                        var row = resultSet.rows.item(i);
+                        var eventDetail = new lifeStory.EventDetail();
+
+                        eventDetail.eventId = row.event_id;
+                        eventDetail.id = row.id;
+                        eventDetail.name = row.name;
+                        eventDetail.creatureCount = row.creatureCount;
+
+                        eventDetails[i] = eventDetail;
+                    }
+
+                    event.eventDetails = eventDetails;
+
+                    callback(event);
+                },
+                sqlErrorHandler);
+        });
+    };
+
+    dbLibrary.getEvent = function(eventId, callback)
+    {
+        dbLibrary.getDb().readTransaction(function(tx)
+        {
+            tx.executeSql(
+                'SELECT e.id, eventType_id, characterCount, date, xp, description, ' +
+                'eventType.name AS eventTypeName ' +
+                'FROM event e JOIN eventType ' +
+                    'ON e.eventType_id = eventType.id ' +
+                'WHERE id = ?;',
+                [eventId],
+                function(transaction, resultSet)
+                {
+                    var row = resultSet.rows.item(0);
+                    var event = lifeStory.Event();
+
+                    event.id = row.id;
+                    event.eventTypeId = row.eventType_id;
+                    event.characterCount = row.characterCount;
+                    event.date = row.date;
+                    event.experience = row.xp;
+                    event.description = row.description;
+                    event.eventTypeName = row.eventTypeName;
+
+                    dbLibrary.getEventsDetails(event, callback);
+                },
+                sqlErrorHandler);
+        });
+    };
+
     // Clears the character table
     dbLibrary.clearCharacterTable = function clearCharacterTable()
     {

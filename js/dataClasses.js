@@ -35,6 +35,9 @@
         this.name = name;
         this.living = living;
         this.details = details;
+
+        this.raceName = null;
+        this.className = null;
     };
 
     lifeStory.EventType = function eventType(name)
@@ -59,6 +62,9 @@
         this.date = date;
         this.experience = experience;
         this.description = description;
+
+        this.eventTypeName = null;
+        this.eventDetails = null;
     };
 
     lifeStory.SelectEntry = function selectEntry(key, value)

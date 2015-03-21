@@ -64,7 +64,7 @@
         /// </summary>
         /// <param name="message" type="string">Success message to display</param>
 
-        $('#successMessage').text(message);
+        $('#successMessage').html(message);
         $('#successDialog').popup('open');
     }
 
@@ -75,7 +75,7 @@
         /// </summary>
         /// <param name="message" type="string">Error message to display</param>
 
-        $('#errorMessage').text(message);
+        $('#errorMessage').html(message);
         $('#errorDialog').popup('open');
     }
 
@@ -118,15 +118,16 @@
     };
 
     // Populate the select element matching selectElementId with key and values from data
-    uiLibrary.populateList = function (selectElementId, data)
+    uiLibrary.populateSelectList = function (selectElementId, data)
     {
         if (!Array.isArray(data))
         {
-            throw 'The data argument for populateList must be an array';
+            throw 'The data argument for populateSelectList must be an array';
         }
         else if (data.length > 0 && !(data[0] instanceof lifeStory.SelectEntry))
         {
-            throw 'The entries in the data argument for populateList must be instances of SelectEntry';
+            throw 'The entries in the data argument for populateSelectList must be instances ' +
+                'of lifeStory.SelectEntry';
         }
 
         var text = '';
@@ -151,7 +152,7 @@
     {
         lifeStory.db.getClasses(function(selectEntries)
         {
-            uiLibrary.populateList(classListId, selectEntries);
+            uiLibrary.populateSelectList(classListId, selectEntries);
 
             if (typeof populationCompleteCallback === 'function')
             {
@@ -164,7 +165,7 @@
     {
         lifeStory.db.getRaces(function(selectEntries)
         {
-            uiLibrary.populateList(raceListId, selectEntries);
+            uiLibrary.populateSelectList(raceListId, selectEntries);
 
             if (typeof populationCompleteCallback === 'function')
             {
@@ -217,6 +218,64 @@
         {
             $(removeButtonSelector).closest('.ui-btn').hide();
         }
+    };
+
+    uiLibrary.populateCharacterList = function(listViewId, itemElementType)
+    {
+        lifeStory.db.getCharacters(function (characters)
+        {
+            var $listContainer = $('#' + listViewId);
+            var $reviewItem = $(':first(' + itemElementType + ')', $listContainer).
+                clone().
+                removeClass('ui-screen-hidden');
+
+            // Remove everything except the first item. First item is hidden and used as a template
+            $(':first(' + itemElementType + ')', $listContainer).siblings().remove();
+
+            for (var i = 0; i < characters.length; i++)
+            {
+                var $currentItem = $reviewItem.clone();
+                var character = characters[i];
+
+                $('[data-property=name]', $currentItem).text(character.name);
+                $('[data-property=raceName]', $currentItem).text(character.raceName);
+                $('[data-property=className]', $currentItem).text(character.clasName);
+
+                if (!character.living)
+                {
+                    $currentItem.data('theme', 'f');
+                }
+
+                $('a', $currentItem).on('tap',
+                    { characterId: character.id, characterName: character.name },
+                    function (event)
+                    {
+                        localStorage.setItem('characterId', event.data.characterId);
+                        localStorage.setItem('characterName', event.data.characterName);
+                    }
+                );
+
+                $listContainer.append($currentItem);
+            }
+
+            if (characters.length === 0)
+            {
+                $reviewItem.
+                    find('a').
+                    attr('href', '#createCharacter').
+                    find('h1').
+                    text('Add a Character').
+                    siblings().
+                    remove();
+
+                // Change icon to a plus
+                $reviewItem.find('span').removeClass('ui-icon-arrow-r').addClass('ui-icon-plus');
+
+                $listContainer.append($reviewItem);
+            }
+
+            $listContainer.listview('refresh');
+        });
     };
 
     // Confirms the user wants to clear the character table. If so, clears the table.

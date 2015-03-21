@@ -31,6 +31,11 @@ $(function()
 // Initialization stuff for the home page
 $('#home').one('pageinit', function homePageInit()
 {
+    $(this).on('pagebeforeshow', function()
+    {
+        lifeStory.ui.populateCharacterList('characterList', 'li');
+    });
+    
     $('#showDeceased').change(lifeStory.ui.filterCharacterList);
 });
 
@@ -84,7 +89,7 @@ $('#createEvent').one('pageinit', function createEventPageInit()
 {
     $('#eventType').on('change', function ()
     {
-        if ($('#eventType option:selected').val() === 'combat')
+        if (parseInt($('#eventType option:selected').val(), 10) === lifeStory.COMBAT)
         {
             $('#eventDetailInputs').hide();
             $('#combatDetailInputs').show();
@@ -146,6 +151,11 @@ $('#editEvent').one('pageinit', function createEventPageInit()
     'use strict';
 
     var lifeStory = {};
+
+    lifeStory.COMBAT = 1;
+    lifeStory.NON_COMBAT = 2;
+    lifeStory.RESURRECT = 3;
+    lifeStory.DEATH = 4;
 
     // Makes lifeStory available to the global object
     window.lifeStory = lifeStory;

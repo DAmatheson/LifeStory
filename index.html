@@ -50,20 +50,10 @@
                 </div>
 
                 <ul id="characterList" class="clearBoth" data-role="listview">
-                    <li data-theme="f">
+                    <li class="ui-screen-hidden">
                         <a href="#eventLog">
-                            <h1>Trogdor</h1>
-                            <p>
-                                Trogg Burninator
-                            </p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#eventLog">
-                            <h1>Dudebro</h1>
-                            <p>
-                                Human Warrior
-                            </p>
+                            <h1 data-property="name"></h1>
+                            <p><span data-property="raceName"></span> <span data-property="className"></span></p>
                         </a>
                     </li>
                 </ul>
@@ -99,7 +89,7 @@
             </header>
 
             <div class="ui-content" data-role="content">
-                <h2 class="left">Trogdor</h2>
+                <h2 data-property="characterName" class="left"></h2>
 
                 <div class="right">
                     <a href="#createEvent" data-role="button" class="ui-btn-inline" data-theme="b"
@@ -108,7 +98,13 @@
                     </a>
                 </div>
 
-                <ul id="characterEvents" class="clearBoth" data-role="listview">
+                <ul id="eventList" class="clearBoth" data-role="listview">
+                    <li class="ui-screen-hidden">
+                        <a href="#eventDetails">
+                            <h1 data-property="title"></h1>
+                            <p data-property="experience"></p>
+                        </a>
+                    </li>
                     <li>
                         <h1>Trogdor was created</h1>
                         <p>1st level Trogg Burninator</p>
