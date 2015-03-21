@@ -15,6 +15,17 @@ $(function()
     {
         event.preventDefault();
     });
+
+    // Initialize the popups
+    $('#successDialog').popup();
+    $('#errorDialog').popup();
+    $('#confirmDialog').popup();
+
+    // Remove focus from buttons after tap
+    $(document).on('tap', function()
+    {
+        $('.ui-btn-active').removeClass('ui-btn-active ui-focus');
+    });
 });
 
 // Initialization stuff for the home page
@@ -46,13 +57,11 @@ $('#customize').one('pageinit', function customizePageInit()
     $('#deleteRace').on('tap', function ()
     {
         lifeStory.dataAccess.deleteRace($('#deleteRaceSelect').val());
-        $(this).blur();
     });
 
     $('#deleteClass').on('tap', function ()
     {
         lifeStory.dataAccess.deleteClass($('#deleteClassSelect').val());
-        $(this).blur();
     });
 });
 

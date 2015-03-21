@@ -18,11 +18,43 @@
     var uiLibrary = lifeStory.ui = {};
 
     // Displays a confirmation dialog and returns the users choice
-    function getConfirmation(message)
+    uiLibrary.displayConfirmation = function (title, message, acceptCallback, denyCallback)
     {
-        // Provides a single location for logic related to the confirmation dialog
-        // TODO: Use a better looking confirmation, consider http://jsfiddle.net/taditdash/vvjj8/
-        return confirm(message);
+        /// <summary>
+        ///     Displays a confirmation popup to the user<br/>
+        ///     #confirmAccept is the accept button<br/>
+        ///     #confirmDeny is the decline button
+        /// </summary>
+        /// <param name="title" type="string">Title to display</param>
+        /// <param name="message" type="string">Message to display</param>
+        /// <param name="acceptCallback" type="function">
+        ///     Optional. Callback to call if the user accepts
+        /// </param>
+        /// <param name="denyCallback" type="function">
+        ///     Optional. Callback to call if the user declines
+        /// </param>
+
+        $('#confirmTitle').html(title);
+        $('#confirmMessage').html(message);
+        $('#confirmDialog').popup('open');
+
+        if (acceptCallback)
+        {
+            $('#confirmAccept').one('tap', function ()
+            {
+                acceptCallback();
+                $('#confirmDeny').off('tap');
+            });
+        }
+        
+        if (denyCallback)
+        {
+            $('#confirmDeny').one('tap', function ()
+            {
+                denyCallback();
+                $('#confirmAccept').off('tap');
+            });
+        }
     }
 
     uiLibrary.displaySuccessMessage = function(message)
@@ -32,8 +64,8 @@
         /// </summary>
         /// <param name="message" type="string">Success message to display</param>
 
-        // Makes it so we only have logic for displaying success messages in one place.
-        alert(message);
+        $('#successMessage').text(message);
+        $('#successDialog').popup('open');
     }
 
     uiLibrary.displayErrorMessage = function(message)
@@ -43,8 +75,8 @@
         /// </summary>
         /// <param name="message" type="string">Error message to display</param>
 
-        // Makes it so we only have logic for displaying error messages in one place.
-        alert(message);
+        $('#errorMessage').text(message);
+        $('#errorDialog').popup('open');
     }
 
     // Filters the character list to remove deceased characters if the source checkbox is unchecked
@@ -194,13 +226,9 @@
         // is returned from getCharacterCount if a callback isn't use.
         lifeStory.db.getCharacterCount(function (characterCount)
         {
-            var result = getConfirmation('Are you sure you want to delete all (' + characterCount +
-                ') characters permanently? This cannot be undone.');
-
-            if (result === true)
-            {
-                lifeStory.db.clearCharacterTable();
-            }
+            uiLibrary.displayConfirmation('Clear Characters?',
+                'Are you sure you want to delete all (' + characterCount + ') characters permanently? ' +
+                '<strong>This cannot be undone.</strong>', lifeStory.db.clearCharacterTable);
         });
     };
 
@@ -209,16 +237,12 @@
     {
         // This must be done this way because the confirm dialog will be shown before a value
         // is returned from getCharacterCount if a callback isn't use.
-        lifeStory.db.getCharacterCount(function (characterCount)
+        lifeStory.db.getCharacterCount(function (count)
         {
-            var result = getConfirmation('Are you sure you want to delete all data? This will delete ' +
-                'all (' + characterCount + ') characters, their events, and custom races and classes ' +
-                'permanently. This cannot be undone.');
-
-            if (result === true)
-            {
-                lifeStory.db.dropAllTables();
-            }
+            uiLibrary.displayConfirmation('Delete All Data?',
+                'Are you sure you want to delete all data? This will delete all (' + count + ') ' +
+                'characters, their events, and custom races and classes permanently. ' +
+                '<strong>This cannot be undone.</strong>', lifeStory.db.dropAllTables);
         });
     };
 

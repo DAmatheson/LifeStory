@@ -90,6 +90,22 @@
         $.mobile.changePage('#' + pageId);
     };
 
+    utilLibrary.onSuccessDialogClose = function(redirectToPageId)
+    {
+        /// <summary>
+        ///     Redirects to the page identified by redirectToPageId when the success dialog is closed
+        /// </summary>
+        /// <param name="redirectToPageId" type="string">Id of the page to redirect to</param>
+
+        $('#successBtn').one('tap', function(event)
+        {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+
+            utilLibrary.redirectToPage(redirectToPageId);
+        });
+    };
+
     utilLibrary.convertToSelectEntrys = function(resultSet, valueName, callback)
     {
         /// <summary>

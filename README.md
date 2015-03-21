@@ -4,7 +4,7 @@ D&amp;D Character experience and history app
 **Authors:** Drew Matheson &amp; Isaac West
 
 ## jQuery Mobile Information
-jQuery Mobile Theme: http://themeroller.jquerymobile.com/?ver=1.1.2&style_id=20150312-4
+jQuery Mobile Theme: http://themeroller.jquerymobile.com/?ver=1.3.2&style_id=20150321-5
 
 ### Themes
 * **a**: Dangerous / Warning

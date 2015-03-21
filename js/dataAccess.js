@@ -21,9 +21,6 @@
         /// <summary>
         ///     Displays the passed in message. Logs the error.
         /// </summary>
-        /// <param name="errorMessage" type=""></param>
-        /// <param name="transaction" type=""></param>
-        /// <param name="error" type=""></param>
 
         lifeStory.ui.displayErrorMessage(errorMessage);
 
@@ -79,7 +76,7 @@
 
         if (callbackData.redirectToPageId) // Redirect to the specified page
         {
-            lifeStory.util.redirectToPage(callbackData.redirectToPageId);
+            lifeStory.util.onSuccessDialogClose(callbackData.redirectToPageId);
         }
         else if (callbackData.isCustomizePage) // Repopulate the list and refresh the UI state
         {
@@ -93,8 +90,6 @@
         var saveFailure = failureCallback('Failed to create the new race.');
 
         lifeStory.db.addRace(lifeStory.util.createRaceFromInput(form), successCallback, saveFailure);
-
-        $('button', form).blur();
     };
 
     // Callback function for successfully deleting a race
@@ -134,7 +129,7 @@
 
         if (callbackData.redirectToPageId) // Redirect to the specified page
         {
-            lifeStory.util.redirectToPage(callbackData.redirectToPageId);
+            lifeStory.util.onSuccessDialogClose(callbackData.redirectToPageId);
         }
         else if (callbackData.isCustomizePage) // Repopulate the list and refresh the UI state
         {
@@ -150,8 +145,6 @@
 
         lifeStory.db.addClass(lifeStory.util.createClassFromInput(form), successCallback,
             saveFailure);
-
-        $('button', form).blur();
     };
 
     // Callback function for successfully deleting a class
