@@ -39,6 +39,19 @@ $('#home').one('pageinit', function homePageInit()
     $('#showDeceased').change(lifeStory.ui.filterCharacterList);
 });
 
+$('#eventLog').one('pageinit', function eventLogPageInit()
+{
+    $(this).on('pagebeforeshow', function ()
+    {
+        lifeStory.ui.populateEventLog('eventList', 'li');
+    });
+});
+
+$('#characterDetails').one('pageinit', function characterDetailsPageInit()
+{
+    $(this).on('pagebeforeshow', lifeStory.ui.populateCharacterDetail);
+});
+
 $('#createCharacter').one('pageinit', function createCharacterPageInit()
 {
     $(this).on('pagebeforeshow', function()
@@ -47,27 +60,6 @@ $('#createCharacter').one('pageinit', function createCharacterPageInit()
     });
     
     lifeStory.validation.handleCharacterForm('createCharacterForm', true);
-});
-
-$('#customize').one('pageinit', function customizePageInit()
-{
-    lifeStory.validation.handleRaceForm('createRaceForm');
-    lifeStory.validation.handleClassForm('createClassForm');
-
-    $(this).on('pagebeforeshow', function()
-    {
-        lifeStory.ui.populateRaceAndClassList('deleteRaceSelect', 'deleteClassSelect', true);
-    });
-
-    $('#deleteRace').on('tap', function ()
-    {
-        lifeStory.dataAccess.deleteRace($('#deleteRaceSelect').val());
-    });
-
-    $('#deleteClass').on('tap', function ()
-    {
-        lifeStory.dataAccess.deleteClass($('#deleteClassSelect').val());
-    });
 });
 
 $('#addClass').one('pageinit', function addClassPageInit()
@@ -143,6 +135,27 @@ $('#editEvent').one('pageinit', function createEventPageInit()
     });
 });
 
+$('#customize').one('pageinit', function customizePageInit()
+{
+    lifeStory.validation.handleRaceForm('createRaceForm');
+    lifeStory.validation.handleClassForm('createClassForm');
+
+    $(this).on('pagebeforeshow', function ()
+    {
+        lifeStory.ui.populateRaceAndClassList('deleteRaceSelect', 'deleteClassSelect', true);
+    });
+
+    $('#deleteRace').on('tap', function ()
+    {
+        lifeStory.dataAccess.deleteRace($('#deleteRaceSelect').val());
+    });
+
+    $('#deleteClass').on('tap', function ()
+    {
+        lifeStory.dataAccess.deleteClass($('#deleteClassSelect').val());
+    });
+});
+
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
 // Take undefined as parameter and don't pass anything to get an unchanged version of undefined.
@@ -151,6 +164,44 @@ $('#editEvent').one('pageinit', function createEventPageInit()
     'use strict';
 
     var lifeStory = {};
+    lifeStory.values =
+    {
+        get characterId()
+        {
+            return localStorage.getItem('characterId') || '';
+        },
+        set characterId(value)
+        {
+            if (value !== undefined && value !== null)
+            {
+                localStorage.setItem('characterId', value);
+            }
+        },
+
+        get characterName()
+        {
+            return localStorage.getItem('characterName') || '';
+        },
+        set characterName(value)
+        {
+            if (value !== undefined && value !== null)
+            {
+                localStorage.setItem('characterName', value);
+            }
+        },
+
+        get eventId()
+        {
+            return localStorage.getItem('eventId') || '';
+        },
+        set eventId(value)
+        {
+            if (value !== undefined && value !== null)
+            {
+                localStorage.removeItem('eventId', value);
+            }
+        }
+    };
 
     lifeStory.COMBAT = 1;
     lifeStory.NON_COMBAT = 2;

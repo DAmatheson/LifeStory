@@ -250,8 +250,8 @@
                     { characterId: character.id, characterName: character.name },
                     function (event)
                     {
-                        localStorage.setItem('characterId', event.data.characterId);
-                        localStorage.setItem('characterName', event.data.characterName);
+                        lifeStory.values.characterId = event.data.characterId;
+                        lifeStory.values.characterName = event.data.characterName;
                     }
                 );
 
@@ -275,6 +275,103 @@
             }
 
             $listContainer.listview('refresh');
+        });
+    };
+
+    uiLibrary.populateEventLog = function (listViewId, itemElementType)
+    {
+        var characterId = lifeStory.values.characterId;
+        var characterName = lifeStory.values.characterName;
+
+        $('#eventLog h2[data-property=characterName]').text(characterName);
+
+        lifeStory.db.getCharactersEvents(characterId, function (events)
+        {
+            var $listContainer = $('#' + listViewId);
+            var $reviewItem = $(':first(' + itemElementType + ')', $listContainer).
+                clone().
+                removeClass('ui-screen-hidden');
+
+            // Remove everything except the first item. First item is hidden and used as a template
+            $(':first(' + itemElementType + ')', $listContainer).siblings().remove();
+
+            for (var i = 0; i < events.length; i++)
+            {
+                var $currentItem = $reviewItem.clone();
+                var event = events[i];
+
+                var title = '';
+
+                if (event.description)
+                {
+                    title = event.description;
+                }
+
+                $('[data-property=title]', $currentItem).text(title);
+                $('[data-property=experience]', $currentItem).text(event.experience);
+
+                if (event.id === lifeStory.DEATH) // Death Event
+                {
+                    $currentItem.data('theme', 'f');
+                }
+                else if (event.id === lifeStory.RESURRECT) // Resurrect Event
+                {
+                    $currentItem.data('theme', 'g');
+                }
+
+                $('a', $currentItem).on('tap', { eventId: event.id }, function (event)
+                {
+                    lifeStory.values.eventId = event.eventId;
+                });
+
+                $listContainer.append($currentItem);
+            }
+
+            if (events.length === 0)
+            {
+                $reviewItem.
+                    find('a').
+                    attr('href', '#createEvent').
+                    find('h1').
+                    text('Add a character event').
+                    siblings().
+                    remove();
+
+                // Change icon to a plus
+                $reviewItem.find('span').removeClass('ui-icon-arrow-r').addClass('ui-icon-plus');
+
+                $listContainer.append($reviewItem);
+            }
+
+            $listContainer.listview('refresh');
+        });
+    };
+
+    uiLibrary.populateCharacterDetail = function()
+    {
+        var characterId = lifeStory.values.characterId;
+        var characterName = lifeStory.values.characterName;
+
+        $('#characterDetails h2[data-property=characterName]').text(characterName);
+
+        lifeStory.db.getCharacter(characterId, function(character)
+        {
+            var $detailsTable = $('#characterDetailsTable');
+
+            $detailsTable.find('[data-property=race]').text(character.raceName);
+            $detailsTable.find('[data-property=class]').text(character.className);
+            $detailsTable.find('[data-property=living]').text(character.living); // TODO: Change this when the value for living is decided
+            $detailsTable.find('[data-property=experience]').text(Math.floor(character.experience)); // TODO: Calculate level based on experience instead
+
+            if (character.details)
+            {
+                $detailsTable.find('[data-property=details]').text(character.details).
+                    parent().removeClass('ui-screen-hidden');
+            }
+            else
+            {
+                $detailsTable.find('[data-property=details]').parent().addClass('ui-screen-hidden');
+            }
         });
     };
 

@@ -351,7 +351,7 @@
                 'WHERE id = ?;',
                 [
                     character.name, character.raceId, character.classId,
-                    character.details, character.living, localStorage.getItem('currentCharacter') // TODO: get current character id properly
+                    character.details, character.living, lifeStory.dataAccess.characterId
                 ],
                 successCallback || null,
                 failureCallback || sqlErrorHandler);
@@ -497,21 +497,13 @@
                 'FROM character c ' +
                     'JOIN class ' +
                         'ON c.class_id = class.id ' +
-                    'JOIN race' +
+                    'JOIN race ' +
                         'ON c.race_id = race.id ' +
-                'WHERE id = ?;',
+                'WHERE c.id = ?;',
                 [characterId],
                 function(transaction, resultSet)
                 {
                     var row = resultSet.rows.item(0);
-
-                    var race = new lifeStory.Race();
-                    race.name = row.raceName;
-                    race.id = row.race_id;
-
-                    var characterClass = new lifeStory.CharacterClass();
-                    characterClass.name = row.className;
-                    characterClass.id = row.class_id;
 
                     var character = new lifeStory.Character();
                     character.id = row.id;
@@ -520,8 +512,8 @@
                     character.classId = row.class_id;
                     character.living = row.living;
                     character.details = row.details;
-                    character.race = race;
-                    character.characterClass = characterClass;
+                    character.raceName = row.raceName;
+                    character.className = row.className;
 
                     callback(character);
                 },

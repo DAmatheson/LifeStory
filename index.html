@@ -478,7 +478,7 @@
             </header>
 
             <div class="ui-content" data-role="content">
-                <h2 class="left">Trogdor</h2>
+                <h2 data-property="characterName" class="left"></h2>
 
                 <div class="right">
                     <a href="#eventLog" data-role="button" class="ui-btn-inline" data-theme="c"
@@ -487,46 +487,36 @@
                     </a>
                 </div>
 
-                <table class="clearBoth">
+                <table id="characterDetailsTable" class="clearBoth">
                     <tr>
                         <td class="tableLabel">
                             Race:
                         </td>
-                        <td>
-                            Trogg
-                        </td>
+                        <td data-property="race"></td>
                     </tr>
                     <tr>
                         <td class="tableLabel">
                             Class:
                         </td>
-                        <td>
-                            Burninator
-                        </td>
+                        <td data-property="class"></td>
                     </tr>
                     <tr>
                         <td class="tableLabel">
                             Level:
                         </td>
-                        <td>
-                            1
-                        </td>
+                        <td data-property="level">1</td>
                     </tr>
                     <tr>
                         <td class="tableLabel">
                             Details:
                         </td>
-                        <td>
-                            Notes about character.
-                        </td>
+                        <td data-property="details"></td>
                     </tr>
                     <tr>
                         <td class="tableLabel">
                             Status:
                         </td>
-                        <td>
-                            Dead
-                        </td>
+                        <td data-property="living"></td>
                     </tr>
                 </table>
             </div>
