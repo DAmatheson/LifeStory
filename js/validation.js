@@ -62,7 +62,8 @@
         var callbackData =
         {
             redirectToPageId: redirectToPageIdOnSubmit,
-            formIdToReset: formId
+            formIdToReset: formId,
+            isCustomizePage: !redirectToPageIdOnSubmit
         };
 
         setupFormValidation(formId, submitHandler, rules, messages, callbackData);
@@ -84,7 +85,8 @@
         var callbackData =
         {
             redirectToPageId: redirectToPageIdOnSubmit,
-            formIdToReset: formId
+            formIdToReset: formId,
+            isCustomizePage: !redirectToPageIdOnSubmit
         };
 
         var submitHandler = lifeStory.dataAccess.saveClassToDb;
@@ -100,6 +102,16 @@
             {
                 required: true,
                 rangelength: [1, 50]
+            },
+            raceId:
+            {
+                required: true,
+                number: true
+            },
+            classId:
+            {
+                required: true,
+                number: true
             }
         };
 
@@ -109,6 +121,16 @@
             {
                 required: 'Your character must have a name.',
                 rangelength: 'Your character\'s name must be between 1 and 50 characters long.'
+            },
+            raceId:
+            {
+                required: 'Your character must have a race.',
+                number: 'Please create a race to be.'
+            },
+            classId:
+            {
+                required: 'Your character must have a class.',
+                number: 'Please create a class to be.'
             }
         };
 

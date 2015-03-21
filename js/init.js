@@ -40,7 +40,19 @@ $('#customize').one('pageinit', function customizePageInit()
 
     $(this).on('pagebeforeshow', function()
     {
-        lifeStory.ui.populateRaceAndClassList('deleteRaceSelect', 'deleteClassSelect');
+        lifeStory.ui.populateRaceAndClassList('deleteRaceSelect', 'deleteClassSelect', true);
+    });
+
+    $('#deleteRace').on('tap', function ()
+    {
+        lifeStory.dataAccess.deleteRace($('#deleteRaceSelect').val());
+        $(this).blur();
+    });
+
+    $('#deleteClass').on('tap', function ()
+    {
+        lifeStory.dataAccess.deleteClass($('#deleteClassSelect').val());
+        $(this).blur();
     });
 });
 

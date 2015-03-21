@@ -314,7 +314,7 @@
     };
 
     // Saves the Character into the database and calls the corresponding success or failure callback
-    dbLibrary.addCharacter = function insertCharacter(character, successCallback, failureCallback)
+    dbLibrary.addCharacter = function addCharacter(character, successCallback, failureCallback)
     {
         if (!(character instanceof lifeStory.Character))
         {
@@ -326,7 +326,7 @@
             tx.executeSql(
                 'INSERT INTO character ' +
                     '(name, race_id, class_id, details, living) ' +
-                'VALUES (?, ?, ?, ?, ?)',
+                'VALUES (?, ?, ?, ?, ?);',
                 [
                     character.name, character.raceId, character.classId,
                     character.details, character.living
@@ -336,7 +336,7 @@
         });
     };
 
-    dbLibrary.updateCharacter = function insertCharacter(character, successCallback, failureCallback)
+    dbLibrary.updateCharacter = function updateCharacter(character, successCallback, failureCallback)
     {
         if (!(character instanceof lifeStory.Character))
         {
@@ -348,7 +348,7 @@
             tx.executeSql(
                 'UPDATE character' +
                 'SET name = ?, race_id = ?, class_id = ?, details = ?, living = ? ' +
-                'WHERE id = ?',
+                'WHERE id = ?;',
                 [
                     character.name, character.raceId, character.classId,
                     character.details, character.living, localStorage.getItem('currentCharacter') // TODO: get current character id properly
@@ -358,14 +358,46 @@
         });
     };
 
+    dbLibrary.deleteRace = function deleteRace(id, successCallback, failureCallback)
+    {
+        dbLibrary.getDb().transaction(function(tx)
+        {
+            tx.executeSql(
+                'DELETE FROM race ' +
+                'WHERE id = ? AND ' +
+                    'NOT EXISTS (' +
+                        'SELECT 1 FROM character WHERE race_id = ?' +
+                    ');',
+                [id, id],
+                successCallback || null,
+                failureCallback || sqlErrorHandler);
+        });
+    };
+
+    dbLibrary.deleteClass = function deleteClass(id, successCallback, failureCallback)
+    {
+        dbLibrary.getDb().transaction(function(tx)
+        {
+            tx.executeSql(
+                'DELETE FROM class ' +
+                'WHERE id = ? AND ' +
+                    'NOT EXISTS (' +
+                        'SELECT 1 FROM character WHERE class_id = ?' +
+                    ');',
+                [id, id],
+                successCallback || null,
+                failureCallback || sqlErrorHandler);
+        });
+    };
+
     // Gets the character count and passes it as the sole argument to callBack
-    dbLibrary.getCharacterCount = function (callback)
+    dbLibrary.getCharacterCount = function getCharacterCount(callback)
     {
         dbLibrary.getDb().readTransaction(function (tx)
         {
             tx.executeSql(
                 'SELECT COUNT() AS count ' +
-                'FROM character',
+                'FROM character;',
                 null,
                 function (transaction, resultSet)
                 {
@@ -383,14 +415,14 @@
     };
 
     // Gets the classes and passes them as the sole argument to callBack
-    dbLibrary.getClasses = function (callback)
+    dbLibrary.getClasses = function getClasses(callback)
     {
         dbLibrary.getDb().readTransaction(function (tx)
         {
             tx.executeSql(
                 'SELECT * ' +
                 'FROM class ' +
-                'ORDER BY name',
+                'ORDER BY name;',
                 null,
                 function (transaction, resultSet)
                 {
@@ -401,14 +433,14 @@
     };
 
     // Gets the races and passes them as the sole argument to callBack
-    dbLibrary.getRaces = function (callback)
+    dbLibrary.getRaces = function getRaces(callback)
     {
         dbLibrary.getDb().readTransaction(function (tx)
         {
             tx.executeSql(
                 'SELECT * ' +
                 'FROM race ' +
-                'ORDER BY name',
+                'ORDER BY name;',
                 null,
                 function(transaction, resultSet)
                 {
@@ -419,11 +451,11 @@
     };
 
     // Clears the character table
-    dbLibrary.clearCharacterTable = function ()
+    dbLibrary.clearCharacterTable = function clearCharacterTable()
     {
         dbLibrary.getDb().transaction(function (tx)
         {
-            tx.executeSql('DROP TABLE IF EXISTS character', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS character;', null, null, sqlErrorHandler);
 
             createCharacterTable(tx);
         });
@@ -431,17 +463,17 @@
 
     // Drops all tables, used for resetting the database
     // Pass 'danger' as an argument to confirm the action
-    dbLibrary.dropAllTables = function()
+    dbLibrary.dropAllTables = function dropAllTables()
     {
         dbLibrary.getDb().transaction(function (tx)
         {
-            tx.executeSql('DROP TABLE IF EXISTS character', null, null, sqlErrorHandler);
-            tx.executeSql('DROP TABLE IF EXISTS characterEvent', null, null, sqlErrorHandler);
-            tx.executeSql('DROP TABLE IF EXISTS class', null, null, sqlErrorHandler);
-            tx.executeSql('DROP TABLE IF EXISTS event', null, null, sqlErrorHandler);
-            tx.executeSql('DROP TABLE IF EXISTS eventType', null, null, sqlErrorHandler);
-            tx.executeSql('DROP TABLE IF EXISTS eventDetail', null, null, sqlErrorHandler);
-            tx.executeSql('DROP TABLE IF EXISTS race', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS character;', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS characterEvent;', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS class;', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS event;', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS eventType;', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS eventDetail;', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS race;', null, null, sqlErrorHandler);
 
             localStorage.setItem('dbInitialized', 'false');
         });

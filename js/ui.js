@@ -17,6 +17,36 @@
 
     var uiLibrary = lifeStory.ui = {};
 
+    // Displays a confirmation dialog and returns the users choice
+    function getConfirmation(message)
+    {
+        // Provides a single location for logic related to the confirmation dialog
+        // TODO: Use a better looking confirmation, consider http://jsfiddle.net/taditdash/vvjj8/
+        return confirm(message);
+    }
+
+    uiLibrary.displaySuccessMessage = function(message)
+    {
+        /// <summary>
+        ///     Displays the passed in success message to the user
+        /// </summary>
+        /// <param name="message" type="string">Success message to display</param>
+
+        // Makes it so we only have logic for displaying success messages in one place.
+        alert(message);
+    }
+
+    uiLibrary.displayErrorMessage = function(message)
+    {
+        /// <summary>
+        ///     Displays the passed in error message to the user
+        /// </summary>
+        /// <param name="message" type="string">Error message to display</param>
+
+        // Makes it so we only have logic for displaying error messages in one place.
+        alert(message);
+    }
+
     // Filters the character list to remove deceased characters if the source checkbox is unchecked
     uiLibrary.filterCharacterList = function()
     {
@@ -27,6 +57,34 @@
 
     };
 
+    uiLibrary.refreshDeleteRaceUIState = function ()
+    {
+        if ($('#deleteRaceSelect option:first').is(':disabled'))
+        {
+            $('#deleteRace').button('disable');
+            $('#deleteRaceSelect').selectmenu('disable');
+        }
+        else
+        {
+            $('#deleteRace').button('enable');
+            $('#deleteRaceSelect').selectmenu('enable');
+        }
+    };
+
+    uiLibrary.refreshDeleteClassUIState = function ()
+    {
+        if ($('#deleteClassSelect option:first').is(':disabled'))
+        {
+            $('#deleteClass').button('disable');
+            $('#deleteClassSelect').selectmenu('disable');
+        }
+        else
+        {
+            $('#deleteClass').button('enable');
+            $('#deleteClassSelect').selectmenu('enable');
+        }
+    };
+
     // Populate the select element matching selectElementId with key and values from data
     uiLibrary.populateList = function (selectElementId, data)
     {
@@ -34,11 +92,7 @@
         {
             throw 'The data argument for populateList must be an array';
         }
-        else if (data.length === 0)
-        {
-            throw 'The data argument for populateList must contain at least one element.';
-        }
-        else if (!(data[0] instanceof lifeStory.SelectEntry))
+        else if (data.length > 0 && !(data[0] instanceof lifeStory.SelectEntry))
         {
             throw 'The entries in the data argument for populateList must be instances of SelectEntry';
         }
@@ -50,10 +104,59 @@
             text += '<option value="' + data[i].key + '">' + data[i].value + '</option>';
         }
 
+        if (data.length === 0)
+        {
+            text = '<option disabled>-- No Races Created --</option>';
+        }
+
         $('#' + selectElementId).
             children().remove().end(). // Remove placeholder option which prevents an error in jQM 1.1.2
             append(text).
             selectmenu('refresh');
+    };
+
+    uiLibrary.populateClassList = function(classListId, populationCompleteCallback)
+    {
+        lifeStory.db.getClasses(function(selectEntries)
+        {
+            uiLibrary.populateList(classListId, selectEntries);
+
+            if (typeof populationCompleteCallback === 'function')
+            {
+                populationCompleteCallback();
+            }
+        });
+    };
+
+    uiLibrary.populateRaceList = function(raceListId, populationCompleteCallback)
+    {
+        lifeStory.db.getRaces(function(selectEntries)
+        {
+            uiLibrary.populateList(raceListId, selectEntries);
+
+            if (typeof populationCompleteCallback === 'function')
+            {
+                populationCompleteCallback();
+            }
+        });
+    };
+
+    uiLibrary.populateRaceAndClassList = function (raceListId, classListId, refreshDeleteUI)
+    {
+        /// <summary>
+        ///     Populates the race and class lists with the data in the database
+        /// </summary>
+        /// <param name="raceListId" type="">Id of the race list to populate</param>
+        /// <param name="classListId" type="">Id of the class list to populate</param>
+        /// <param name="refreshDeleteUI" type="boolean">
+        ///     True if the delete UI on customize page should be refreshed
+        /// </param>
+
+        uiLibrary.populateRaceList(raceListId,
+            refreshDeleteUI ? uiLibrary.refreshDeleteRaceUIState : undefined);
+
+        uiLibrary.populateClassList(classListId,
+            refreshDeleteUI ? uiLibrary.refreshDeleteClassUIState : undefined);
     };
 
     uiLibrary.duplicateInputSet = function(appendToSelector, templateElementId, removeButtonSelector)
@@ -84,20 +187,6 @@
         }
     };
 
-    // Helper function to populate the race and class lists specified by the two arguments
-    uiLibrary.populateRaceAndClassList = function(raceListId, classListId)
-    {
-        lifeStory.db.getClasses(function(selectEntries)
-        {
-            uiLibrary.populateList(classListId, selectEntries);
-        });
-
-        lifeStory.db.getRaces(function(selectEntries)
-        {
-            uiLibrary.populateList(raceListId, selectEntries);
-        });
-    };
-
     // Confirms the user wants to clear the character table. If so, clears the table.
     uiLibrary.confirmClearCharactersTable = function ()
     {
@@ -105,8 +194,7 @@
         // is returned from getCharacterCount if a callback isn't use.
         lifeStory.db.getCharacterCount(function (characterCount)
         {
-            // TODO: Use a better looking confirmation, consider http://jsfiddle.net/taditdash/vvjj8/
-            var result = confirm('Are you sure you want to delete all (' + characterCount +
+            var result = getConfirmation('Are you sure you want to delete all (' + characterCount +
                 ') characters permanently? This cannot be undone.');
 
             if (result === true)
@@ -123,9 +211,8 @@
         // is returned from getCharacterCount if a callback isn't use.
         lifeStory.db.getCharacterCount(function (characterCount)
         {
-            // TODO: Use a better looking confirmation, consider http://jsfiddle.net/taditdash/vvjj8/
-            var result = confirm('Are you sure you want to delete all data? This will delete all ('
-                 + characterCount + ') characters, their events, and custom races and classes ' +
+            var result = getConfirmation('Are you sure you want to delete all data? This will delete ' +
+                'all (' + characterCount + ') characters, their events, and custom races and classes ' +
                 'permanently. This cannot be undone.');
 
             if (result === true)

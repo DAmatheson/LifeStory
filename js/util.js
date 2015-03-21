@@ -85,6 +85,11 @@
         return new lifeStory.CharacterClass(className);
     };
 
+    utilLibrary.redirectToPage = function(pageId)
+    {
+        $.mobile.changePage('#' + pageId);
+    };
+
     utilLibrary.convertToSelectEntrys = function(resultSet, valueName, callback)
     {
         /// <summary>
@@ -103,6 +108,6 @@
         }
 
         callback(results);
-    }
+    };
 
 })(window, window.lifeStory, jQuery);

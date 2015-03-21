@@ -725,7 +725,6 @@
                     </a>
                 </div>
 
-                <!-- TODO: Make sure this returns to the character creation form on success -->
                 <form id="addClassForm" class="clearBoth">
                     <label for="addClassName">Class Name:</label>
                     <input type="text" name="className" id="addClassName" placeholder="Class Name" />
@@ -769,7 +768,6 @@
                     </a>
                 </div>
 
-                <!-- TODO: Make sure this returns to the character creation form on success -->
                 <form id="addRaceForm" class="clearBoth">
                     <label for="addRaceName">Race Name:</label>
                     <input type="text" name="raceName" id="addRaceName" placeholder="Race Name" />
@@ -836,7 +834,7 @@
                                     Loading Races...
                                 </option>
                             </select>
-                            <button data-theme="a">Delete Race</button>
+                            <button id="deleteRace" type="button" data-theme="a">Delete Race</button>
                         </form>
                     </div>
                     <div class="ui-block-b">
@@ -850,7 +848,7 @@
                                     Loading Classes...
                                 </option>
                             </select>
-                            <button data-theme="a">Delete Class</button>
+                            <button id="deleteClass" type="button" data-theme="a">Delete Class</button>
                         </form>
                     </div>
                 </div>
