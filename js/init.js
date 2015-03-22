@@ -7,9 +7,6 @@
 
 $(function()
 {
-    $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharactersTable);
-    $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
-
     // TODO: Only here to prevent query strings in the URL while form handling isn't set up
     $('form').on('submit', function(event)
     {
@@ -24,8 +21,14 @@ $(function()
     // Remove focus from buttons after tap
     $(document).on('tap', function()
     {
-        $('.ui-btn-active').removeClass('ui-btn-active ui-focus');
+        $('.ui-btn-active:not(.ui-state-persist)').removeClass('ui-btn-active ui-focus');
     });
+});
+
+$('#settings').one('pageinit', function settingsPageInit()
+{
+    $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharactersTable);
+    $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
 });
 
 // Initialization stuff for the home page
@@ -50,6 +53,11 @@ $('#eventLog').one('pageinit', function eventLogPageInit()
 $('#characterDetails').one('pageinit', function characterDetailsPageInit()
 {
     $(this).on('pagebeforeshow', lifeStory.ui.populateCharacterDetail);
+
+    $('#deleteCharacter').on('tap', function()
+    {
+        lifeStory.ui.confirmDeleteCharacter();
+    });
 });
 
 $('#createCharacter').one('pageinit', function createCharacterPageInit()
@@ -73,15 +81,20 @@ $('#addRace').one('pageinit', function addRacePageInit()
 });
 
 $('#editCharacter').one('pageinit', function customizePageInit() {
-    lifeStory.ui.populateRaceAndClassList('editCharacterRaceSelect', 'editCharacterClassSelect');
     lifeStory.validation.handleCharacterForm('editCharacterForm');
+
+    $(this).on('pagebeforeshow', function()
+    {
+        lifeStory.ui.populateRaceAndClassList('editCharacterRaceSelect', 'editCharacterClassSelect');
+        lifeStory.ui.populateCharacterEdit();
+    });
 });
 
 $('#createEvent').one('pageinit', function createEventPageInit()
 {
     $('#eventType').on('change', function ()
     {
-        if (parseInt($('#eventType option:selected').val(), 10) === lifeStory.COMBAT)
+        if (parseInt($('#eventType option:selected').val(), 10) === lifeStory.COMBAT_EVENT)
         {
             $('#eventDetailInputs').hide();
             $('#combatDetailInputs').show();
@@ -163,12 +176,39 @@ $('#customize').one('pageinit', function customizePageInit()
 {
     'use strict';
 
-    var lifeStory = {};
+    var lifeStory =
+    {
+        get COMBAT_EVENT()
+        {
+            return 1;
+        },
+        get NON_COMBAT_EVENT()
+        {
+            return 2;
+        },
+        get RESURRECT_EVENT()
+        {
+            return 3;
+        },
+        get DEATH_EVENT()
+        {
+            return 4;
+        },
+        get ALIVE()
+        {
+            return 1;
+        },
+        get DEAD()
+        {
+            return 0;
+        }
+    };
+
     lifeStory.values =
     {
         get characterId()
         {
-            return localStorage.getItem('characterId') || '';
+            return localStorage.getItem('characterId');
         },
         set characterId(value)
         {
@@ -176,11 +216,15 @@ $('#customize').one('pageinit', function customizePageInit()
             {
                 localStorage.setItem('characterId', value);
             }
+            else if (value === null)
+            {
+                localStorage.removeItem('characterId');
+            }
         },
 
         get characterName()
         {
-            return localStorage.getItem('characterName') || '';
+            return localStorage.getItem('characterName');
         },
         set characterName(value)
         {
@@ -188,25 +232,44 @@ $('#customize').one('pageinit', function customizePageInit()
             {
                 localStorage.setItem('characterName', value);
             }
+            else if (value === null)
+            {
+                localStorage.removeItem('characterName');
+            }
+        },
+
+        get characterAlive()
+        {
+            return localStorage.getItem('characterAlive');
+        },
+        set characterAlive(value)
+        {
+            if (value !== undefined && value !== null)
+            {
+                localStorage.setItem('characterAlive', value);
+            }
+            else if (value === null)
+            {
+                localStorage.removeItem('characterAlive');
+            }
         },
 
         get eventId()
         {
-            return localStorage.getItem('eventId') || '';
+            return localStorage.getItem('eventId');
         },
         set eventId(value)
         {
             if (value !== undefined && value !== null)
             {
-                localStorage.removeItem('eventId', value);
+                localStorage.setItem('eventId', value);
+            }
+            else if (value === null)
+            {
+                localStorage.removeItem('eventId');
             }
         }
     };
-
-    lifeStory.COMBAT = 1;
-    lifeStory.NON_COMBAT = 2;
-    lifeStory.RESURRECT = 3;
-    lifeStory.DEATH = 4;
 
     // Makes lifeStory available to the global object
     window.lifeStory = lifeStory;

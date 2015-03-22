@@ -67,8 +67,7 @@
             </footer>
         </section>
 
-        <!-- TODO LOW PRIORITY: Dynamically replace Trogdor with current character's name-->
-        <section id="eventLog" data-role="page" data-title="Trogdor - Life Story">
+        <section id="eventLog" data-role="page" data-title="Event Log - Life Story">
             <header id="eventLogHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -105,41 +104,18 @@
                             <p data-property="experience"></p>
                         </a>
                     </li>
-                    <li>
-                        <h1>Trogdor was created</h1>
-                        <p>1st level Trogg Burninator</p>
-                    </li>
-                    <li>
-                        <a href="#eventDetails">
-                            <h1>Defeated: 4 Goblins</h1>
-                            <p>
-                                100XP
-                            </p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#eventDetails">
-                            <h1>Temple of The Flenseworm</h1>
-                            <p>
-                                75XP
-                            </p>
-                        </a>
-                    </li>
-                    <li data-theme="f">
-                        <a href="#eventDetails">
-                            <h1>Died</h1>
-                            <p>
-                                Killed by: 1 Giant Diseased Rat
-                            </p>
-                        </a>
-                    </li>
                 </ul>
             </div>
 
             <footer data-role="footer fieldcontain" data-position="fixed">
                 <fieldset class="ui-grid-a">
                     <div class="ui-block-a">
-                        <a href="#resurrectEvent" data-role="button" data-theme="g">
+                        <a href="#deathEvent" id="diedButton" data-role="button" data-theme="f" 
+                           class="ui-screen-hidden">
+                            Died
+                        </a>
+                        <a href="#resurrectEvent" id="resurrectButton" data-role="button" data-theme="g" 
+                           class="ui-screen-hidden">
                             Resurrect
                         </a>
                     </div>
@@ -177,7 +153,7 @@
                 <div class="right">
                     <a href="#eventLog" data-role="button" class="ui-btn-inline" data-theme="c"
                        data-mini="true" data-icon="back">
-                        Trogdor
+                        Event Log
                     </a>
                 </div>
 
@@ -248,7 +224,7 @@
                 <div class="right">
                     <a href="#eventLog" data-role="button" class="ui-btn-inline" data-theme="c"
                        data-mini="true" data-icon="back">
-                        Trogdor
+                        Event Log
                     </a>
                 </div>
 
@@ -289,7 +265,7 @@
                 <div class="right">
                     <a href="#eventLog" data-role="button" class="ui-btn-inline" data-theme="c"
                        data-mini="true" data-icon="back">
-                        Trogdor
+                        Event Log
                     </a>
                 </div>
 
@@ -457,7 +433,7 @@
             </div>
         </section>
 
-        <section id="characterDetails" data-role="page" data-title="Trogdor Details - Life Story">
+        <section id="characterDetails" data-role="page" data-title="Character Details - Life Story">
             <header id="characterDetailHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -516,7 +492,7 @@
             <footer data-role="footer fieldcontain" data-position="fixed">
                 <fieldset class="ui-grid-a">
                     <div class="ui-block-a">
-                        <a href="#" data-role="button" data-theme="a">
+                        <a href="#" id="deleteCharacter" data-role="button" data-theme="a">
                             Delete
                         </a>
                     </div>
@@ -571,7 +547,6 @@
                     </label>
                     <select id="raceSelect" name="raceId">
                         <option>
-                            <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Races...
                         </option>
                     </select>
@@ -585,7 +560,6 @@
                     </label>
                     <select id="classSelect" name="classId">
                         <option>
-                            <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Classes...
                         </option>
                     </select>
@@ -598,7 +572,7 @@
             </div>
         </section>
 
-        <section id="editCharacter" data-role="page" data-title="Edit Trogdor - Life Story">
+        <section id="editCharacter" data-role="page" data-title="Edit Character - Life Story">
             <header id="editCharacterHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -631,7 +605,7 @@
                     <input type="hidden" name="id" />
 
                     <label for="editCharacterName">Name</label>
-                    <input type="text" name="name" id="editCharacterName" placeholder="Character Name" value="Trogdor" />
+                    <input type="text" name="name" id="editCharacterName" placeholder="Character Name" />
 
                     <label for="editCharacterRaceSelect">
                         Race
@@ -642,7 +616,6 @@
                     </label>
                     <select id="editCharacterRaceSelect" name="raceId">
                         <option>
-                            <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Races...
                         </option>
                     </select>
@@ -656,13 +629,12 @@
                     </label>
                     <select id="editCharacterClassSelect" name="classId">
                         <option>
-                            <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                             Loading Classes...
                         </option>
                     </select>
 
                     <label for="editDetails">Character Details</label>
-                    <textarea id="editDetails" name="details">Burninates the countryside.</textarea>
+                    <textarea id="editDetails" name="details"></textarea>
 
                     <button data-theme="b">Save Changes</button>
                 </form>
@@ -808,7 +780,6 @@
                             </label>
                             <select id="deleteRaceSelect" name="race">
                                 <option>
-                                    <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                                     Loading Races...
                                 </option>
                             </select>
@@ -822,7 +793,6 @@
                             </label>
                             <select id="deleteClassSelect" name="class">
                                 <option>
-                                    <!-- Note: Only here because jQM 1.1.2 errors out without it -->
                                     Loading Classes...
                                 </option>
                             </select>

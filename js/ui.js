@@ -220,6 +220,13 @@
         }
     };
 
+    function characterLinkClicked(event)
+    {
+        lifeStory.values.characterId = event.data.id;
+        lifeStory.values.characterName = event.data.name;
+        lifeStory.values.characterAlive = event.data.alive;
+    }
+
     uiLibrary.populateCharacterList = function(listViewId, itemElementType)
     {
         lifeStory.db.getCharacters(function (characters)
@@ -241,18 +248,14 @@
                 $('[data-property=raceName]', $currentItem).text(character.raceName);
                 $('[data-property=className]', $currentItem).text(character.className);
 
-                if (!character.living)
+                if (character.living === lifeStory.DEAD)
                 {
-                    $currentItem.data('theme', 'f');
+                    $currentItem.attr('data-theme', 'f').removeClass('ui-btn-up-c').addClass('ui-btn-up-f');
                 }
 
                 $('a', $currentItem).on('tap',
-                    { characterId: character.id, characterName: character.name },
-                    function (event)
-                    {
-                        lifeStory.values.characterId = event.data.characterId;
-                        lifeStory.values.characterName = event.data.characterName;
-                    }
+                    { id: character.id, name: character.name, alive: character.living },
+                    characterLinkClicked
                 );
 
                 $listContainer.append($currentItem);
@@ -280,12 +283,9 @@
 
     uiLibrary.populateEventLog = function (listViewId, itemElementType)
     {
-        var characterId = lifeStory.values.characterId;
-        var characterName = lifeStory.values.characterName;
+        $('#eventLog h2[data-property=characterName]').text(lifeStory.values.characterName);
 
-        $('#eventLog h2[data-property=characterName]').text(characterName);
-
-        lifeStory.db.getCharactersEvents(characterId, function (events)
+        lifeStory.db.getCharactersEvents(lifeStory.values.characterId, function (events)
         {
             var $listContainer = $('#' + listViewId);
             var $reviewItem = $(':first(' + itemElementType + ')', $listContainer).
@@ -302,26 +302,30 @@
 
                 var title = '';
 
-                if (event.description)
+                if (event.description) // TODO: Figure out title if a description doesn't exist
                 {
                     title = event.description;
                 }
+                else
+                {
+                    title = event.eventTypeName;
+                }
 
                 $('[data-property=title]', $currentItem).text(title);
-                $('[data-property=experience]', $currentItem).text(event.experience);
+                $('[data-property=experience]', $currentItem).text(event.experience + ' XP');
 
-                if (event.id === lifeStory.DEATH) // Death Event
+                if (event.id === lifeStory.DEATH_EVENT)
                 {
                     $currentItem.data('theme', 'f');
                 }
-                else if (event.id === lifeStory.RESURRECT) // Resurrect Event
+                else if (event.id === lifeStory.RESURRECT_EVENT)
                 {
                     $currentItem.data('theme', 'g');
                 }
 
-                $('a', $currentItem).on('tap', { eventId: event.id }, function (event)
+                $('a', $currentItem).on('tap', { eventId: event.id }, function (e)
                 {
-                    lifeStory.values.eventId = event.eventId;
+                    lifeStory.values.eventId = e.eventId;
                 });
 
                 $listContainer.append($currentItem);
@@ -343,6 +347,17 @@
                 $listContainer.append($reviewItem);
             }
 
+            if (lifeStory.values.characterAlive === lifeStory.ALIVE)
+            {
+                $('#diedButton').removeClass('ui-screen-hidden');
+                $('#resurrectButton').addClass('ui-screen-hidden');
+            }
+            else
+            {
+                $('#resurrectButton').removeClass('ui-screen-hidden');
+                $('#diedButton').addClass('ui-screen-hidden');
+            }
+
             $listContainer.listview('refresh');
         });
     };
@@ -360,7 +375,9 @@
 
             $detailsTable.find('[data-property=race]').text(character.raceName);
             $detailsTable.find('[data-property=class]').text(character.className);
-            $detailsTable.find('[data-property=living]').text(character.living); // TODO: Change this when the value for living is decided
+            $detailsTable.find('[data-property=living]').text(
+                character.living === lifeStory.ALIVE ? 'Alive' : 'Dead');
+
             $detailsTable.find('[data-property=level]').text(Math.floor(character.experience) || 0); // TODO: Calculate level based on experience instead
 
             if (character.details)
@@ -376,11 +393,39 @@
         });
     };
 
+    uiLibrary.populateCharacterEdit = function()
+    {
+        lifeStory.db.getCharacter(lifeStory.values.characterId, function(character)
+        {
+            var $form = $('#editCharacterForm');
+
+            $form.find('[name=id]').val(character.id);
+            $form.find('[name=name]').val(character.name);
+            $form.find('[name=raceId]').val(character.raceId).selectmenu('refresh');
+            $form.find('[name=classId]').val(character.classId).selectmenu('refresh');
+            $form.find('[name=details]').val(character.details);
+        });
+    };
+
+    // Confirms the user wants to clear the delete the character. If so, deletes the character.
+    uiLibrary.confirmDeleteCharacter = function ()
+    {
+        var acceptCallback = function()
+        {
+            lifeStory.dataAccess.deleteCharacter(lifeStory.values.characterId);
+        }
+
+        uiLibrary.displayConfirmation('Delete ' + lifeStory.values.characterName + '?',
+            'Are you sure you want to delete ' + lifeStory.values.characterName +
+            '? <strong>This cannot be undone.</strong>',
+            acceptCallback);
+    };
+
     // Confirms the user wants to clear the character table. If so, clears the table.
     uiLibrary.confirmClearCharactersTable = function ()
     {
         // This must be done this way because the confirm dialog will be shown before a value
-        // is returned from getCharacterCount if a callback isn't use.
+        // is returned from getCharacterCount if a callback isn't used.
         lifeStory.db.getCharacterCount(function (characterCount)
         {
             uiLibrary.displayConfirmation('Clear Characters?',
@@ -393,7 +438,7 @@
     uiLibrary.confirmClearDatabase = function ()
     {
         // This must be done this way because the confirm dialog will be shown before a value
-        // is returned from getCharacterCount if a callback isn't use.
+        // is returned from getCharacterCount if a callback isn't used.
         lifeStory.db.getCharacterCount(function (count)
         {
             uiLibrary.displayConfirmation('Delete All Data?',

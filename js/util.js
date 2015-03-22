@@ -55,15 +55,16 @@
     {
         var $inputs = reduceToOnlyInputs(form);
 
-        var newCharacter = new lifeStory.Character();
+        var character = new lifeStory.Character();
 
-        newCharacter.name = $inputs.filter('[name=name]').val().trim();
-        newCharacter.raceId = $inputs.filter('[name=raceId]').val();
-        newCharacter.classId = $inputs.filter('[name=classId]').val();
-        newCharacter.living = $inputs.filter('[name=living]').val() || true; // TODO: true = WHERE living = 'true'; 1 = WHERE living = 1; Which is preferable?
-        newCharacter.details = $inputs.filter('[name=details]').val().trim() || null;
+        character.id = $inputs.filter('[name=id]').val() || null;
+        character.name = $inputs.filter('[name=name]').val().trim();
+        character.raceId = $inputs.filter('[name=raceId]').val();
+        character.classId = $inputs.filter('[name=classId]').val();
+        character.living = $inputs.filter('[name=living]').val() || lifeStory.ALIVE;
+        character.details = $inputs.filter('[name=details]').val().trim() || null;
 
-        return newCharacter;
+        return character;
     };
 
     utilLibrary.createRaceFromInput = function(form)
@@ -90,7 +91,7 @@
         $.mobile.changePage('#' + pageId);
     };
 
-    utilLibrary.onSuccessDialogClose = function(redirectToPageId)
+    utilLibrary.redirectOnSuccessDialogClose = function(redirectToPageId)
     {
         /// <summary>
         ///     Redirects to the page identified by redirectToPageId when the success dialog is closed
