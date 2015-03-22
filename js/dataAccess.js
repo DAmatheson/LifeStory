@@ -76,7 +76,7 @@
 
         if (callbackData.redirectToPageId) // Redirect to the specified page
         {
-            lifeStory.util.onSuccessDialogClose(callbackData.redirectToPageId);
+            lifeStory.util.redirectOnSuccessDialogClose(callbackData.redirectToPageId);
         }
         else if (callbackData.isCustomizePage) // Repopulate the list and refresh the UI state
         {
@@ -129,7 +129,7 @@
 
         if (callbackData.redirectToPageId) // Redirect to the specified page
         {
-            lifeStory.util.onSuccessDialogClose(callbackData.redirectToPageId);
+            lifeStory.util.redirectOnSuccessDialogClose(callbackData.redirectToPageId);
         }
         else if (callbackData.isCustomizePage) // Repopulate the list and refresh the UI state
         {
@@ -172,17 +172,28 @@
 
     function saveCharacterSuccess(transaction, resultSet, callbackData)
     {
+        $('#' + callbackData.formIdToReset).trigger('reset');
+
+        lifeStory.values.characterId = resultSet.insertId;
+
         lifeStory.ui.displaySuccessMessage('New character created.');
-        //lifeStory.util.redirectToPage(callbackData.redirectToPageId); // TODO: Show the created character's event log
+
+        if (callbackData.redirectToPageId) // Redirect to the specified page
+        {
+            lifeStory.util.redirectOnSuccessDialogClose(callbackData.redirectToPageId);
+        }
     }
 
-    dataAccessLibrary.saveCharacterToDb = function (form)
+    dataAccessLibrary.saveCharacterToDb = function (form, callbackData)
     {
-        //var successCallback = modifySuccessCallback(saveCharacterSuccess, callbackData); // TODO: To redirect to details page
+        var successCallback = modifySuccessCallback(saveCharacterSuccess, callbackData);
         var saveFailure = failureCallback('Failed to create the character.');
 
-        lifeStory.db.addCharacter(lifeStory.util.createCharacterFromInput(form), saveCharacterSuccess,
-            saveFailure);
+        var newCharacter = lifeStory.util.createCharacterFromInput(form);
+        lifeStory.values.characterName = newCharacter.name;
+        lifeStory.values.characterAlive = newCharacter.living;
+
+        lifeStory.db.addCharacter(newCharacter, successCallback, saveFailure);
     };
 
     function updateCharacterSuccess(transaction, resultSet, callbackData)
@@ -199,5 +210,24 @@
         lifeStory.db.updateCharacter(lifeStory.util.createCharacterFromInput(form),
             updateCharacterSuccess, updateFailure);
     };
+
+    // Callback function for successfully deleting a character
+    function deleteCharacterSuccess()
+    {
+        lifeStory.values.characterId = null;
+        lifeStory.values.characterName = null;
+        lifeStory.values.characterAlive = null;
+
+        lifeStory.ui.displaySuccessMessage('The character was deleted successfully.');
+        lifeStory.util.redirectOnSuccessDialogClose('home');
+    }
+
+    // Attempts to delete the character identified by characterId and displays a message of the outcome
+    dataAccessLibrary.deleteCharacter = function (characterId)
+    {
+        var deleteFailure = failureCallback('Failed to delete the character.');
+
+        lifeStory.db.deleteCharacter(characterId, deleteCharacterSuccess, deleteFailure);
+    }
 
 })(window, window.lifeStory, jQuery);

@@ -91,7 +91,7 @@
         $.mobile.changePage('#' + pageId);
     };
 
-    utilLibrary.onSuccessDialogClose = function(redirectToPageId)
+    utilLibrary.redirectOnSuccessDialogClose = function(redirectToPageId)
     {
         /// <summary>
         ///     Redirects to the page identified by redirectToPageId when the success dialog is closed

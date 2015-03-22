@@ -393,11 +393,25 @@
         });
     };
 
+    // Confirms the user wants to clear the delete the character. If so, deletes the character.
+    uiLibrary.confirmDeleteCharacter = function ()
+    {
+        var acceptCallback = function()
+        {
+            lifeStory.dataAccess.deleteCharacter(lifeStory.values.characterId);
+        }
+
+        uiLibrary.displayConfirmation('Delete ' + lifeStory.values.characterName + '?',
+            'Are you sure you want to delete ' + lifeStory.values.characterName +
+            '? <strong>This cannot be undone.</strong>',
+            acceptCallback);
+    };
+
     // Confirms the user wants to clear the character table. If so, clears the table.
     uiLibrary.confirmClearCharactersTable = function ()
     {
         // This must be done this way because the confirm dialog will be shown before a value
-        // is returned from getCharacterCount if a callback isn't use.
+        // is returned from getCharacterCount if a callback isn't used.
         lifeStory.db.getCharacterCount(function (characterCount)
         {
             uiLibrary.displayConfirmation('Clear Characters?',
@@ -410,7 +424,7 @@
     uiLibrary.confirmClearDatabase = function ()
     {
         // This must be done this way because the confirm dialog will be shown before a value
-        // is returned from getCharacterCount if a callback isn't use.
+        // is returned from getCharacterCount if a callback isn't used.
         lifeStory.db.getCharacterCount(function (count)
         {
             uiLibrary.displayConfirmation('Delete All Data?',

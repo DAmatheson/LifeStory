@@ -7,9 +7,6 @@
 
 $(function()
 {
-    $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharactersTable);
-    $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
-
     // TODO: Only here to prevent query strings in the URL while form handling isn't set up
     $('form').on('submit', function(event)
     {
@@ -26,6 +23,12 @@ $(function()
     {
         $('.ui-btn-active').removeClass('ui-btn-active ui-focus');
     });
+});
+
+$('#settings').one('pageinit', function settingsPageInit()
+{
+    $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharactersTable);
+    $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
 });
 
 // Initialization stuff for the home page
@@ -50,6 +53,11 @@ $('#eventLog').one('pageinit', function eventLogPageInit()
 $('#characterDetails').one('pageinit', function characterDetailsPageInit()
 {
     $(this).on('pagebeforeshow', lifeStory.ui.populateCharacterDetail);
+
+    $('#deleteCharacter').on('tap', function()
+    {
+        lifeStory.ui.confirmDeleteCharacter();
+    });
 });
 
 $('#createCharacter').one('pageinit', function createCharacterPageInit()
@@ -195,7 +203,7 @@ $('#customize').one('pageinit', function customizePageInit()
     {
         get characterId()
         {
-            return localStorage.getItem('characterId') || '';
+            return localStorage.getItem('characterId');
         },
         set characterId(value)
         {
@@ -203,11 +211,15 @@ $('#customize').one('pageinit', function customizePageInit()
             {
                 localStorage.setItem('characterId', value);
             }
+            else if (value === null)
+            {
+                localStorage.removeItem('characterId');
+            }
         },
 
         get characterName()
         {
-            return localStorage.getItem('characterName') || '';
+            return localStorage.getItem('characterName');
         },
         set characterName(value)
         {
@@ -215,11 +227,15 @@ $('#customize').one('pageinit', function customizePageInit()
             {
                 localStorage.setItem('characterName', value);
             }
+            else if (value === null)
+            {
+                localStorage.removeItem('characterName');
+            }
         },
 
         get characterAlive()
         {
-            return localStorage.getItem('characterAlive') || '';
+            return localStorage.getItem('characterAlive');
         },
         set characterAlive(value)
         {
@@ -227,17 +243,25 @@ $('#customize').one('pageinit', function customizePageInit()
             {
                 localStorage.setItem('characterAlive', value);
             }
+            else if (value === null)
+            {
+                localStorage.removeItem('characterAlive');
+            }
         },
 
         get eventId()
         {
-            return localStorage.getItem('eventId') || '';
+            return localStorage.getItem('eventId');
         },
         set eventId(value)
         {
             if (value !== undefined && value !== null)
             {
                 localStorage.setItem('eventId', value);
+            }
+            else if (value === null)
+            {
+                localStorage.removeItem('eventId');
             }
         }
     };

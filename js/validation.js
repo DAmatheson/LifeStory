@@ -134,13 +134,21 @@
             }
         };
 
+        var callbackData =
+        {
+            redirectToPageId: 'eventLog',
+            formIdToReset: formId
+        };
+
         if (isNewCharacterForm)
         {
-            setupFormValidation(formId, lifeStory.dataAccess.saveCharacterToDb, rules, messages);
+            setupFormValidation(formId, lifeStory.dataAccess.saveCharacterToDb, rules, messages,
+                callbackData);
         }
         else
         {
-            setupFormValidation(formId, lifeStory.dataAccess.updateCharacterInDb, rules, messages);
+            setupFormValidation(formId, lifeStory.dataAccess.updateCharacterInDb, rules, messages,
+                callbackData);
         }
     };
 })(window, window.lifeStory, jQuery);

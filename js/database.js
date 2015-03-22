@@ -26,6 +26,14 @@
         console.error(error.message, error, transaction);
     }
 
+    function transactionErrorHandler(error)
+    {
+        alert(error.message);
+        console.error(error.message, error);
+
+        return true; // Rollback the whole transaction
+    }
+
     function initializationError(transaction, error)
     {
         localStorage.setItem('dbInitializationError', 'true');
@@ -243,7 +251,7 @@
         else
         {
             db = window.openDatabase('LifeStory', '1.0', 'Life Story Database',
-                2 * 1024 * 1024, initializeTables);
+                5 * 1024 * 1024, initializeTables);
 
             // Ensure the database has been initialized as openDatabase will only call
             // initializeDatabase if the database doesn't exist.
@@ -388,6 +396,64 @@
                 successCallback || null,
                 failureCallback || sqlErrorHandler);
         });
+    };
+
+    dbLibrary.deleteCharacter = function deleteCharacter(id, successCallback, failureCallback)
+    {
+        /// <summary>
+        ///     Attempts to delete the character specified by id along with all event records for it.<br/>
+        ///     If the transaction fails, it is rolled back and no data is deleted.
+        /// </summary>
+        /// <param name="id" type="number">The id of the character to delete</param>
+        /// <param name="successCallback" type="function">The callback for deletion success</param>
+        /// <param name="failureCallback" type="function">The callback for deletion failure</param>
+
+        var wrappedFailureCallback = function(error)
+        {
+            transactionErrorHandler(error);
+
+            if (failureCallback)
+            {
+                failureCallback();
+            }
+        }
+
+        dbLibrary.getDb().transaction(function (tx)
+        {
+            tx.executeSql(
+                'DELETE FROM eventDetail ' +
+                'WHERE event_id IN ' +
+                '( ' +
+                    'SELECT ed.id ' +
+                    'FROM eventDetail ed ' +
+                        'JOIN event e ' +
+                            'ON ed.event_id = e.id ' +
+                        'JOIN characterEvent ce ' +
+                            'ON e.id = ce.event_id AND ce.character_id = ? ' +
+                ');',
+                [id]);
+
+            tx.executeSql(
+                'DELETE FROM event ' +
+                'WHERE id IN ' +
+                '( ' +
+                    'SELECT e.id ' +
+                    'FROM event e JOIN characterEvent ce ' +
+                        'ON e.id = ce.event_id AND ce.character_id = ?' +
+                ');',
+                [id]);
+
+            tx.executeSql(
+                'DELETE FROM characterEvent ' +
+                'WHERE character_id = ?',
+                [id]);
+
+            tx.executeSql(
+                'DELETE FROM character ' +
+                'WHERE id = ?;',
+                [id]);
+
+        }, wrappedFailureCallback, successCallback);
     };
 
     // Gets the character count and passes it as the sole argument to callBack
