@@ -378,7 +378,8 @@
             $detailsTable.find('[data-property=living]').text(
                 character.living === lifeStory.ALIVE ? 'Alive' : 'Dead');
 
-            $detailsTable.find('[data-property=level]').text(Math.floor(character.experience) || 0); // TODO: Calculate level based on experience instead
+            $detailsTable.find('[data-property=level]').text(
+                lifeStory.util.getLevel(Math.floor(character.experience)));
 
             if (character.details)
             {

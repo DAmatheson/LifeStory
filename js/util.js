@@ -112,7 +112,7 @@
         /// <summary>
         ///     Converts the values from a resultSet into an array of key value lifeStory.SelectEntrys
         /// </summary>
-        /// <param name="resultSet" type="">The result set</param>
+        /// <param name="resultSet">The result set</param>
         /// <param name="valueName" type="string">The column name to pull the value from</param>
         /// <param name="callback" type="function">The function to call with the converted results</param>
 
@@ -132,8 +132,10 @@
         /// <summary>
         ///     Calculates a character's level based on their total XP
         /// </summary>
-        /// <param name="xpTotal" type="">The amount of XP the character has accrued</param>
-    
+        /// <param name="xpTotal" type="number">The amount of XP the character has accrued</param>
+
+        xpTotal = xpTotal || 0;
+
         // you are level n if your xp is between index n-1 and n
         var levels = [0, 300, 900, 2700, 6500,
             14000, 23000, 34000, 48000, 64000,

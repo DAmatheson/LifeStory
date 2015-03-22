@@ -559,7 +559,7 @@
         {
             tx.executeSql(
                 'SELECT c.id, race_id, class_id, c.name, living, details, ' +
-                    'race.name AS raceName, class.name AS className, SUM(e.xp) AS experience ' +
+                    'race.name AS raceName, class.name AS className, SUM(e.xp / e.characterCount) AS experience ' +
                 'FROM character c ' +
                     'JOIN class ' +
                         'ON c.class_id = class.id ' +
