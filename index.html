@@ -67,8 +67,7 @@
             </footer>
         </section>
 
-        <!-- TODO LOW PRIORITY: Dynamically replace Trogdor with current character's name-->
-        <section id="eventLog" data-role="page" data-title="Trogdor - Life Story">
+        <section id="eventLog" data-role="page" data-title="Event Log - Life Story">
             <header id="eventLogHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -105,41 +104,18 @@
                             <p data-property="experience"></p>
                         </a>
                     </li>
-                    <li>
-                        <h1>Trogdor was created</h1>
-                        <p>1st level Trogg Burninator</p>
-                    </li>
-                    <li>
-                        <a href="#eventDetails">
-                            <h1>Defeated: 4 Goblins</h1>
-                            <p>
-                                100XP
-                            </p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#eventDetails">
-                            <h1>Temple of The Flenseworm</h1>
-                            <p>
-                                75XP
-                            </p>
-                        </a>
-                    </li>
-                    <li data-theme="f">
-                        <a href="#eventDetails">
-                            <h1>Died</h1>
-                            <p>
-                                Killed by: 1 Giant Diseased Rat
-                            </p>
-                        </a>
-                    </li>
                 </ul>
             </div>
 
             <footer data-role="footer fieldcontain" data-position="fixed">
                 <fieldset class="ui-grid-a">
                     <div class="ui-block-a">
-                        <a href="#resurrectEvent" data-role="button" data-theme="g">
+                        <a href="#deathEvent" id="diedButton" data-role="button" data-theme="f" 
+                           class="ui-screen-hidden">
+                            Died
+                        </a>
+                        <a href="#resurrectEvent" id="resurrectButton" data-role="button" data-theme="g" 
+                           class="ui-screen-hidden">
                             Resurrect
                         </a>
                     </div>
@@ -457,7 +433,7 @@
             </div>
         </section>
 
-        <section id="characterDetails" data-role="page" data-title="Trogdor Details - Life Story">
+        <section id="characterDetails" data-role="page" data-title="Character Details - Life Story">
             <header id="characterDetailHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>
@@ -598,7 +574,7 @@
             </div>
         </section>
 
-        <section id="editCharacter" data-role="page" data-title="Edit Trogdor - Life Story">
+        <section id="editCharacter" data-role="page" data-title="Edit Character - Life Story">
             <header id="editCharacterHeader" data-role="header" data-position="fixed">
                 <nav data-role="navbar">
                     <ul>

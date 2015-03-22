@@ -81,7 +81,7 @@ $('#createEvent').one('pageinit', function createEventPageInit()
 {
     $('#eventType').on('change', function ()
     {
-        if (parseInt($('#eventType option:selected').val(), 10) === lifeStory.COMBAT)
+        if (parseInt($('#eventType option:selected').val(), 10) === lifeStory.COMBAT_EVENT)
         {
             $('#eventDetailInputs').hide();
             $('#combatDetailInputs').show();
@@ -163,7 +163,34 @@ $('#customize').one('pageinit', function customizePageInit()
 {
     'use strict';
 
-    var lifeStory = {};
+    var lifeStory =
+    {
+        get COMBAT_EVENT()
+        {
+            return 1;
+        },
+        get NON_COMBAT_EVENT()
+        {
+            return 2;
+        },
+        get RESURRECT_EVENT()
+        {
+            return 3;
+        },
+        get DEATH_EVENT()
+        {
+            return 4;
+        },
+        get ALIVE()
+        {
+            return 1;
+        },
+        get DEAD()
+        {
+            return 0;
+        }
+    };
+
     lifeStory.values =
     {
         get characterId()
@@ -190,6 +217,18 @@ $('#customize').one('pageinit', function customizePageInit()
             }
         },
 
+        get characterAlive()
+        {
+            return localStorage.getItem('characterAlive') || '';
+        },
+        set characterAlive(value)
+        {
+            if (value !== undefined && value !== null)
+            {
+                localStorage.setItem('characterAlive', value);
+            }
+        },
+
         get eventId()
         {
             return localStorage.getItem('eventId') || '';
@@ -198,15 +237,10 @@ $('#customize').one('pageinit', function customizePageInit()
         {
             if (value !== undefined && value !== null)
             {
-                localStorage.removeItem('eventId', value);
+                localStorage.setItem('eventId', value);
             }
         }
     };
-
-    lifeStory.COMBAT = 1;
-    lifeStory.NON_COMBAT = 2;
-    lifeStory.RESURRECT = 3;
-    lifeStory.DEATH = 4;
 
     // Makes lifeStory available to the global object
     window.lifeStory = lifeStory;

@@ -351,7 +351,7 @@
                 'WHERE id = ?;',
                 [
                     character.name, character.raceId, character.classId,
-                    character.details, character.living, lifeStory.dataAccess.characterId
+                    character.details, character.living, character.id
                 ],
                 successCallback || null,
                 failureCallback || sqlErrorHandler);
@@ -536,11 +536,12 @@
                 'SELECT e.id AS id, eventType_id, characterCount, date, xp, description, ' +
                     'et.name AS eventTypeName ' +
                 'FROM event e ' +
-                    'JOIN eventType et ' +
-                        'ON e.eventType_id = et.id ' +
                     'JOIN characterEvent ce ' +
                         'ON e.id = ce.event_id ' +
-                'WHERE ce.character_id = ?;',
+                    'JOIN eventType et ' +
+                        'ON e.eventType_id = et.id ' +
+                'WHERE ce.character_id = ?' +
+                'ORDER BY date ASC;', // TODO: Decide on sort order
                 [characterId],
                 function(transaction, resultSet)
                 {
@@ -558,6 +559,8 @@
                         event.experience = row.xp;
                         event.description = row.description;
                         event.eventTypeName = row.eventTypeName;
+
+                        events[i] = event;
                     }
 
                     callback(events);
