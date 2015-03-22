@@ -354,7 +354,7 @@
         dbLibrary.getDb().transaction(function(tx)
         {
             tx.executeSql(
-                'UPDATE character' +
+                'UPDATE character ' +
                 'SET name = ?, race_id = ?, class_id = ?, details = ?, living = ? ' +
                 'WHERE id = ?;',
                 [

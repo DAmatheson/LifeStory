@@ -393,6 +393,20 @@
         });
     };
 
+    uiLibrary.populateCharacterEdit = function()
+    {
+        lifeStory.db.getCharacter(lifeStory.values.characterId, function(character)
+        {
+            var $form = $('#editCharacterForm');
+
+            $form.find('[name=id]').val(character.id);
+            $form.find('[name=name]').val(character.name);
+            $form.find('[name=raceId]').val(character.raceId).selectmenu('refresh');
+            $form.find('[name=classId]').val(character.classId).selectmenu('refresh');
+            $form.find('[name=details]').val(character.details);
+        });
+    };
+
     // Confirms the user wants to clear the delete the character. If so, deletes the character.
     uiLibrary.confirmDeleteCharacter = function ()
     {

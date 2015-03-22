@@ -43,6 +43,11 @@ label > a[data-role="button"][data-iconpos="notext"][data-inline="true"]
     margin-bottom: 0;
 }
 
+.ui-popup
+{
+    min-width: 264px;
+}
+
 /*#region  -- Classes --  */
 .red
 {

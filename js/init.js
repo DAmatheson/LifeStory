@@ -21,7 +21,7 @@ $(function()
     // Remove focus from buttons after tap
     $(document).on('tap', function()
     {
-        $('.ui-btn-active').removeClass('ui-btn-active ui-focus');
+        $('.ui-btn-active:not(.ui-state-persist)').removeClass('ui-btn-active ui-focus');
     });
 });
 
@@ -81,8 +81,13 @@ $('#addRace').one('pageinit', function addRacePageInit()
 });
 
 $('#editCharacter').one('pageinit', function customizePageInit() {
-    lifeStory.ui.populateRaceAndClassList('editCharacterRaceSelect', 'editCharacterClassSelect');
     lifeStory.validation.handleCharacterForm('editCharacterForm');
+
+    $(this).on('pagebeforeshow', function()
+    {
+        lifeStory.ui.populateRaceAndClassList('editCharacterRaceSelect', 'editCharacterClassSelect');
+        lifeStory.ui.populateCharacterEdit();
+    });
 });
 
 $('#createEvent').one('pageinit', function createEventPageInit()

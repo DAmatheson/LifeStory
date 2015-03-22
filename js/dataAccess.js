@@ -177,11 +177,7 @@
         lifeStory.values.characterId = resultSet.insertId;
 
         lifeStory.ui.displaySuccessMessage('New character created.');
-
-        if (callbackData.redirectToPageId) // Redirect to the specified page
-        {
-            lifeStory.util.redirectOnSuccessDialogClose(callbackData.redirectToPageId);
-        }
+        lifeStory.util.redirectOnSuccessDialogClose('eventLog');
     }
 
     dataAccessLibrary.saveCharacterToDb = function (form, callbackData)
@@ -198,17 +194,22 @@
 
     function updateCharacterSuccess(transaction, resultSet, callbackData)
     {
+        $('#' + callbackData.formIdToReset).trigger('reset');
+
         lifeStory.ui.displaySuccessMessage('Character updated.');
-        //lifeStory.util.redirectToPage(callbackData.redirectToPageId); // TODO: Show the character's details page
+        lifeStory.util.redirectOnSuccessDialogClose('eventLog');
     }
 
-    dataAccessLibrary.updateCharacterInDb = function (form)
+    dataAccessLibrary.updateCharacterInDb = function (form, callbackData)
     {
-        //var successCallback = modifySuccessCallback(updateCharacterSuccess, callbackData); // TODO: To redirect to details page
+        var successCallback = modifySuccessCallback(updateCharacterSuccess, callbackData);
         var updateFailure = failureCallback('Failed to update the character.');
 
-        lifeStory.db.updateCharacter(lifeStory.util.createCharacterFromInput(form),
-            updateCharacterSuccess, updateFailure);
+        var updatedCharacter = lifeStory.util.createCharacterFromInput(form);
+        lifeStory.values.characterName = updatedCharacter.name;
+        lifeStory.values.characterAlive = updatedCharacter.living;
+
+        lifeStory.db.updateCharacter(updatedCharacter, successCallback, updateFailure);
     };
 
     // Callback function for successfully deleting a character

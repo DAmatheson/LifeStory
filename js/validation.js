@@ -136,7 +136,6 @@
 
         var callbackData =
         {
-            redirectToPageId: 'eventLog',
             formIdToReset: formId
         };
 
