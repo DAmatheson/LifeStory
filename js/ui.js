@@ -347,7 +347,7 @@
                 $listContainer.append($reviewItem);
             }
 
-            if (lifeStory.values.characterAlive === lifeStory.ALIVE)
+            if (parseInt(lifeStory.values.characterAlive) === lifeStory.ALIVE)
             {
                 $('#diedButton').removeClass('ui-screen-hidden');
                 $('#resurrectButton').addClass('ui-screen-hidden');
