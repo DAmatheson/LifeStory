@@ -375,11 +375,16 @@
 
             $detailsTable.find('[data-property=race]').text(character.raceName);
             $detailsTable.find('[data-property=class]').text(character.className);
+
+            var level = lifeStory.util.getLevel(Math.floor(character.experience));
+            $detailsTable.find('[data-property=level]').text(level);
+            $detailsTable.find('[data-property=totalXP]').text(Math.floor(character.experience) + " XP");
+            $detailsTable.find('[data-property=requiredXP]')
+                .text(lifeStory.util.xpToNextLevel(character.experience) + " XP")
+                .prev().html("To Level " + (level + 1) + ":");
+
             $detailsTable.find('[data-property=living]').text(
                 character.living === lifeStory.ALIVE ? 'Alive' : 'Dead');
-
-            $detailsTable.find('[data-property=level]').text(
-                lifeStory.util.getLevel(Math.floor(character.experience)));
 
             if (character.details)
             {

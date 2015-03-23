@@ -127,6 +127,11 @@
         callback(results);
     };
 
+    utilLibrary.levelValues = [0, 300, 900, 2700, 6500,
+                            14000, 23000, 34000, 48000, 64000,
+                            85000, 100000, 120000, 140000, 165000,
+                            195000, 225000, 265000, 305000, 355000];
+
     utilLibrary.getLevel = function(xpTotal)
     {
         /// <summary>
@@ -137,19 +142,21 @@
         xpTotal = xpTotal || 0;
 
         // you are level n if your xp is between index n-1 and n
-        var levels = [0, 300, 900, 2700, 6500,
-            14000, 23000, 34000, 48000, 64000,
-            85000, 100000, 120000, 140000, 165000,
-            195000, 225000, 265000, 305000, 355000];
-
-        for (var i = 1; i < levels.length - 1; i++) {
-            if (xpTotal < levels[i])
+        for (var i = 1; i < utilLibrary.levelValues.length - 1; i++) {
+            if (xpTotal < utilLibrary.levelValues[i])
             {
                 return i;
             }
         }
 
         // return highest level if above the highest xp requirement
-        return levels.length;
+        return utilLibrary.levelValues.length;
+    }
+
+    utilLibrary.xpToNextLevel = function(xpTotal)
+    {
+        var level = utilLibrary.getLevel(xpTotal);
+
+        return utilLibrary.levelValues[level] - xpTotal;
     }
 })(window, window.lifeStory, jQuery);
