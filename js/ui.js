@@ -5,7 +5,7 @@
  *      Drew Matheson, 2015.03.05: Created
  */
 
-// 
+// Extend lifeStory with ui functions located under lifeStory.ui
 (function (window, lifeStory, $, undefined)
 {
     'use strict';

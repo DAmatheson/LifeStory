@@ -6,7 +6,6 @@
  */
 
 // Extend lifeStory with database functions located under lifeStory.db
-
 (function(lifeStory, undefined)
 {
     'use strict';

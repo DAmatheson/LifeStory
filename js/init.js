@@ -187,7 +187,6 @@ $('#customize').one('pageinit', function customizePageInit()
 
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
-// Take undefined as parameter and don't pass anything to get an unchanged version of undefined.
 (function (window, undefined)
 {
     'use strict';

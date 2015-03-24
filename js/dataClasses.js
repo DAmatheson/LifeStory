@@ -5,7 +5,7 @@
  *      Drew Matheson, 2015.03.05: Created
  */
 
-// Data classes for LifeStory
+// Extend lifeStory with model classes located under lifeStory
 (function (window, lifeStory, undefined)
 {
     'use strict';

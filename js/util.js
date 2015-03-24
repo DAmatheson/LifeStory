@@ -5,6 +5,7 @@
  *      Drew Matheson, 2015.03.05: Created
  */
 
+// Extend lifeStory with utility functions located under lifeStory.util
 (function (window, lifeStory, $, undefined)
 {
     'use strict';

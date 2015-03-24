@@ -5,6 +5,7 @@
  *      Drew Matheson, 2015.03.19: Created
  */
 
+// Extend lifeStory with data access functions located under lifeStory.dataAccess
 (function(window, lifeStory, $, undefined)
 {
     'use strict';

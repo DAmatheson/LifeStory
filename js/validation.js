@@ -5,6 +5,7 @@
  *      Drew Matheson, 2015.03.18: Created
  */
 
+// Extend lifeStory with validation functions located under lifeStory.validation
 (function(window, lifeStory, $, undefined)
 {
     'use strict';
