@@ -28,6 +28,7 @@
 
         var event = new lifeStory.Event();
 
+        event.id = $inputs.filter('[name=id]').val() || null;
         event.eventTypeId = $inputs.filter('[name=eventType]').val();
         event.characterCount = $inputs.filter('[name=characterCount]').val();
         event.experience = $inputs.filter('[name=experience]').val();
@@ -38,14 +39,9 @@
 
     utilLibrary.createEventDetailsFromInput = function(form)
     {
-        var eventDetailItems = [];
-
-        console.log(form);
-
         var $form = $(form);
 
-        var eventId = $form.find('[name=id]').val() || null; // TODO: Consider if this is even needed
-
+        var eventDetailItems = [];
         var detailCounter = 0;
 
         $('fieldset', $form).each(function()
@@ -58,8 +54,7 @@
 
             if (eventName && creatureCount)
             {
-                eventDetailItems.push(new lifeStory.EventDetail(detailId, eventId, eventName,
-                    creatureCount));
+                eventDetailItems.push(new lifeStory.EventDetail(detailId, eventName, creatureCount));
 
                 detailCounter++;
             }

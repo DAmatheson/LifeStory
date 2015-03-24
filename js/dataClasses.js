@@ -47,7 +47,7 @@
         this.name = name || null;
     };
 
-    lifeStory.EventDetail = function eventDetail(detailId, eventId, eventName, creatureCount)
+    lifeStory.EventDetail = function eventDetail(detailId, eventName, creatureCount, eventId)
     {
         this.id = detailId || null;
         this.eventId = eventId || null;
