@@ -167,9 +167,9 @@
                     param: true,
                     depends: lifeStory.util.isCombatEvent
                 },
-                rangelength:
+                maxlength:
                 {
-                    param: [1, 60],
+                    param: 30,
                     depends: lifeStory.util.isCombatEvent
                 }
             },
@@ -193,9 +193,9 @@
                     param: true,
                     depends: !lifeStory.util.isCombatEvent
                 },
-                rangelength:
+                maxlength:
                 {
-                    param: [1, 60],
+                    param:  30,
                     depends: !lifeStory.util.isCombatEvent
                 }
             },
@@ -216,34 +216,34 @@
         {
             eventType:
             {
-                required: 'Your character must have a race.',
-                number: 'Please create a race for your character.'
+                required: 'You must select an XP source.',
+                number: 'Please select an XP source.'
             },
             enemyName:
             {
                 required: 'Please enter a name.',
-                rangelength: 'Between 1 and 60 characters long.' // TODO: Actual message
+                maxlength: 'Max 30 characters long.'
             },
             creatureCount:
             {
                 required: 'Required.',
-                number: 'The count must be a number.'
+                number: 'Must be a number.'
             },
             eventName:
             {
                 required: 'Please enter what got you experience.',
-                rangelength: 'Must be between 1 and 60 characters.'
+                maxlength: 'Max 30 characters long.'
             },
             experience:
             {
-                required: 'Please enter total XP amount.',
-                number: 'XP Amount must be a number.',
-                min: 'XP Amount must be at least 0.'
+                required: 'Please enter the total XP amount.',
+                number: 'XP amount must be a number.',
+                min: 'XP amount must be at least 0.'
             },
             characterCount:
             {
                 required: 'Please enter how many characters shared the XP.',
-                number: 'The number of characters sharing the XP must be a number.'
+                number: 'Character count must be a number.' // TODO: This message needs work
             }
         };
 

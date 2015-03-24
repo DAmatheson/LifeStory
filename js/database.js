@@ -126,7 +126,7 @@
             '(' +
                 'id INTEGER NOT NULL, ' +
                 'event_id INTEGER NOT NULL, ' +
-                'name VARCHAR(60) NOT NULL, ' + // TODO: Decide on max length, update validation to match
+                'name VARCHAR(30) NOT NULL, ' + // TODO: Decide on max length, update validation to match
                 'creatureCount INTEGER, ' +
                 'PRIMARY KEY (id, event_id), ' +
                 'FOREIGN KEY (event_id) REFERENCES event (id)' +
