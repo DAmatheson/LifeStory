@@ -249,7 +249,7 @@
 
         var callbackData =
         {
-            formIdToReset: formId,
+            formIdToReset: formId
         };
 
         if (isNewEventForm)

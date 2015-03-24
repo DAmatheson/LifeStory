@@ -301,18 +301,26 @@
                 var event = events[i];
 
                 var title = '';
-
-                if (event.description) // TODO: Figure out title if a description doesn't exist
+                
+                if (event.eventTypeId === lifeStory.COMBAT_EVENT)
                 {
-                    title = event.description;
+                    title = 'Defeated: ' + event.eventDetails[0].creatureCount + ' ' +
+                        event.eventDetails[0].name;
+                }
+                else if (event.eventTypeId === lifeStory.NON_COMBAT_EVENT ||
+                    event.eventTypeId === lifeStory.RESURRECT_EVENT ||
+                    event.eventTypeId === lifeStory.DEATH_EVENT)
+                {
+                    title = event.eventDetails[0].name;
                 }
                 else
                 {
-                    title = event.eventTypeName;
+                    title = event.eventTypeName; // TODO: This shouldn't ever happen so maybe remove
                 }
 
                 $('[data-property=title]', $currentItem).text(title);
-                $('[data-property=experience]', $currentItem).text(event.experience + ' XP');
+                $('[data-property=experience]', $currentItem).text(
+                    Math.floor(event.experience / event.characterCount) + ' XP');
 
                 if (event.id === lifeStory.DEATH_EVENT)
                 {

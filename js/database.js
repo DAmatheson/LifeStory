@@ -653,18 +653,25 @@
     {
         dbLibrary.getDb().readTransaction(function(tx)
         {
-            var event = lifeStory.Event();
-
             tx.executeSql(
                 'SELECT e.id AS id, eventType_id, characterCount, date, xp, description, ' +
-                    'et.name AS eventTypeName ' +
+                    'et.name AS eventTypeName, ed.name AS eventDetailName, creatureCount ' +
                 'FROM event e ' +
                     'JOIN characterEvent ce ' +
                         'ON e.id = ce.event_id ' +
                     'JOIN eventType et ' +
                         'ON e.eventType_id = et.id ' +
-                'WHERE ce.character_id = ?' +
-                'ORDER BY date ASC;', // TODO: Decide on sort order
+                    'JOIN eventDetail ed ' +
+                        'ON e.id = ed.event_id AND ed.id = ' +
+                            '(' +
+                                'SELECT id ' +
+                                'FROM eventDetail ' +
+                                'WHERE event_id = e.id ' +
+                                'ORDER BY id ' +
+                                'LIMIT 1' +
+                            ') ' +
+                'WHERE ce.character_id = ? ' +
+                'ORDER BY date;', // TODO: Decide on sort order
                 [characterId],
                 function(transaction, resultSet)
                 {
@@ -674,6 +681,10 @@
                     {
                         var row = resultSet.rows.item(i);
                         var event = new lifeStory.Event();
+                        var eventDetail = new lifeStory.EventDetail();
+
+                        eventDetail.name = row.eventDetailName;
+                        eventDetail.creatureCount = row.creatureCount;
 
                         event.id = row.id;
                         event.eventTypeId = row.eventType_id;
@@ -682,6 +693,7 @@
                         event.experience = row.xp;
                         event.description = row.description;
                         event.eventTypeName = row.eventTypeName;
+                        event.eventDetails = [eventDetail];
 
                         events[i] = event;
                     }
