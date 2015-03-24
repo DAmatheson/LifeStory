@@ -92,9 +92,12 @@ $('#editCharacter').one('pageinit', function customizePageInit() {
 
 $('#createEvent').one('pageinit', function createEventPageInit()
 {
+    lifeStory.validation.handleEventForm('createEventForm', true);
+    $('#removeEnemy').closest('.ui-btn').hide();
+
     $('#eventType').on('change', function ()
     {
-        if (parseInt($('#eventType option:selected').val(), 10) === lifeStory.COMBAT_EVENT)
+        if (lifeStory.util.isCombatEvent())
         {
             $('#eventDetailInputs').hide();
             $('#combatDetailInputs').show();
@@ -105,8 +108,6 @@ $('#createEvent').one('pageinit', function createEventPageInit()
             $('#eventDetailInputs').show();
         }
     });
-
-    $('#removeEnemy').closest('.ui-btn').hide();
 
     $('#addEnemy').on('tap', function ()
     {
@@ -128,6 +129,7 @@ $('#createEvent').one('pageinit', function createEventPageInit()
 
 $('#editEvent').one('pageinit', function createEventPageInit()
 {
+    lifeStory.validation.handleEventForm('editEventForm');
     $('#editRemoveEnemy').closest('.ui-btn').hide();
 
     $('#editAddEnemy').on('tap', function ()

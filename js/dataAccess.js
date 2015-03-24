@@ -231,4 +231,25 @@
         lifeStory.db.deleteCharacter(characterId, deleteCharacterSuccess, deleteFailure);
     }
 
+    // Callback function for successfully saving an event
+    function saveEventSuccess(transaction, resultSet, callbackData)
+    {
+        $('#' + callbackData.formIdToReset).trigger('reset');
+
+        lifeStory.ui.displaySuccessMessage('New Event created');
+        lifeStory.util.redirectOnSuccessDialogClose('eventLog');
+    };
+
+    dataAccessLibrary.saveEventToDb = function(form, callbackData)
+    {
+        var successCallback = modifySuccessCallback(saveEventSuccess, callbackData);
+        var saveFailure = failureCallback('Failed to save the event.');
+
+        var newEvent = lifeStory.util.createEventFromInput(form);
+        var newEventDetails = lifeStory.util.createEventDetailsFromInput(form);
+        var characterId = lifeStory.values.characterId;
+
+        lifeStory.db.addEvent(newEvent, newEventDetails, characterId, successCallback, saveFailure);
+    }
+
 })(window, window.lifeStory, jQuery);

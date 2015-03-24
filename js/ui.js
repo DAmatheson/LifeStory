@@ -347,7 +347,7 @@
                 $listContainer.append($reviewItem);
             }
 
-            if (parseInt(lifeStory.values.characterAlive) === lifeStory.ALIVE)
+            if (parseInt(lifeStory.values.characterAlive, 10) === lifeStory.ALIVE)
             {
                 $('#diedButton').removeClass('ui-screen-hidden');
                 $('#resurrectButton').addClass('ui-screen-hidden');
@@ -378,23 +378,23 @@
 
             var level = lifeStory.util.getLevel(Math.floor(character.experience));
             $detailsTable.find('[data-property=level]').text(level);
-            $detailsTable.find('[data-property=totalXP]').text(Math.floor(character.experience) + " XP");
-            $detailsTable.find('[data-property=requiredXP]')
-                .text(lifeStory.util.xpToNextLevel(character.experience) + " XP")
-                .prev().html("To Level " + (level + 1) + ":");
+            $detailsTable.find('[data-property=totalXP]').text(Math.floor(character.experience) + ' XP');
+            $detailsTable.find('[data-property=nextLevel').text((level + 1));
+            $detailsTable.find('[data-property=requiredXP]').text(
+                lifeStory.util.xpToNextLevel(character.experience) + ' XP');
 
             $detailsTable.find('[data-property=living]').text(
                 character.living === lifeStory.ALIVE ? 'Alive' : 'Dead');
 
             if (character.details)
             {
-                $detailsTable.find('[data-property=details]').text(character.details).
-                    parent().prev().removeClass('ui-screen-hidden');
+                $detailsTable.find('[data-property=details]').text(character.details);
+                $detailsTable.find('#detailsRow').removeClass('ui-screen-hidden');
             }
             else
             {
-                $detailsTable.find('[data-property=details]').text('').
-                    parent().prev().addClass('ui-screen-hidden');
+                $detailsTable.find('[data-property=details]').text('');
+                $detailsTable.find('#detailsRow').addClass('ui-screen-hidden');
             }
         });
     };

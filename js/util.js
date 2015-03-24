@@ -21,17 +21,33 @@
         return $(':input:not(button)', element);
     }
 
-    utilLibrary.createEventDetailsFromInput = function(formId, inputSetContainer)
+    utilLibrary.createEventFromInput = function(form)
+    {
+        var $inputs = reduceToOnlyInputs(form);
+
+        var event = new lifeStory.Event();
+
+        event.eventTypeId = $inputs.filter('[name=eventType]').val();
+        event.characterCount = $inputs.filter('[name=characterCount]').val();
+        event.experience = $inputs.filter('[name=experience]').val();
+        event.description = $inputs.filter('[name=description]').val();
+
+        return event;
+    }
+
+    utilLibrary.createEventDetailsFromInput = function(form)
     {
         var eventDetailItems = [];
 
-        var $form = $('#' + formId);
+        console.log(form);
 
-        var eventId = $form.find('[name=id]').val();
+        var $form = $(form);
+
+        var eventId = $form.find('[name=id]').val() || null; // TODO: Consider if this is even needed
 
         var detailCounter = 0;
 
-        $(inputSetContainer, $form).each(function()
+        $('fieldset', $form).each(function()
         {
             var $inputs = reduceToOnlyInputs(this);
 
@@ -85,6 +101,11 @@
 
         return new lifeStory.CharacterClass(className);
     };
+
+    utilLibrary.isCombatEvent = function()
+    {
+        return parseInt($('#eventType option:selected').val(), 10) === lifeStory.COMBAT_EVENT;
+    }
 
     utilLibrary.redirectToPage = function(pageId)
     {

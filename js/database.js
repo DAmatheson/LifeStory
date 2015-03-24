@@ -76,7 +76,7 @@
                 'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
                 'race_id INTEGER, ' +
                 'class_id INTEGER, ' +
-                'name VARCHAR(50) NOT NULL, ' +
+                'name VARCHAR(50) NOT NULL, ' + // TODO: Decide on max length, update validation to match
                 'living BOOLEAN NOT NULL DEFAULT 1,' +
                 'details TEXT, ' +
                 'FOREIGN KEY (race_id) REFERENCES race (id),' +
@@ -126,7 +126,7 @@
             '(' +
                 'id INTEGER NOT NULL, ' +
                 'event_id INTEGER NOT NULL, ' +
-                'name VARCHAR(60) NOT NULL, ' +
+                'name VARCHAR(60) NOT NULL, ' + // TODO: Decide on max length, update validation to match
                 'creatureCount INTEGER, ' +
                 'PRIMARY KEY (id, event_id), ' +
                 'FOREIGN KEY (event_id) REFERENCES event (id)' +
@@ -342,6 +342,63 @@
                 successCallback || null,
                 failureCallback || sqlErrorHandler);
         });
+    };
+
+    dbLibrary.addEvent = function addEvent(event, eventDetails, characterId, successCallback, failureCallback)
+    {
+        if (!(event instanceof lifeStory.Event))
+        {
+            throw 'event parameter to addEvent must be an instance of lifestory.Event';
+        }
+        else if (!Array.isArray(eventDetails))
+        {
+            throw 'The eventDetails argument for addEvent must be an array';
+        }
+        else if (eventDetails.length > 0 && !(eventDetails[0] instanceof lifeStory.EventDetail))
+        {
+            throw 'The entries in the eventDetails argument for addEvent must be instances ' +
+                'of lifeStory.EventDetail';
+        }
+
+        var wrappedFailureCallback = function(error)
+        {
+            transactionErrorHandler(error);
+
+            if (failureCallback)
+            {
+                failureCallback();
+            }
+        }
+
+        dbLibrary.getDb().transaction(function(tx)
+        {
+            tx.executeSql(
+                'INSERT INTO event (eventType_Id, characterCount, xp, description) ' +
+                'VALUES (?, ?, ?, ?);',
+                [
+                    event.eventTypeId, event.characterCount,
+                    event.experience, event.description
+                ],
+                function (transaction, resultSet)
+                {
+                    tx.executeSql(
+                        'INSERT INTO characterEvent (character_id, event_id) VALUES (?, ?);',
+                        [
+                            characterId, resultSet.insertId
+                        ]);
+
+                    eventDetails.forEach(function(item)
+                    {
+                        tx.executeSql(
+                            'INSERT INTO eventDetail (id, event_id, name, creatureCount) ' +
+                            'VALUES (?, ?, ?, ?);',
+                            [
+                                item.id, resultSet.insertId,
+                                item.name, item.creatureCount
+                            ]);
+                    });
+                });
+        }, wrappedFailureCallback, successCallback);
     };
 
     dbLibrary.updateCharacter = function updateCharacter(character, successCallback, failureCallback)

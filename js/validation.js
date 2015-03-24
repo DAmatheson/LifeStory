@@ -40,6 +40,24 @@
         {
             submitHandler: submitHandler,
             rules: rules,
+            errorPlacement: function(error, element)
+            {
+                error.css('display', 'block');
+
+                if (element.attr('name') === 'enemyName')
+                {
+                    error.prependTo(element.parent()); // TODO HIGH PRIORITY: Decide how we want these to show up
+                    //error.appendTo($('#enemyNameLabel'));
+                }
+                else if (element.attr('name') === 'creatureCount')
+                {
+                    error.appendTo($('#creatureCountLabel'));
+                }
+                else
+                {
+                    error.appendTo(element.parent().prev());
+                }
+            },
             messages: messages
         });
     }
@@ -125,12 +143,12 @@
             raceId:
             {
                 required: 'Your character must have a race.',
-                number: 'Please create a race to be.'
+                number: 'Please create a race for your character.'
             },
             classId:
             {
                 required: 'Your character must have a class.',
-                number: 'Please create a class to be.'
+                number: 'Please create a class for your character.'
             }
         };
 
@@ -150,4 +168,116 @@
                 callbackData);
         }
     };
+
+    validationLibrary.handleEventForm = function (formId, isNewEventForm)
+    {
+        var rules =
+        {
+            eventType:
+            {
+                required: true,
+                number: true
+            },
+            enemyName: // Combat event only
+            {
+                required:
+                {
+                    param: true,
+                    depends: lifeStory.util.isCombatEvent
+                },
+                rangelength:
+                {
+                    param: [1, 60],
+                    depends: lifeStory.util.isCombatEvent
+                }
+            },
+            creatureCount: // Combat event only
+            {
+                required:
+                {
+                    param: true,
+                    depends: lifeStory.util.isCombatEvent
+                },
+                number:
+                {
+                    param: true,
+                    depends: lifeStory.util.isCombatEvent
+                }
+            },
+            eventName: // Non Combat event only
+            {
+                required:
+                {
+                    param: true,
+                    depends: !lifeStory.util.isCombatEvent
+                },
+                rangelength:
+                {
+                    param: [1, 60],
+                    depends: !lifeStory.util.isCombatEvent
+                }
+            },
+            xp:
+            {
+                required: true,
+                number: true
+            },
+            characterCount:
+            {
+                required: true,
+                number: true
+            }
+        };
+
+        var messages =
+        {
+            eventType:
+            {
+                required: 'Your character must have a race.',
+                number: 'Please create a race for your character.'
+            },
+            enemyName:
+            {
+                required: 'Please enter a name.',
+                rangelength: 'Between 1 and 60 characters long.' // TODO: Actual message
+            },
+            creatureCount:
+            {
+                required: 'Required.',
+                number: 'The count must be a number.'
+            },
+            eventName:
+            {
+                required: 'Please enter what got you experience.',
+                rangelength: 'Must be between 1 and 60 characters.'
+            },
+            xp:
+            {
+                required: 'Please enter total XP amount.',
+                number: 'XP Amount must be a number.'
+            },
+            characterCount:
+            {
+                required: 'Please enter how many characters shared the XP.',
+                number: 'The number of characters sharing the XP must be a number.'
+            }
+        };
+
+        var callbackData =
+        {
+            formIdToReset: formId,
+        };
+
+        if (isNewEventForm)
+        {
+            setupFormValidation(formId, lifeStory.dataAccess.saveEventToDb, rules, messages,
+                callbackData);
+        }
+        else
+        {
+            setupFormValidation(formId, lifeStory.dataAccess.updateEventInDb, rules, messages,
+                callbackData);
+        }
+    };
+
 })(window, window.lifeStory, jQuery);
