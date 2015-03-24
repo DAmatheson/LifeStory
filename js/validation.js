@@ -40,24 +40,6 @@
         {
             submitHandler: submitHandler,
             rules: rules,
-            errorPlacement: function(error, element)
-            {
-                error.css('display', 'block');
-
-                if (element.attr('name') === 'enemyName')
-                {
-                    error.prependTo(element.parent()); // TODO HIGH PRIORITY: Decide how we want these to show up
-                    //error.appendTo($('#enemyNameLabel'));
-                }
-                else if (element.attr('name') === 'creatureCount')
-                {
-                    error.appendTo($('#creatureCountLabel'));
-                }
-                else
-                {
-                    error.appendTo(element.parent().prev());
-                }
-            },
             messages: messages
         });
     }
@@ -217,10 +199,11 @@
                     depends: !lifeStory.util.isCombatEvent
                 }
             },
-            xp:
+            experience:
             {
                 required: true,
-                number: true
+                number: true,
+                min: 0
             },
             characterCount:
             {
@@ -251,10 +234,11 @@
                 required: 'Please enter what got you experience.',
                 rangelength: 'Must be between 1 and 60 characters.'
             },
-            xp:
+            experience:
             {
                 required: 'Please enter total XP amount.',
-                number: 'XP Amount must be a number.'
+                number: 'XP Amount must be a number.',
+                min: 'XP Amount must be at least 0.'
             },
             characterCount:
             {

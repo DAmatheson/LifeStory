@@ -6,24 +6,20 @@
  */
 
 /*#region  -- Media Queries --  */
-@media all and (max-width: 35em)
-{
+@media all and (max-width: 35em) {
    .my-breakpoint .ui-block-a,
-   .my-breakpoint .ui-block-b 
-   {
+   .my-breakpoint .ui-block-b {
        width: 100%;
        float: none;
    } 
 
-   .my-breakpoint .ui-block-b
-   {
+   .my-breakpoint .ui-block-b {
        padding-top: 1.5em;
        clear: left;
    }
 
-   .rightPadHalf, .leftPadHalf
-    {
-       padding: 0 !important; /* HORRIBLE */
+   .rightPadHalf, .leftPadHalf {
+       padding: 0 !important; /* Unfortunate reality */
     }
 }
 /*#endregion*/
@@ -32,90 +28,74 @@ label.error {
 	color: red;
 }
 
-label.ui-input-text, label.ui-select, td.tableLabel
-{
+label.ui-input-text:not(.error), label.ui-select, td.tableLabel {
     font-weight: bold;
 }
 
-label > a[data-role="button"][data-iconpos="notext"][data-inline="true"]
-{
+label > a[data-role="button"][data-iconpos="notext"][data-inline="true"] {
     margin-top: 0;
     margin-bottom: 0;
 }
 
-.ui-popup
-{
+.ui-popup {
     min-width: 264px;
 }
 
 /*#region  -- Classes --  */
-.red
-{
+.red {
      color: red;
 }
 
-.alignCenter
-{
+.alignCenter {
     text-align: center;
 }
 
 /* Footer selector is to remove top/bottom margin due to inputs and labels*/
-.margin0, footer > div.ui-checkbox > label.margin0
-{
+.margin0, footer > div.ui-checkbox > label.margin0 {
     margin-top: 0;
     margin-bottom:0;
 }
 
-.rightPadHalf
-{
+.rightPadHalf {
     padding-right: 0.5em;
 }
 
-.leftPadHalf
-{
+.leftPadHalf {
     padding-left: 0.5em;
 }
 
-.right
-{
+.right {
     float: right;
 }
 
-.left
-{
+.left {
     float: left;
 }
 
-.clearBoth
-{
+.clearBoth {
     clear:both
 }
 
-.ui-grid-a .ui-block-a.twoThirds
-{
+.ui-grid-a .ui-block-a.twoThirds {
      width: 65%
 }
 
-.ui-grid-a .ui-block-b.oneThird
-{
+.ui-grid-a .ui-block-b.oneThird {
      width: 35%;
 } 
 /*#endregion*/
 
 /*#region  -- Elements --  */
-h2
-{
+h2 {
     margin-top: 0.3em;
 }
 
-img
-{
+img {
      max-width: 100%;
 }
 
 /* Prevent the header text and new character button breaking into two lines */
-html, body, section
-{
+html, body, section {
     -moz-min-width: 300px;
     -ms-min-width: 300px;
     -o-min-width: 300px;

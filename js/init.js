@@ -109,21 +109,28 @@ $('#createEvent').one('pageinit', function createEventPageInit()
         }
     });
 
+    var removeButtonSelector = '#removeEnemy';
+
     $('#addEnemy').on('tap', function ()
     {
         var appendToSelector = '#combatDetailInputs fieldset:last';
         var templateElementId = 'enemyInputsTemplate';
-        var removeButtonSelector = '#removeEnemy';
 
         lifeStory.ui.duplicateInputSet(appendToSelector, templateElementId, removeButtonSelector);
     });
 
     $('#removeEnemy').on('tap', function ()
     {
-        var removeButtonSelector = '#removeEnemy';
         var removeElementSelector = '#combatDetailInputs fieldset:last:not(#enemyInputsTemplate)';
 
         lifeStory.ui.removeInputSet(removeElementSelector, removeButtonSelector);
+    });
+
+    $('#createEventForm').on('reset', function()
+    {
+        var extraInputsSelector = '#combatDetailInputs fieldset:not(#enemyInputsTemplate)';
+
+        lifeStory.ui.removeInputSet(extraInputsSelector, removeButtonSelector);
     });
 });
 
@@ -132,21 +139,28 @@ $('#editEvent').one('pageinit', function createEventPageInit()
     lifeStory.validation.handleEventForm('editEventForm');
     $('#editRemoveEnemy').closest('.ui-btn').hide();
 
+    var removeButtonSelector = '#editRemoveEnemy';
+
     $('#editAddEnemy').on('tap', function ()
     {
         var appendToSelector = '#editCombatDetailInputs fieldset:last';
         var templateElementId = 'editEnemyInputsTemplate';
-        var removeButtonSelector = '#editRemoveEnemy';
 
         lifeStory.ui.duplicateInputSet(appendToSelector, templateElementId, removeButtonSelector);
     });
 
     $('#editRemoveEnemy').on('tap', function ()
     {
-        var removeButtonSelector = '#editRemoveEnemy';
         var removeElementSelector = '#editCombatDetailInputs fieldset:last:not(#editEnemyInputsTemplate)';
 
         lifeStory.ui.removeInputSet(removeElementSelector, removeButtonSelector);
+    });
+
+    $('#createEventForm').on('reset', function ()
+    {
+        var extraInputsSelector = '#combatDetailInputs fieldset:not(#enemyInputsTemplate)';
+
+        lifeStory.ui.removeInputSet(extraInputsSelector, removeButtonSelector);
     });
 });
 

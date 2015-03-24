@@ -172,9 +172,19 @@
                             </div>
                             <div class="ui-block-b leftPadHalf oneThird">
                                 <label id="creatureCountLabel" for="creatureCount">How many?</label>
-                                <input type="number" id="creatureCount" name="creatureCount" data-mini="true" min="1" placeholder="Count" />
+                                <input type="number" id="creatureCount" name="creatureCount" data-mini="true" placeholder="Count" />
                             </div>
                         </fieldset>
+
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a rightPadHalf twoThirds">
+                                <label class="error" for="enemyName" generated="true"></label>
+                            </div>
+                            <div class="ui-block-b leftPadHalf oneThird">
+                                <label class="error" for="creatureCount" generated="true"></label>
+                            </div>
+                        </div>
+
 
                         <button id="addEnemy" type="button" data-theme="c" data-icon="plus" data-mini="true">Add Another Enemy</button>
                         <button id="removeEnemy" type="button" data-theme="c" data-icon="minus" data-mini="true">Remove Last Enemy</button>
