@@ -247,7 +247,7 @@
         var saveFailure = failureCallback('Failed to save the event.');
 
         var newEvent = lifeStory.util.createEventFromInput(form);
-        var newEventDetails = lifeStory.util.createEventDetailsFromInput(form);
+        var newEventDetails = lifeStory.util.createEventDetailsFromInput(form, newEvent.eventTypeId);
         var characterId = lifeStory.values.characterId;
 
         lifeStory.db.addEvent(newEvent, newEventDetails, characterId, successCallback, saveFailure);

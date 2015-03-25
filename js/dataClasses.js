@@ -30,10 +30,10 @@
     lifeStory.Character = function character(name, raceId, classId, details, living)
     {
         this.id = null;
-        this.raceId = raceId || null;
-        this.classId = classId || null;
+        this.raceId = parseInt(raceId, 10) || null;
+        this.classId = parseInt(classId, 10) || null;
         this.name = name || null;
-        this.living = living || null;
+        this.living = parseInt(living, 10) || null;
         this.details = details || null;
 
         this.raceName = null;
@@ -50,20 +50,20 @@
     lifeStory.EventDetail = function eventDetail(detailId, eventName, creatureCount, eventId)
     {
         this.id = detailId || null;
-        this.eventId = eventId || null;
+        this.eventId = parseInt(eventId, 10) || null;
         this.name = eventName || null;
-        this.creatureCount = creatureCount || null;
+        this.creatureCount = parseInt(creatureCount, 10) || null;
     };
 
-    lifeStory.Event = function event(eventTypeId, date, characterCount, experience, description)
+    lifeStory.Event = function event(eventTypeId, characterCount, experience, description, date)
     {
         this.id = null;
-        this.eventTypeId = eventTypeId || null;
-        this.characterCount = characterCount || null;
-        this.date = date || null; // Note: Likely never used as it is only for sorting and that is all DB side currently
-        this.experience = experience || null;
+        this.eventTypeId = parseInt(eventTypeId, 10) || null;
+        this.characterCount = parseInt(characterCount, 10) || null;
+        this.experience = parseInt(experience, 10) || null;
         this.description = description || null;
 
+        this.date = date || null;
         this.eventTypeName = null;
         this.eventDetails = null;
     };

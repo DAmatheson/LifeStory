@@ -309,7 +309,7 @@
             </header>
 
             <div class="ui-content" data-role="content">
-                <h2 class="left">Trogdor</h2>
+                <h2 class="left" data-property="characterName"></h2>
 
                 <div class="right">
                     <a href="#eventLog" data-role="button" class="ui-btn-inline" data-theme="c"
@@ -318,41 +318,45 @@
                     </a>
                 </div>
 
-                <table class="clearBoth">
+                <table id="eventDetailsTable" class="clearBoth">
                     <tr>
                         <td class="tableLabel">
-                            Defeated:
+                            Event Type:
                         </td>
-                        <td>
-                            4 Goblins
-                        </td>
+                        <td data-property="eventType"></td>
                     </tr>
                     <tr>
+                        <td class="tableLabel">
+                            Event Date:
+                        </td>
+                        <td data-property="date"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableLabel" data-property="typeLabel"></td>
+                        <td data-property="names"></td>
+                    </tr>
+                    <tr id="experienceRow">
                         <td class="tableLabel">
                             Got:
                         </td>
-                        <td>
-                            100XP
-                        </td>
+                        <td data-property="experience"></td>
                     </tr>
-                    <tr>
+                    <tr id="characterCountRow">
                         <td class="tableLabel">
                             In a group of:
                         </td>
                         <td>
-                            4 Characters
+                            <span data-property="characterCount"></span> Characters
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="descriptionLabelRow">
                         <td class="tableLabel">
                             Description:
                         </td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td colspan="2">
-                            Notes about the event.
-                        </td>
+                        <td colspan="2" data-property="description"></td>
                     </tr>
                 </table>
             </div>
@@ -360,7 +364,7 @@
             <footer data-role="footer fieldcontain" data-position="fixed">
                 <fieldset class="ui-grid-a">
                     <div class="ui-block-a">
-                        <a href="#" data-role="button" data-theme="a">
+                        <a href="#" id="deleteEvent" data-role="button" data-theme="a">
                             Delete
                         </a>
                     </div>
@@ -498,7 +502,7 @@
                         <td class="tableLabel">Status:</td>
                         <td data-property="living"></td>
                     </tr>
-                    <tr id="detailsRow">
+                    <tr id="detailsLabelRow">
                         <td class="tableLabel">Details:</td>
                     </tr>
                     <tr>

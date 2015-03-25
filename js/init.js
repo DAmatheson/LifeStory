@@ -60,6 +60,16 @@ $('#characterDetails').one('pageinit', function characterDetailsPageInit()
     });
 });
 
+$('#eventDetails').one('pageinit', function eventDetailsPageInit()
+{
+    $(this).on('pagebeforeshow', lifeStory.ui.populateEventDetail);
+
+    $('#deleteEvent').on('tap', function ()
+    {
+        lifeStory.ui.confirmDeleteEvent();
+    });
+});
+
 $('#createCharacter').one('pageinit', function createCharacterPageInit()
 {
     $(this).on('pagebeforeshow', function()

@@ -26,39 +26,51 @@
     {
         var $inputs = reduceToOnlyInputs(form);
 
-        var event = new lifeStory.Event();
+        var id = parseInt($inputs.filter('[name=id]').val(), 10) || null;
+        var eventTypeId = $inputs.filter('[name=eventType]').val();
+        var characterCount = $inputs.filter('[name=characterCount]').val();
+        var experience = $inputs.filter('[name=experience]').val();
+        var description = $inputs.filter('[name=description]').val();
 
-        event.id = $inputs.filter('[name=id]').val() || null;
-        event.eventTypeId = $inputs.filter('[name=eventType]').val();
-        event.characterCount = $inputs.filter('[name=characterCount]').val();
-        event.experience = $inputs.filter('[name=experience]').val();
-        event.description = $inputs.filter('[name=description]').val();
+        var event = new lifeStory.Event(eventTypeId, characterCount, experience, description);
+        event.id = id;
 
         return event;
     }
 
-    utilLibrary.createEventDetailsFromInput = function(form)
+    utilLibrary.createEventDetailsFromInput = function(form, eventTypeId)
     {
         var $form = $(form);
 
         var eventDetailItems = [];
-        var detailCounter = 0;
 
-        $('fieldset', $form).each(function()
+        if (eventTypeId === lifeStory.NON_COMBAT_EVENT)
         {
-            var $inputs = reduceToOnlyInputs(this);
+            var eventName = $form.find('[name=eventName]').val().trim();
 
-            var detailId = $inputs.filter('[name=eventDetailId]').val() || detailCounter + 1;
-            var eventName = $inputs.filter('[name=enemyName]').val().trim();
-            var creatureCount = $inputs.filter('[name=creatureCount]').val() || null;
+            eventDetailItems.push(new lifeStory.EventDetail(1, eventName, null));
+        }
+        else
+        {
+            var detailCounter = 0;
 
-            if (eventName && creatureCount)
+            $('fieldset', $form).each(function ()
             {
-                eventDetailItems.push(new lifeStory.EventDetail(detailId, eventName, creatureCount));
+                var $inputs = reduceToOnlyInputs(this);
 
-                detailCounter++;
-            }
-        });
+                var detailId = $inputs.filter('[name=eventDetailId]').val() || detailCounter + 1;
+                var enemyName = $inputs.filter('[name=enemyName]').val().trim();
+
+                var creatureCount = $inputs.filter('[name=creatureCount]').val() || null;
+
+                if (enemyName && creatureCount)
+                {
+                    eventDetailItems.push(new lifeStory.EventDetail(detailId, enemyName, creatureCount));
+
+                    detailCounter++;
+                }
+            });
+        }
 
         return eventDetailItems;
     };

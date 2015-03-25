@@ -322,18 +322,18 @@
                 $('[data-property=experience]', $currentItem).text(
                     Math.floor(event.experience / event.characterCount) + ' XP');
 
-                if (event.id === lifeStory.DEATH_EVENT)
+                if (event.eventTypeId === lifeStory.DEATH_EVENT)
                 {
                     $currentItem.data('theme', 'f');
                 }
-                else if (event.id === lifeStory.RESURRECT_EVENT)
+                else if (event.eventTypeId === lifeStory.RESURRECT_EVENT)
                 {
                     $currentItem.data('theme', 'g');
                 }
 
                 $('a', $currentItem).on('tap', { eventId: event.id }, function (e)
                 {
-                    lifeStory.values.eventId = e.eventId;
+                    lifeStory.values.eventId = e.data.eventId;
                 });
 
                 $listContainer.append($currentItem);
@@ -370,6 +370,81 @@
         });
     };
 
+    uiLibrary.populateEventDetail = function()
+    {
+        var characterName = lifeStory.values.characterName;
+        var eventId = lifeStory.values.eventId;
+
+        $('#eventDetails h2[data-property=characterName]').text(characterName);
+
+        lifeStory.db.getEvent(eventId, function(event)
+        {
+            var $detailsTable = $('#eventDetailsTable');
+
+            var typeLabel = '';
+
+            switch (event.eventTypeId)
+            {
+                case (lifeStory.COMBAT_EVENT):
+                    typeLabel = 'Defeated:';
+                    break;
+                case (lifeStory.NON_COMBAT_EVENT):
+                    typeLabel = 'An Event:'; // TODO:
+                    break;
+                case (lifeStory.RESURRECT_EVENT):
+                    typeLabel = 'Resurrected By:';
+                    break;
+                case (lifeStory.DEATH_EVENT):
+                    typeLabel = 'Killed By:';
+                    break;
+            }
+
+            $detailsTable.find('[data-property=typeLabel').text(typeLabel);
+            $detailsTable.find('[data-property=eventType]').text(event.eventTypeName); // TODO: Consider changing names in DB to match select list display name for the type
+            $detailsTable.find('[data-property=date]').text(event.date);
+
+            var names = '';
+
+            event.eventDetails.forEach(function(item)
+            {
+                names += (item.creatureCount || '') + ' ' + item.name + ', ';
+            });
+
+            names = names.substring(0, names.length - 2).trim();
+
+            $detailsTable.find('[data-property=names]').text(names);
+
+            if (event.eventTypeId === lifeStory.RESURRECT_EVENT ||
+                event.eventTypeId === lifeStory.DEATH_EVENT)
+            {
+                $('#experienceRow').addClass('ui-screen-hidden'); // TODO: Consider changing all of these to .hide and .show
+                $('#characterCountRow').addClass('ui-screen-hidden');
+
+                $detailsTable.find('[data-property=experience]').text('');
+                $detailsTable.find('[data-property=characterCount]').text('');
+            }
+            else
+            {
+                $('#experienceRow').removeClass('ui-screen-hidden');
+                $('#characterCountRow').removeClass('ui-screen-hidden');
+
+                $detailsTable.find('[data-property=experience]').text(event.experience + ' XP'); // TODO: Should XP just be perm in the td?
+                $detailsTable.find('[data-property=characterCount]').text(event.characterCount);
+            }
+
+            if (event.description)
+            {
+                $detailsTable.find('[data-property=description]').text(event.description);
+                $detailsTable.find('#descriptionLabelRow').removeClass('ui-screen-hidden');
+            }
+            else
+            {
+                $detailsTable.find('[data-property=description]').text('');
+                $detailsTable.find('#descriptionLabelRow').addClass('ui-screen-hidden');
+            }
+        });
+    };
+
     uiLibrary.populateCharacterDetail = function()
     {
         var characterId = lifeStory.values.characterId;
@@ -397,12 +472,12 @@
             if (character.details)
             {
                 $detailsTable.find('[data-property=details]').text(character.details);
-                $detailsTable.find('#detailsRow').removeClass('ui-screen-hidden');
+                $detailsTable.find('#detailsLabelRow').removeClass('ui-screen-hidden');
             }
             else
             {
                 $detailsTable.find('[data-property=details]').text('');
-                $detailsTable.find('#detailsRow').addClass('ui-screen-hidden');
+                $detailsTable.find('#detailsLabelRow').addClass('ui-screen-hidden');
             }
         });
     };

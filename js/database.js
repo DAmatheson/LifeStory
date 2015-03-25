@@ -125,7 +125,7 @@
             '(' +
                 'id INTEGER NOT NULL, ' +
                 'event_id INTEGER NOT NULL, ' +
-                'name VARCHAR(30) NOT NULL, ' + // TODO: Decide on max length, update validation to match
+                'name VARCHAR(30) NOT NULL, ' + 
                 'creatureCount INTEGER, ' +
                 'PRIMARY KEY (id, event_id), ' +
                 'FOREIGN KEY (event_id) REFERENCES event (id)' +
@@ -703,15 +703,43 @@
         });
     };
 
-    dbLibrary.getEventsDetails = function(event, callback)
+    dbLibrary.getEvent = function(eventId, callback)
     {
+        var event = new lifeStory.Event();
+
+        var wrappedCallback = function()
+        {
+            callback(event);
+        };
+
         dbLibrary.getDb().readTransaction(function(tx)
         {
+            tx.executeSql(
+                'SELECT e.id AS id, eventType_id, characterCount, date, xp, description, ' +
+                    'et.name AS eventTypeName ' +
+                'FROM event e JOIN eventType et ' +
+                    'ON e.eventType_id = et.id ' +
+                'WHERE e.id = ?;',
+                [eventId],
+                function(transaction, resultSet)
+                {
+                    var row = resultSet.rows.item(0);
+
+                    event.id = row.id;
+                    event.eventTypeId = row.eventType_id;
+                    event.characterCount = row.characterCount;
+                    event.date = row.date;
+                    event.experience = row.xp;
+                    event.description = row.description;
+                    event.eventTypeName = row.eventTypeName;
+                },
+                sqlErrorHandler);
+
             tx.executeSql(
                 'SELECT id, event_id, name, creatureCount ' +
                 'FROM eventDetail ' +
                 'WHERE event_id = ?;',
-                [event.Id],
+                [eventId],
                 function(transaction, resultSet)
                 {
                     var eventDetails = [];
@@ -730,41 +758,9 @@
                     }
 
                     event.eventDetails = eventDetails;
-
-                    callback(event);
                 },
                 sqlErrorHandler);
-        });
-    };
-
-    dbLibrary.getEvent = function(eventId, callback)
-    {
-        dbLibrary.getDb().readTransaction(function(tx)
-        {
-            tx.executeSql(
-                'SELECT e.id, eventType_id, characterCount, date, xp, description, ' +
-                    'eventType.name AS eventTypeName ' +
-                'FROM event e JOIN eventType ' +
-                    'ON e.eventType_id = eventType.id ' +
-                'WHERE id = ?;',
-                [eventId],
-                function(transaction, resultSet)
-                {
-                    var row = resultSet.rows.item(0);
-                    var event = lifeStory.Event();
-
-                    event.id = row.id;
-                    event.eventTypeId = row.eventType_id;
-                    event.characterCount = row.characterCount;
-                    event.date = row.date;
-                    event.experience = row.xp;
-                    event.description = row.description;
-                    event.eventTypeName = row.eventTypeName;
-
-                    dbLibrary.getEventsDetails(event, callback);
-                },
-                sqlErrorHandler);
-        });
+        }, null, wrappedCallback);
     };
 
     // Clears the character table
