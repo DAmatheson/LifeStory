@@ -512,6 +512,46 @@
         }, wrappedFailureCallback, successCallback);
     };
 
+    dbLibrary.deleteEvent = function deleteEvent(id, successCallback, failureCallback)
+    {
+        /// <summary>
+        ///     Attempts to delete the event specified by id along with all detail records for it.<br/>
+        ///     If the transaction fails, it is rolled back and no data is deleted.
+        /// </summary>
+        /// <param name="id" type="number">The id of the event to delete</param>
+        /// <param name="successCallback" type="function">The callback for deletion success</param>
+        /// <param name="failureCallback" type="function">The callback for deletion failure</param>
+
+        var wrappedFailureCallback = function (error)
+        {
+            transactionErrorHandler(error);
+
+            if (failureCallback)
+            {
+                failureCallback();
+            }
+        }
+
+        dbLibrary.getDb().transaction(function (tx)
+        {
+            tx.executeSql(
+                'DELETE FROM eventDetail ' +
+                'WHERE event_id = ?',
+                [id]);
+
+            tx.executeSql(
+                'DELETE FROM event ' +
+                'WHERE id = ?',
+                [id]);
+
+            tx.executeSql(
+                'DELETE FROM characterEvent ' +
+                'WHERE event_id = ?',
+                [id]);
+
+        }, wrappedFailureCallback, successCallback);
+    };
+
     // Gets the character count and passes it as the sole argument to callBack
     dbLibrary.getCharacterCount = function getCharacterCount(callback)
     {

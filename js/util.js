@@ -166,7 +166,8 @@
         xpTotal = xpTotal || 0;
 
         // you are level n if your xp is between index n-1 and n
-        for (var i = 1; i < lifeStory.LEVEL_VALUES.length - 1; i++) {
+        for (var i = 1; i < lifeStory.LEVEL_VALUES.length - 1; i++)
+        {
             if (xpTotal < lifeStory.LEVEL_VALUES[i])
             {
                 return i;
@@ -175,12 +176,13 @@
 
         // return highest level if above the highest xp requirement
         return lifeStory.LEVEL_VALUES.length;
-    }
+    };
 
     utilLibrary.xpToNextLevel = function(xpTotal)
     {
         var level = utilLibrary.getLevel(xpTotal);
 
         return lifeStory.LEVEL_VALUES[level] - xpTotal;
-    }
+    };
+
 })(window, window.lifeStory, jQuery);

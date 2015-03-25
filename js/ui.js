@@ -497,18 +497,30 @@
     };
 
     // Confirms the user wants to clear the delete the character. If so, deletes the character.
-    uiLibrary.confirmDeleteCharacter = function ()
+    uiLibrary.confirmDeleteCharacter = function()
     {
         var acceptCallback = function()
         {
             lifeStory.dataAccess.deleteCharacter(lifeStory.values.characterId);
         }
 
-        uiLibrary.displayConfirmation('Delete ' + lifeStory.values.characterName + '?',
+        uiLibrary.displayConfirmation('Delete ' + lifeStory.values.characterName + '?', // Security hole as this is used with .html
             'Are you sure you want to delete ' + lifeStory.values.characterName +
             '? <strong>This cannot be undone.</strong>',
             acceptCallback);
     };
+
+    uiLibrary.confirmDeleteEvent = function()
+    {
+        var acceptCallback = function()
+        {
+            lifeStory.dataAccess.deleteEvent(lifeStory.values.eventId);
+        }
+
+        uiLibrary.displayConfirmation('Delete Event?',
+            'Are you sure you want to delete this event? <strong>This cannot be undone.</strong>',
+            acceptCallback);
+    }
 
     // Confirms the user wants to clear the character table. If so, clears the table.
     uiLibrary.confirmClearCharactersTable = function ()

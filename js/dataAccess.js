@@ -114,7 +114,7 @@
         var deleteFailure = failureCallback('Failed to delete the race.');
 
         lifeStory.db.deleteRace(raceId, deleteRaceSuccess, deleteFailure);
-    }
+    };
 
     function refreshDeleteClassUI()
     {
@@ -164,12 +164,12 @@
     }
 
     // Attempts to delete the class identified by classId and displays a message of the outcome
-    dataAccessLibrary.deleteClass = function (classId)
+    dataAccessLibrary.deleteClass = function(classId)
     {
         var deleteFailure = failureCallback('Failed to delete the class.');
 
         lifeStory.db.deleteClass(classId, deleteClassSuccess, deleteFailure);
-    }
+    };
 
     function saveCharacterSuccess(transaction, resultSet, callbackData)
     {
@@ -225,12 +225,12 @@
     }
 
     // Attempts to delete the character identified by characterId and displays a message of the outcome
-    dataAccessLibrary.deleteCharacter = function (characterId)
+    dataAccessLibrary.deleteCharacter = function(characterId)
     {
         var deleteFailure = failureCallback('Failed to delete the character.');
 
         lifeStory.db.deleteCharacter(characterId, deleteCharacterSuccess, deleteFailure);
-    }
+    };
 
     // Callback function for successfully saving an event
     function saveEventSuccess(transaction, resultSet, callbackData)
@@ -239,7 +239,7 @@
 
         lifeStory.ui.displaySuccessMessage('New Event created');
         lifeStory.util.redirectOnSuccessDialogClose('eventLog');
-    };
+    }
 
     dataAccessLibrary.saveEventToDb = function(form, callbackData)
     {
@@ -251,6 +251,23 @@
         var characterId = lifeStory.values.characterId;
 
         lifeStory.db.addEvent(newEvent, newEventDetails, characterId, successCallback, saveFailure);
+    };
+
+    // Callback function for successfully deleting an event
+    function deleteEventSuccess()
+    {
+        lifeStory.values.eventId = null;
+
+        lifeStory.ui.displaySuccessMessage('The event was deleted successfully.');
+        lifeStory.util.redirectOnSuccessDialogClose('eventLog');
     }
+
+    // Attempts to delete the character identified by eventId and displays a message of the outcome
+    dataAccessLibrary.deleteEvent = function(eventId)
+    {
+        var deleteFailure = failureCallback('Failed to delete the event.');
+
+        lifeStory.db.deleteEvent(eventId, deleteEventSuccess, deleteFailure);
+    };
 
 })(window, window.lifeStory, jQuery);
