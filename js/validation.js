@@ -265,4 +265,44 @@
         }
     };
 
+    validationLibrary.handleOtherEventForm = function(formId, isResurrectEvent)
+    {
+        var rules =
+        {
+            eventName:
+            {
+                required:
+                {
+                    param: true,
+                    depends: !lifeStory.util.isCombatEvent
+                },
+                maxlength:
+                {
+                    param: 30,
+                    depends: !lifeStory.util.isCombatEvent
+                }
+            }
+        };
+
+        var messages =
+        {
+            eventName:
+            {
+                required: 'Please enter what got you experience.',
+                maxlength: 'Max 30 characters long.'
+            }
+        };
+
+        var callbackData =
+        {
+            formIdToReset: formId,
+            successMessage: isResurrectEvent ? 'You\'ve been resurrected successfully.' : 'You died.', // TODO: Messages
+            failureMessage: 'Failed to save ' + (isResurrectEvent ? 'resurrection.' : 'death.'), // TODO: Messages
+            isResurrection: isResurrectEvent
+        };
+
+        setupFormValidation(formId, lifeStory.dataAccess.saveOtherEventToDb, rules, messages,
+            callbackData);
+    }
+
 })(window, window.lifeStory, jQuery);

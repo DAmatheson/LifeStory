@@ -17,7 +17,7 @@
 
     var dataAccessLibrary = lifeStory.dataAccess = {};
 
-    function dbFailure(errorMessage, transaction, error)
+    function dbFailure(errorMessage, error, transaction)
     {
         /// <summary>
         ///     Displays the passed in message. Logs the error.
@@ -25,7 +25,7 @@
 
         lifeStory.ui.displayErrorMessage(errorMessage);
 
-        console.error(error.message, transaction, error);
+        console.error(error.message, error, transaction);
     }
 
     function failureCallback(message)
@@ -38,7 +38,22 @@
 
         return function (transaction, error)
         {
-            dbFailure(message, transaction, error);
+            dbFailure(message, error, transaction);
+        }
+    }
+
+    function transactionFailureCallback(message)
+    {
+        /// <summary>
+        ///     Calls dbFailure with the passed in message in addition to the error.<br/>
+        ///     Intended for callbacks which are called for transaction level failures
+        /// </summary>
+        /// <param name="message" type="string">The message to pass on to dbFailure</param>
+        /// <returns type="function">The enhanced callback function</returns>
+
+        return function(error)
+        {
+            dbFailure(message, error);
         }
     }
 
@@ -71,7 +86,7 @@
     // Callback function for successfully saving a race
     function saveRaceSuccess(transaction, resultSet, callbackData)
     {
-        $('#' + callbackData.formIdToReset).trigger('reset');
+        lifeStory.util.triggerReset(callbackData.formIdToReset);
 
         lifeStory.ui.displaySuccessMessage('New custom race created.');
 
@@ -124,7 +139,7 @@
     // Callback function for successfully saving a class
     function saveClassSuccess(transaction, resultSet, callbackData)
     {
-        $('#' + callbackData.formIdToReset).trigger('reset');
+        lifeStory.util.triggerReset(callbackData.formIdToReset);
 
         lifeStory.ui.displaySuccessMessage('New custom class created.');
 
@@ -173,7 +188,7 @@
 
     function saveCharacterSuccess(transaction, resultSet, callbackData)
     {
-        $('#' + callbackData.formIdToReset).trigger('reset');
+        lifeStory.util.triggerReset(callbackData.formIdToReset);
 
         lifeStory.values.characterId = resultSet.insertId;
 
@@ -195,8 +210,7 @@
 
     function updateCharacterSuccess(transaction, resultSet, callbackData)
     {
-        $('#' + callbackData.formIdToReset).trigger('reset');
-
+        lifeStory.util.triggerReset(callbackData.formIdToReset);
         lifeStory.ui.displaySuccessMessage('Character updated.');
         lifeStory.util.redirectOnSuccessDialogClose('eventLog');
     }
@@ -227,7 +241,7 @@
     // Attempts to delete the character identified by characterId and displays a message of the outcome
     dataAccessLibrary.deleteCharacter = function(characterId)
     {
-        var deleteFailure = failureCallback('Failed to delete the character.');
+        var deleteFailure = transactionFailureCallback('Failed to delete the character.');
 
         lifeStory.db.deleteCharacter(characterId, deleteCharacterSuccess, deleteFailure);
     };
@@ -235,8 +249,7 @@
     // Callback function for successfully saving an event
     function saveEventSuccess(transaction, resultSet, callbackData)
     {
-        $('#' + callbackData.formIdToReset).trigger('reset');
-
+        lifeStory.util.triggerReset(callbackData.formIdToReset);
         lifeStory.ui.displaySuccessMessage('New Event created');
         lifeStory.util.redirectOnSuccessDialogClose('eventLog');
     }
@@ -244,7 +257,7 @@
     dataAccessLibrary.saveEventToDb = function(form, callbackData)
     {
         var successCallback = modifySuccessCallback(saveEventSuccess, callbackData);
-        var saveFailure = failureCallback('Failed to save the event.');
+        var saveFailure = transactionFailureCallback('Failed to save the event.');
 
         var newEvent = lifeStory.util.createEventFromInput(form);
         var newEventDetails = lifeStory.util.createEventDetailsFromInput(form, newEvent.eventTypeId);
@@ -265,9 +278,50 @@
     // Attempts to delete the character identified by eventId and displays a message of the outcome
     dataAccessLibrary.deleteEvent = function(eventId)
     {
-        var deleteFailure = failureCallback('Failed to delete the event.');
+        var deleteFailure = transactionFailureCallback('Failed to delete the event.');
 
         lifeStory.db.deleteEvent(eventId, deleteEventSuccess, deleteFailure);
     };
+
+    // Callback function for successfully saving an event
+    function saveOtherEventSuccess(transaction, resultSet, callbackData)
+    {
+        lifeStory.util.triggerReset(callbackData.formIdToReset);
+        lifeStory.ui.displaySuccessMessage(callbackData.successMessage);
+        lifeStory.util.redirectOnSuccessDialogClose('eventLog');
+    }
+
+    dataAccessLibrary.saveOtherEventToDb = function(form, callbackData)
+    {
+        /// <summary>
+        ///     Saves a resurrection or death even to the DB.
+        /// </summary>
+        /// <param name="form" type="DOM Element">The form to get data from</param>
+        /// <param name="callbackData" type="object">Additional callback data to pass to the success callback</param>
+
+        var successCallback = modifySuccessCallback(saveOtherEventSuccess, callbackData);
+        var saveFailure = transactionFailureCallback(callbackData.failureMessage);
+
+        var newEvent = lifeStory.util.createEventFromInput(form);
+
+        if (callbackData.isResurrection)
+        {
+            newEvent.eventTypeId = lifeStory.RESURRECT_EVENT;
+            lifeStory.values.characterAlive = lifeStory.ALIVE;
+        }
+        else
+        {
+            newEvent.eventTypeId = lifeStory.DEATH_EVENT;
+            lifeStory.values.characterAlive = lifeStory.DEAD;
+        }
+
+        var newEventDetails = lifeStory.util.createEventDetailsFromInput(form, newEvent.eventTypeId);
+        var characterId = lifeStory.values.characterId;
+        
+        newEvent.experience = null;
+        newEvent.characterCount = 1;
+
+        lifeStory.db.addEvent(newEvent, newEventDetails, characterId, successCallback, saveFailure);
+    }
 
 })(window, window.lifeStory, jQuery);

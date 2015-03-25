@@ -174,6 +174,16 @@ $('#editEvent').one('pageinit', function createEventPageInit()
     });
 });
 
+$('#resurrectEvent').one('pageinit', function resurrectEventPageInit()
+{
+    lifeStory.validation.handleOtherEventForm('resurrectEventForm', true);
+});
+
+$('#deathEvent').one('pageinit', function deathEventPageInit()
+{
+    lifeStory.validation.handleOtherEventForm('deathEventForm', false);
+});
+
 $('#customize').one('pageinit', function customizePageInit()
 {
     lifeStory.validation.handleRaceForm('createRaceForm');

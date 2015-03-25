@@ -21,16 +21,36 @@
 
     function sqlErrorHandler(transaction, error)
     {
+        // TODO: Consider changing this to use the better alert. Although these are not meant to 
+        // ever be used as they are simply fallback error handlers in case one isn't supplied
         alert('SQL error: ' + error.message);
         console.error(error.message, error, transaction);
     }
 
-    function transactionErrorHandler(error)
+    function wrapTransactionFailureCallback(callback)
     {
-        alert(error.message);
-        console.error(error.message, error);
+        /// <summary>
+        ///     Rolls back the transaction. If provided, the callback is called with the error.
+        /// </summary>
+        /// <param name="callback" type="function">Optional, Callback to be called with the error</param>
+        /// <returns type="function">Wrapped callback which will also rollback the transaction</returns>
 
-        return true; // Rollback the whole transaction
+        return function (error)
+        {
+            if (callback)
+            {
+                callback(error);
+            }
+            else
+            {
+                // TODO: Consider changing this to use the better alert. Although these are not meant to 
+                // ever be used as they are simply fallback error handlers in case one isn't supplied
+                alert(error.message);
+                console.error(error.message, error);
+            }
+
+            return true; // Roll back the whole transaction
+        };
     }
 
     function initializationError(transaction, error)
@@ -343,7 +363,8 @@
         });
     };
 
-    dbLibrary.addEvent = function addEvent(event, eventDetails, characterId, successCallback, failureCallback)
+    dbLibrary.addEvent = function addEvent(event, eventDetails, characterId, successCallback,
+        transactionFailureCallback)
     {
         if (!(event instanceof lifeStory.Event))
         {
@@ -359,15 +380,7 @@
                 'of lifeStory.EventDetail';
         }
 
-        var wrappedFailureCallback = function(error)
-        {
-            transactionErrorHandler(error);
-
-            if (failureCallback)
-            {
-                failureCallback();
-            }
-        }
+        var wrappedFailureCallback = wrapTransactionFailureCallback(transactionFailureCallback);
 
         dbLibrary.getDb().transaction(function(tx)
         {
@@ -397,6 +410,19 @@
                             ]);
                     });
                 });
+
+            if (event.eventTypeId === lifeStory.DEATH_EVENT ||
+                event.eventTypeId === lifeStory.RESURRECT_EVENT)
+            {
+                tx.executeSql(
+                    'UPDATE character ' +
+                    'SET living = ? ' +
+                    'WHERE id = ?',
+                    [
+                        event.eventTypeId === lifeStory.RESURRECT_EVENT ? lifeStory.ALIVE : lifeStory.DEAD,
+                        characterId
+                    ]);
+            }
         }, wrappedFailureCallback, successCallback);
     };
 
@@ -454,7 +480,7 @@
         });
     };
 
-    dbLibrary.deleteCharacter = function deleteCharacter(id, successCallback, failureCallback)
+    dbLibrary.deleteCharacter = function deleteCharacter(id, successCallback, transactionFailureCallback)
     {
         /// <summary>
         ///     Attempts to delete the character specified by id along with all event records for it.<br/>
@@ -462,17 +488,11 @@
         /// </summary>
         /// <param name="id" type="number">The id of the character to delete</param>
         /// <param name="successCallback" type="function">The callback for deletion success</param>
-        /// <param name="failureCallback" type="function">The callback for deletion failure</param>
+        /// <param name="transactionFailureCallback" type="function">
+        ///     The callback for deletion failure
+        /// </param>
 
-        var wrappedFailureCallback = function(error)
-        {
-            transactionErrorHandler(error);
-
-            if (failureCallback)
-            {
-                failureCallback();
-            }
-        }
+        var wrappedFailureCallback = wrapTransactionFailureCallback(transactionFailureCallback);
 
         dbLibrary.getDb().transaction(function (tx)
         {
@@ -512,7 +532,7 @@
         }, wrappedFailureCallback, successCallback);
     };
 
-    dbLibrary.deleteEvent = function deleteEvent(id, successCallback, failureCallback)
+    dbLibrary.deleteEvent = function deleteEvent(id, successCallback, transactionFailureCallback)
     {
         /// <summary>
         ///     Attempts to delete the event specified by id along with all detail records for it.<br/>
@@ -520,17 +540,9 @@
         /// </summary>
         /// <param name="id" type="number">The id of the event to delete</param>
         /// <param name="successCallback" type="function">The callback for deletion success</param>
-        /// <param name="failureCallback" type="function">The callback for deletion failure</param>
+        /// <param name="transactionFailureCallback" type="function">The callback for deletion failure</param>
 
-        var wrappedFailureCallback = function (error)
-        {
-            transactionErrorHandler(error);
-
-            if (failureCallback)
-            {
-                failureCallback();
-            }
-        }
+        var wrappedFailureCallback = wrapTransactionFailureCallback(transactionFailureCallback);
 
         dbLibrary.getDb().transaction(function (tx)
         {
@@ -803,19 +815,28 @@
         }, null, wrappedCallback);
     };
 
-    // Clears the character table
+    // Clears the character, characterEvent, event, and eventDetail tables
     dbLibrary.clearCharacterTable = function clearCharacterTable()
     {
+        // TODO: Consider taking a success and failure callback
+
+        var failureHandler = wrapTransactionFailureCallback();
+
         dbLibrary.getDb().transaction(function (tx)
         {
-            tx.executeSql('DROP TABLE IF EXISTS character;', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS character;');
+            tx.executeSql('DROP TABLE IF EXISTS characterEvent;');
+            tx.executeSql('DROP TABLE IF EXISTS event;');
+            tx.executeSql('DROP TABLE IF EXISTS eventDetail;');
 
             createCharacterTable(tx);
-        });
+            createEventTable(tx);
+            createEventDetailTable(tx);
+            createCharacterEventTable(tx);
+        }, failureHandler);
     };
 
     // Drops all tables, used for resetting the database
-    // Pass 'danger' as an argument to confirm the action
     dbLibrary.dropAllTables = function dropAllTables()
     {
         dbLibrary.getDb().transaction(function (tx)

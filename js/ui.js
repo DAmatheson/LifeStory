@@ -307,11 +307,17 @@
                     title = 'Defeated: ' + event.eventDetails[0].creatureCount + ' ' +
                         event.eventDetails[0].name;
                 }
-                else if (event.eventTypeId === lifeStory.NON_COMBAT_EVENT ||
-                    event.eventTypeId === lifeStory.RESURRECT_EVENT ||
-                    event.eventTypeId === lifeStory.DEATH_EVENT)
+                else if (event.eventTypeId === lifeStory.NON_COMBAT_EVENT)
                 {
                     title = event.eventDetails[0].name;
+                }
+                else if (event.eventTypeId === lifeStory.RESURRECT_EVENT)
+                {
+                    title = 'Resurrected by: ' + event.eventDetails[0].name;
+                }
+                else if (event.eventTypeId === lifeStory.DEATH_EVENT)
+                {
+                    title = 'Died to: ' + event.eventDetails[0].name;
                 }
                 else
                 {
@@ -319,16 +325,20 @@
                 }
 
                 $('[data-property=title]', $currentItem).text(title);
-                $('[data-property=experience]', $currentItem).text(
-                    Math.floor(event.experience / event.characterCount) + ' XP');
+
+                if (event.eventTypeId === lifeStory.COMBAT_EVENT || event.eventTypeId === lifeStory.NON_COMBAT_EVENT)
+                {
+                    $('[data-property=experience]', $currentItem).text(
+                        Math.floor(event.experience / event.characterCount) + ' XP');
+                }
 
                 if (event.eventTypeId === lifeStory.DEATH_EVENT)
                 {
-                    $currentItem.data('theme', 'f');
+                    $currentItem.attr('data-theme', 'f').removeClass('ui-btn-up-c').addClass('ui-btn-up-f');
                 }
                 else if (event.eventTypeId === lifeStory.RESURRECT_EVENT)
                 {
-                    $currentItem.data('theme', 'g');
+                    $currentItem.attr('data-theme', 'g').removeClass('ui-btn-up-c').addClass('ui-btn-up-g');
                 }
 
                 $('a', $currentItem).on('tap', { eventId: event.id }, function (e)

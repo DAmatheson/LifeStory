@@ -44,11 +44,14 @@
 
         var eventDetailItems = [];
 
-        if (eventTypeId === lifeStory.NON_COMBAT_EVENT)
+        if (eventTypeId === lifeStory.NON_COMBAT_EVENT ||
+            eventTypeId === lifeStory.RESURRECT_EVENT ||
+            eventTypeId === lifeStory.DEATH_EVENT)
         {
             var eventName = $form.find('[name=eventName]').val().trim();
+            var creatureCount = null;
 
-            eventDetailItems.push(new lifeStory.EventDetail(1, eventName, null));
+            eventDetailItems.push(new lifeStory.EventDetail(1, eventName, creatureCount));
         }
         else
         {
@@ -120,6 +123,11 @@
         $.mobile.changePage('#' + pageId);
     };
 
+    utilLibrary.triggerReset = function(formIdToReset)
+    {
+        $('#' + formIdToReset).trigger('reset');
+    }
+
     utilLibrary.redirectOnSuccessDialogClose = function(redirectToPageId)
     {
         /// <summary>
@@ -127,7 +135,8 @@
         /// </summary>
         /// <param name="redirectToPageId" type="string">Id of the page to redirect to</param>
 
-        $('#successBtn').one('tap', function(event)
+        // Unbind any previous events and bind the new one
+        $('#successBtn').off('tap').one('tap', function(event)
         {
             event.stopImmediatePropagation();
             event.preventDefault();
