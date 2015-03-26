@@ -94,7 +94,7 @@
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS eventType ' +
             '(' +
-                'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+                'id INTEGER PRIMARY KEY, ' +
                 'name VARCHAR(20) NOT NULL UNIQUE' +
             ');');
     }
@@ -172,13 +172,19 @@
     // Insert event type records
     function insertEventTypes(transaction)
     {
+        var ids =
+        [
+            lifeStory.COMBAT_EVENT, lifeStory.NON_COMBAT_EVENT,
+            lifeStory.RESURRECT_EVENT, lifeStory.DEATH_EVENT
+        ];
+
         var names = ['Combat', 'Non-Combat', 'Resurrect', 'Death'];
 
-        names.forEach(function (item)
+        names.forEach(function (item, index)
         {
             transaction.executeSql(
-                'INSERT OR IGNORE INTO eventType (name) VALUES (?);',
-                [item]);
+                'INSERT OR IGNORE INTO eventType (id ,name) VALUES (?, ?);',
+                [ids[index], item]);
         });
     }
 
