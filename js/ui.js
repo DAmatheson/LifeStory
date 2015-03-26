@@ -117,6 +117,34 @@
         }
     };
 
+    uiLibrary.showCombatDetailInputs = function(isEdit)
+    {
+        if (isEdit)
+        {
+            $('#editEventDetailInputs').hide();
+            $('#editCombatDetailInputs').show();
+        }
+        else
+        {
+            $('#eventDetailInputs').hide();
+            $('#combatDetailInputs').show();
+        }
+    };
+
+    uiLibrary.showEventDetailInputs = function(isEdit)
+    {
+        if (isEdit)
+        {
+            $('#editCombatDetailInputs').hide();
+            $('#editEventDetailInputs').show();
+        }
+        else
+        {
+            $('#combatDetailInputs').hide();
+            $('#eventDetailInputs').show();
+        }
+    };
+
     // Populate the select element matching selectElementId with key and values from data
     uiLibrary.populateSelectList = function (selectElementId, data)
     {
@@ -466,7 +494,7 @@
     {
         var eventId = lifeStory.values.eventId;
 
-        lifeStory.db.getEvent(eventId, function (event)
+        lifeStory.db.getEvent(eventId, function(event)
         {
             var $form = $('#editEventForm');
 
@@ -479,7 +507,9 @@
 
             if (event.eventTypeId === lifeStory.COMBAT_EVENT)
             {
-                event.eventDetails.forEach(function (item, index)
+                uiLibrary.showCombatDetailInputs(true);
+
+                event.eventDetails.forEach(function(item, index)
                 {
                     var $detailInputs = $(appendToSelector);
 
@@ -496,10 +526,15 @@
             }
             else
             {
+                uiLibrary.showEventDetailInputs(true);
+
+                $form.find('[name=enemyName]').val(''); // Clear out any old values
+                $form.find('[name=creatureCount]').val('');
+
                 $form.find('[name=eventName]').val(event.eventDetails[0].name);
             }
         });
-    }
+    };
 
     uiLibrary.populateCharacterDetail = function()
     {

@@ -110,13 +110,11 @@ $('#createEvent').one('pageinit', function createEventPageInit()
     {
         if (lifeStory.util.isCombatEvent())
         {
-            $('#eventDetailInputs').hide();
-            $('#combatDetailInputs').show();
+            lifeStory.ui.showCombatDetailInputs();
         }
         else
         {
-            $('#combatDetailInputs').hide();
-            $('#eventDetailInputs').show();
+            lifeStory.ui.showEventDetailInputs();
         }
     });
 
