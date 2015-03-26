@@ -23,6 +23,11 @@ $(function()
     {
         $('.ui-btn-active:not(.ui-state-persist)').removeClass('ui-btn-active ui-focus');
     });
+
+    $('input[type=text]').autocomplete(
+    {
+        source: []
+    });
 });
 
 $('#settings').one('pageinit', function settingsPageInit()
@@ -206,7 +211,6 @@ $('#customize').one('pageinit', function customizePageInit()
         lifeStory.dataAccess.deleteClass($('#deleteClassSelect').val());
     });
 });
-
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
 (function (window, undefined)
