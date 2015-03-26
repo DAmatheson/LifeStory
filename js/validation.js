@@ -249,16 +249,21 @@
             }
         };
 
-        var callbackData = new lifeStory.CallbackData(formId, 'eventLog',
-            'New Event created.', 'Failed to save the event.');
+        var callbackData = new lifeStory.CallbackData(formId, 'eventLog');
 
         if (isNewEventForm)
         {
+            callbackData.successMessage = 'New Event created.';
+            callbackData.failureMessage = 'Failed to save the new event.';
+
             setupFormValidation(formId, lifeStory.dataAccess.saveEventToDb, rules, messages,
                 callbackData);
         }
         else
         {
+            callbackData.successMessage = 'Event updated.';
+            callbackData.failureMessage = 'Failed to update the event.';
+
             setupFormValidation(formId, lifeStory.dataAccess.updateEventInDb, rules, messages,
                 callbackData);
         }

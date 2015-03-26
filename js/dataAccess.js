@@ -256,6 +256,17 @@
         lifeStory.db.addEvent(newEvent, newEventDetails, characterId, successCallback, saveFailure);
     };
 
+    dataAccessLibrary.updateEventInDb = function(form, callbackData)
+    {
+        var successCallback = modifySuccessCallback(genericSuccessCallback, callbackData);
+        var saveFailure = transactionFailureCallback(callbackData.failureMessage);
+
+        var event = lifeStory.util.createEventFromInput(form);
+        var eventDetails = lifeStory.util.createEventDetailsFromInput(form, event.eventTypeId);
+
+        lifeStory.db.updateEvent(event, eventDetails, successCallback, saveFailure);
+    };
+
     // Callback function for successfully deleting an event
     function deleteEventSuccess()
     {

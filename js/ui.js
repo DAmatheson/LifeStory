@@ -282,17 +282,17 @@
         });
     };
 
+    function eventLogItemClicked(event)
+    {
+        lifeStory.values.eventId = event.data.eventId;
+    }
+
     uiLibrary.populateEventLog = function (listViewId, itemElementType)
     {
         $('#eventLog h2[data-property=characterName]').text(lifeStory.values.characterName);
 
         lifeStory.db.getCharactersEvents(lifeStory.values.characterId, function (events)
         {
-            var onEventItemClick = function (e)
-            {
-                lifeStory.values.eventId = e.data.eventId;
-            };
-
             var $listContainer = $('#' + listViewId);
             var $reviewItem = $(':first(' + itemElementType + ')', $listContainer).
                 clone().
@@ -310,6 +310,7 @@
                 
                 if (event.eventTypeId === lifeStory.COMBAT_EVENT)
                 {
+                    // TODO: Change to make it a list of all name and creature counts
                     title = 'Defeated: ' + event.eventDetails[0].creatureCount + ' ' +
                         event.eventDetails[0].name;
                 }
@@ -350,7 +351,7 @@
                         removeClass('ui-btn-up-c').addClass('ui-btn-up-g');
                 }
 
-                $('a', $currentItem).on('tap', { eventId: event.id }, onEventItemClick);
+                $('a', $currentItem).on('tap', { eventId: event.id }, eventLogItemClicked);
 
                 $listContainer.append($currentItem);
             }
@@ -460,6 +461,45 @@
             }
         });
     };
+
+    uiLibrary.populateEventEdit = function(appendToSelector, templateElementId, removeButtonSelector)
+    {
+        var eventId = lifeStory.values.eventId;
+
+        lifeStory.db.getEvent(eventId, function (event)
+        {
+            var $form = $('#editEventForm');
+
+            $form.find('[name=id]').val(event.id);
+            $form.find('[name=eventType]').val(event.eventTypeId);
+            $form.find('[name=eventTypeId]').val(event.eventTypeId);
+            $form.find('[name=experience]').val(event.experience);
+            $form.find('[name=characterCount]').val(event.characterCount);
+            $form.find('[name=description]').val(event.description);
+
+            if (event.eventTypeId === lifeStory.COMBAT_EVENT)
+            {
+                event.eventDetails.forEach(function (item, index)
+                {
+                    var $detailInputs = $(appendToSelector);
+
+                    $detailInputs.find('[name=enemyName]').val(item.name);
+                    $detailInputs.find('[name=creatureCount]').val(item.creatureCount);
+
+                    // Duplicate after so first event goes in the template
+                    if (index + 1 < event.eventDetails.length)
+                    {
+                        uiLibrary.duplicateInputSet(appendToSelector, templateElementId,
+                            removeButtonSelector);
+                    }
+                });
+            }
+            else
+            {
+                $form.find('[name=eventName]').val(event.eventDetails[0].name);
+            }
+        });
+    }
 
     uiLibrary.populateCharacterDetail = function()
     {

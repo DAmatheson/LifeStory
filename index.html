@@ -374,7 +374,7 @@
                         </a>
                     </div>
                     <div class="ui-block-b">
-                        <a href="#editEvent" data-role="button">
+                        <a href="#editEvent" id="editEventButton" data-role="button">
                             Edit
                         </a>
                     </div>
@@ -413,19 +413,18 @@
 
                 <form id="editEventForm" class="clearBoth">
                     <input type="hidden" name="id" />
-                    <input type="hidden" name="eventTypeId" /> <!-- TODO: Make this a select if we wish to allow changing the event type -->
+                    <input type="hidden" name="eventType" /> <!-- TODO: Make this a select if we wish to allow changing the event type -->
 
                     <div id="editCombatDetailInputs">
                         <fieldset id="editEnemyInputsTemplate" class="ui-grid-a">
-                            <input type="hidden" name="eventDetailId" />
 
                             <div class="ui-block-a rightPadHalf twoThirds">
                                 <label for="editEnemyName">What did you defeat?</label>
-                                <input type="text" id="editEnemyName" name="enemyName" data-mini="true" placeholder="Name / Type of Enemy" value="Goblins" />
+                                <input type="text" id="editEnemyName" name="enemyName" data-mini="true" placeholder="Name / Type of Enemy" />
                             </div>
                             <div class="ui-block-b leftPadHalf oneThird">
                                 <label for="editEnemyCount">How many?</label>
-                                <input type="number" id="editEnemyCount" name="creatureCount" data-mini="true" min="1" placeholder="Count" value="4" />
+                                <input type="number" id="editEnemyCount" name="creatureCount" data-mini="true" min="1" placeholder="Count" />
                             </div>
                         </fieldset>
 
@@ -439,13 +438,13 @@
                     </div>
 
                     <label for="editXPAmount">How much XP was awarded?</label>
-                    <input type="number" id="editXPAmount" name="experience" min="0" placeholder="Total XP" value="400" />
+                    <input type="number" id="editXPAmount" name="experience" min="0" placeholder="Total XP"/>
 
                     <label for="editNumberOfPCs">How many characters shared the XP?</label>
-                    <input type="number" id="editNumberOfPCs" name="characterCount" min="1" placeholder="Player Character Count" value="4" />
+                    <input type="number" id="editNumberOfPCs" name="characterCount" min="1" placeholder="Player Character Count"/>
 
                     <label for="editEventDetails">Event Details</label>
-                    <textarea id="editEventDetails" name="description">Notes about the event.</textarea>
+                    <textarea id="editEventDetails" name="description"></textarea>
 
                     <button data-theme="b">Save Changes</button>
                 </form>

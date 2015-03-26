@@ -68,11 +68,7 @@ $('#characterDetails').one('pageinit', function characterDetailsPageInit()
 $('#eventDetails').one('pageinit', function eventDetailsPageInit()
 {
     $(this).on('pagebeforeshow', lifeStory.ui.populateEventDetail);
-
-    $('#deleteEvent').on('tap', function ()
-    {
-        lifeStory.ui.confirmDeleteEvent();
-    });
+    $('#deleteEvent').on('tap', lifeStory.ui.confirmDeleteEvent);
 });
 
 $('#createCharacter').one('pageinit', function createCharacterPageInit()
@@ -152,15 +148,21 @@ $('#createEvent').one('pageinit', function createEventPageInit()
 $('#editEvent').one('pageinit', function createEventPageInit()
 {
     lifeStory.validation.handleEventForm('editEventForm');
-    $('#editRemoveEnemy').closest('.ui-btn').hide();
 
     var removeButtonSelector = '#editRemoveEnemy';
+    // TODO: Consider removing the edit enemy inputs template and just having it be the create template
+    var extraInputsSelector = '#editCombatDetailInputs fieldset:not(#editEnemyInputsTemplate)';
+    var appendToSelector = '#editCombatDetailInputs fieldset:last';
+    var templateElementId = 'editEnemyInputsTemplate';
+
+    $(this).on('pagebeforeshow', function()
+    {
+        lifeStory.ui.removeInputSet(extraInputsSelector, removeButtonSelector);
+        lifeStory.ui.populateEventEdit(appendToSelector, templateElementId, removeButtonSelector);
+    });
 
     $('#editAddEnemy').on('tap', function ()
     {
-        var appendToSelector = '#editCombatDetailInputs fieldset:last';
-        var templateElementId = 'editEnemyInputsTemplate';
-
         lifeStory.ui.duplicateInputSet(appendToSelector, templateElementId, removeButtonSelector);
     });
 
@@ -171,10 +173,8 @@ $('#editEvent').one('pageinit', function createEventPageInit()
         lifeStory.ui.removeInputSet(removeElementSelector, removeButtonSelector);
     });
 
-    $('#createEventForm').on('reset', function ()
+    $('#editEventForm').on('reset', function ()
     {
-        var extraInputsSelector = '#combatDetailInputs fieldset:not(#enemyInputsTemplate)';
-
         lifeStory.ui.removeInputSet(extraInputsSelector, removeButtonSelector);
     });
 });

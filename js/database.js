@@ -422,6 +422,60 @@
         });
     };
 
+    dbLibrary.updateEvent = function updateEvent(event, eventDetails, successCallback,
+        transactionFailureCallback)
+    {
+        if (!(event instanceof lifeStory.Event))
+        {
+            throw 'event parameter to updateEvent must be an instance of lifestory.Event';
+        }
+        else if (!Array.isArray(eventDetails))
+        {
+            throw 'The eventDetails argument for updateEvent must be an array';
+        }
+        else if (eventDetails.length <= 0)
+        {
+            throw 'The eventDetails argument for updateEvent must contain at least one item';
+        }
+        else if (!(eventDetails[0] instanceof lifeStory.EventDetail))
+        {
+            throw 'The entries in the eventDetails argument for updateEvent must be instances ' +
+                'of lifeStory.EventDetail';
+        }
+
+        var wrappedFailureCallback = wrapTransactionFailureCallback(transactionFailureCallback);
+
+        dbLibrary.getDb().transaction(function (tx)
+        {
+            tx.executeSql(
+                'UPDATE event ' +
+                'SET eventType_id = ?, characterCount = ?, xp = ?, description = ? ' +
+                'WHERE id = ?;',
+                [
+                    event.eventTypeId, event.characterCount, event.experience, event.description,
+                    event.id
+                ]);
+
+
+            tx.executeSql(
+                'DELETE FROM eventDetail ' +
+                'WHERE event_id = ?;',
+                [event.id]);
+
+            eventDetails.forEach(function (item)
+            {
+                tx.executeSql(
+                    'INSERT INTO eventDetail (id, event_id, name, creatureCount) ' +
+                    'VALUES (?, ?, ?, ?);',
+                    [
+                        item.id, event.id,
+                        item.name, item.creatureCount
+                    ]);
+            });
+
+        }, wrappedFailureCallback, successCallback);
+    };
+
     dbLibrary.deleteRace = function deleteRace(id, successCallback, failureCallback)
     {
         dbLibrary.getDb().transaction(function(tx)

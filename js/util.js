@@ -61,7 +61,7 @@
             {
                 var $inputs = reduceToOnlyInputs(this);
 
-                var detailId = $inputs.filter('[name=eventDetailId]').val() || detailCounter + 1;
+                var detailId = detailCounter + 1;
                 var enemyName = $inputs.filter('[name=enemyName]').val().trim();
 
                 var creatureCount = $inputs.filter('[name=creatureCount]').val() || null;
@@ -115,6 +115,7 @@
 
     utilLibrary.isCombatEvent = function()
     {
+        // TODO: Make this work on both the edit and the create
         return parseInt($('#eventType option:selected').val(), 10) === lifeStory.COMBAT_EVENT;
     }
 
