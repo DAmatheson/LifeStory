@@ -272,8 +272,9 @@
     dataAccessLibrary.deleteEvent = function(eventId)
     {
         var deleteFailure = transactionFailureCallback('Failed to delete the event.');
+        var characterId = lifeStory.values.characterId;
 
-        lifeStory.db.deleteEvent(eventId, deleteEventSuccess, deleteFailure);
+        lifeStory.db.deleteEvent(eventId, characterId, deleteEventSuccess, deleteFailure);
     };
 
     dataAccessLibrary.saveOtherEventToDb = function(form, callbackData)

@@ -506,34 +506,84 @@
         }, wrappedFailureCallback, successCallback);
     };
 
-    dbLibrary.deleteEvent = function deleteEvent(id, successCallback, transactionFailureCallback)
+    dbLibrary.deleteEvent = function deleteEvent(id, characterId, successCallback, transactionFailureCallback)
     {
         /// <summary>
         ///     Attempts to delete the event specified by id along with all detail records for it.<br/>
         ///     If the transaction fails, it is rolled back and no data is deleted.
         /// </summary>
         /// <param name="id" type="number">The id of the event to delete</param>
+        /// <param name="characterId" type="number">The id of the character the event belongs to</param>
         /// <param name="successCallback" type="function">The callback for deletion success</param>
         /// <param name="transactionFailureCallback" type="function">The callback for deletion failure</param>
 
-        var wrappedFailureCallback = wrapTransactionFailureCallback(transactionFailureCallback);
+        var originalAliveValue = lifeStory.values.characterAlive;
+
+        var wrappedFailureCallback = function(error)
+        {
+            // Reset the value back to its original value before this transaction
+            lifeStory.values.characterAlive = originalAliveValue;
+
+            // Call wrapTransactionFailureCallback and immediately invoke the returned function
+            wrapTransactionFailureCallback(transactionFailureCallback)(error);
+        }
 
         dbLibrary.getDb().transaction(function (tx)
         {
             tx.executeSql(
                 'DELETE FROM eventDetail ' +
-                'WHERE event_id = ?',
+                'WHERE event_id = ?;',
                 [id]);
 
             tx.executeSql(
                 'DELETE FROM event ' +
-                'WHERE id = ?',
+                'WHERE id = ?;',
                 [id]);
 
             tx.executeSql(
                 'DELETE FROM characterEvent ' +
-                'WHERE event_id = ?',
+                'WHERE event_id = ?;',
                 [id]);
+
+            tx.executeSql(
+                'UPDATE character ' +
+                'SET living = ' +
+                '(' +
+                    'SELECT ' +
+                        'CASE e.eventType_id ' +
+                            'WHEN ? THEN MAX(?) ' +
+                            'WHEN ? THEN ? ' +
+                            'ELSE ? ' +
+                        'END ' +
+                    'FROM event e JOIN characterEvent ce ' +
+                        'ON e.id = ce.event_id AND ce.character_id = ? ' +
+                    'WHERE eventType_id IN(?, ?) ' +
+                    'ORDER BY date DESC ' +
+                    'LIMIT 1' +
+                ') ' +
+                'WHERE id = ?;',
+                [
+                    lifeStory.RESURRECT_EVENT, lifeStory.ALIVE, // First WHEN
+                    lifeStory.DEATH_EVENT, lifeStory.DEAD, // Second WHEN
+                    lifeStory.ALIVE, // ELSE
+                    characterId, // JOIN character_id condition
+                    lifeStory.RESURRECT_EVENT, lifeStory.DEATH_EVENT, // IN values
+                    characterId // Update WHERE condition
+                ]);
+
+            tx.executeSql(
+                'SELECT living ' +
+                'FROM character ' +
+                'WHERE id = ?;',
+                [characterId],
+                function(transaction, resultSet)
+                {
+                    if (resultSet.rows.length > 0)
+                    {
+                        // Update characterAlive to the new status
+                        lifeStory.values.characterAlive = resultSet.rows.item(0).living;
+                    }
+                });
 
         }, wrappedFailureCallback, successCallback);
     };

@@ -177,6 +177,8 @@ $('#editEvent').one('pageinit', function createEventPageInit()
 $('#resurrectEvent').one('pageinit', function resurrectEventPageInit()
 {
     lifeStory.validation.handleOtherEventForm('resurrectEventForm', true);
+
+    $('#resurrectEventForm span[data-property=characterName]').text(lifeStory.values.characterName);
 });
 
 $('#deathEvent').one('pageinit', function deathEventPageInit()
