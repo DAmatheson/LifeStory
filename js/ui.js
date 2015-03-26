@@ -18,7 +18,7 @@
     var uiLibrary = lifeStory.ui = {};
 
     // Displays a confirmation dialog and returns the users choice
-    uiLibrary.displayConfirmation = function (title, message, acceptCallback, denyCallback)
+    uiLibrary.displayConfirmation = function(title, message, acceptCallback, denyCallback)
     {
         /// <summary>
         ///     Displays a confirmation popup to the user<br/>
@@ -40,22 +40,22 @@
 
         if (acceptCallback)
         {
-            $('#confirmAccept').one('tap', function ()
+            $('#confirmAccept').one('tap', function()
             {
                 acceptCallback();
                 $('#confirmDeny').off('tap');
             });
         }
-        
+
         if (denyCallback)
         {
-            $('#confirmDeny').one('tap', function ()
+            $('#confirmDeny').one('tap', function()
             {
                 denyCallback();
                 $('#confirmAccept').off('tap');
             });
         }
-    }
+    };
 
     uiLibrary.displaySuccessMessage = function(message)
     {
@@ -66,7 +66,7 @@
 
         $('#successMessage').html(message);
         $('#successDialog').popup('open');
-    }
+    };
 
     uiLibrary.displayErrorMessage = function(message)
     {
@@ -77,7 +77,7 @@
 
         $('#errorMessage').html(message);
         $('#errorDialog').popup('open');
-    }
+    };
 
     // Filters the character list to remove deceased characters if the source checkbox is unchecked
     uiLibrary.filterCharacterList = function()
@@ -250,7 +250,8 @@
 
                 if (character.living === lifeStory.DEAD)
                 {
-                    $currentItem.attr('data-theme', 'f').removeClass('ui-btn-up-c').addClass('ui-btn-up-f');
+                    $currentItem.attr('data-theme', 'f').
+                        removeClass('ui-btn-up-c').addClass('ui-btn-up-f');
                 }
 
                 $('a', $currentItem).on('tap',
@@ -287,6 +288,11 @@
 
         lifeStory.db.getCharactersEvents(lifeStory.values.characterId, function (events)
         {
+            var onEventItemClick = function (e)
+            {
+                lifeStory.values.eventId = e.data.eventId;
+            };
+
             var $listContainer = $('#' + listViewId);
             var $reviewItem = $(':first(' + itemElementType + ')', $listContainer).
                 clone().
@@ -326,7 +332,8 @@
 
                 $('[data-property=title]', $currentItem).text(title);
 
-                if (event.eventTypeId === lifeStory.COMBAT_EVENT || event.eventTypeId === lifeStory.NON_COMBAT_EVENT)
+                if (event.eventTypeId === lifeStory.COMBAT_EVENT ||
+                    event.eventTypeId === lifeStory.NON_COMBAT_EVENT)
                 {
                     $('[data-property=experience]', $currentItem).text(
                         Math.floor(event.experience / event.characterCount) + ' XP');
@@ -334,17 +341,16 @@
 
                 if (event.eventTypeId === lifeStory.DEATH_EVENT)
                 {
-                    $currentItem.attr('data-theme', 'f').removeClass('ui-btn-up-c').addClass('ui-btn-up-f');
+                    $currentItem.attr('data-theme', 'f').
+                        removeClass('ui-btn-up-c').addClass('ui-btn-up-f');
                 }
                 else if (event.eventTypeId === lifeStory.RESURRECT_EVENT)
                 {
-                    $currentItem.attr('data-theme', 'g').removeClass('ui-btn-up-c').addClass('ui-btn-up-g');
+                    $currentItem.attr('data-theme', 'g').
+                        removeClass('ui-btn-up-c').addClass('ui-btn-up-g');
                 }
 
-                $('a', $currentItem).on('tap', { eventId: event.id }, function (e)
-                {
-                    lifeStory.values.eventId = e.data.eventId;
-                });
+                $('a', $currentItem).on('tap', { eventId: event.id }, onEventItemClick);
 
                 $listContainer.append($currentItem);
             }
@@ -512,9 +518,9 @@
         var acceptCallback = function()
         {
             lifeStory.dataAccess.deleteCharacter(lifeStory.values.characterId);
-        }
+        };
 
-        uiLibrary.displayConfirmation('Delete ' + lifeStory.values.characterName + '?', // Security hole as this is used with .html
+        uiLibrary.displayConfirmation('Delete ' + lifeStory.values.characterName + '?', // TODO: Security hole as this is used with .html
             'Are you sure you want to delete ' + lifeStory.values.characterName +
             '? <strong>This cannot be undone.</strong>',
             acceptCallback);
@@ -525,12 +531,12 @@
         var acceptCallback = function()
         {
             lifeStory.dataAccess.deleteEvent(lifeStory.values.eventId);
-        }
+        };
 
         uiLibrary.displayConfirmation('Delete Event?',
             'Are you sure you want to delete this event? <strong>This cannot be undone.</strong>',
             acceptCallback);
-    }
+    };
 
     // Confirms the user wants to clear the character table. If so, clears the table.
     uiLibrary.confirmClearCharactersTable = function ()

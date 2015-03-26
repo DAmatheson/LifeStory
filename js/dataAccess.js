@@ -36,10 +36,10 @@
         /// <param name="message" type="string">The message to pass on to dbFailure</param>
         /// <returns type="function">The enhanced callback function</returns>
 
-        return function (transaction, error)
+        return function(transaction, error)
         {
             dbFailure(message, error, transaction);
-        }
+        };
     }
 
     function transactionFailureCallback(message)
@@ -54,7 +54,7 @@
         return function(error)
         {
             dbFailure(message, error);
-        }
+        };
     }
 
     function genericSuccessCallback(callbackData)
@@ -283,7 +283,9 @@
         ///     Saves a resurrection or death even to the DB.
         /// </summary>
         /// <param name="form" type="DOM Element">The form to get data from</param>
-        /// <param name="callbackData" type="object">Additional callback data to pass to the success callback</param>
+        /// <param name="callbackData" type="object">
+        ///     Additional callback data to pass to the success callback
+        /// </param>
 
         var successCallback = modifySuccessCallback(genericSuccessCallback, callbackData);
         var saveFailure = transactionFailureCallback(callbackData.failureMessage);
@@ -303,11 +305,11 @@
 
         var newEventDetails = lifeStory.util.createEventDetailsFromInput(form, newEvent.eventTypeId);
         var characterId = lifeStory.values.characterId;
-        
+
         newEvent.experience = null;
         newEvent.characterCount = 1;
 
         lifeStory.db.addEvent(newEvent, newEventDetails, characterId, successCallback, saveFailure);
-    }
-
+    };
+    
 })(window, window.lifeStory, jQuery);

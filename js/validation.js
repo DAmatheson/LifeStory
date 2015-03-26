@@ -301,6 +301,6 @@
 
         setupFormValidation(formId, lifeStory.dataAccess.saveOtherEventToDb, rules, messages,
             callbackData);
-    }
+    };
 
 })(window, window.lifeStory, jQuery);

@@ -391,7 +391,7 @@
                 tx.executeSql(
                     'UPDATE character ' +
                     'SET living = ? ' +
-                    'WHERE id = ?',
+                    'WHERE id = ?;',
                     [
                         event.eventTypeId === lifeStory.RESURRECT_EVENT ? lifeStory.ALIVE : lifeStory.DEAD,
                         characterId
@@ -495,7 +495,7 @@
 
             tx.executeSql(
                 'DELETE FROM characterEvent ' +
-                'WHERE character_id = ?',
+                'WHERE character_id = ?;',
                 [id]);
 
             tx.executeSql(
@@ -506,7 +506,8 @@
         }, wrappedFailureCallback, successCallback);
     };
 
-    dbLibrary.deleteEvent = function deleteEvent(id, characterId, successCallback, transactionFailureCallback)
+    dbLibrary.deleteEvent = function deleteEvent(id, characterId, successCallback,
+        transactionFailureCallback)
     {
         /// <summary>
         ///     Attempts to delete the event specified by id along with all detail records for it.<br/>
@@ -515,7 +516,9 @@
         /// <param name="id" type="number">The id of the event to delete</param>
         /// <param name="characterId" type="number">The id of the character the event belongs to</param>
         /// <param name="successCallback" type="function">The callback for deletion success</param>
-        /// <param name="transactionFailureCallback" type="function">The callback for deletion failure</param>
+        /// <param name="transactionFailureCallback" type="function">
+        ///     The callback for deletion failure
+        /// </param>
 
         var originalAliveValue = lifeStory.values.characterAlive;
 
@@ -526,7 +529,7 @@
 
             // Call wrapTransactionFailureCallback and immediately invoke the returned function
             wrapTransactionFailureCallback(transactionFailureCallback)(error);
-        }
+        };
 
         dbLibrary.getDb().transaction(function (tx)
         {
@@ -691,7 +694,8 @@
         {
             tx.executeSql(
                 'SELECT c.id, race_id, class_id, c.name, living, details, ' +
-                    'race.name AS raceName, class.name AS className, SUM(e.xp / e.characterCount) AS experience ' +
+                    'race.name AS raceName, class.name AS className, ' +
+                    'SUM(e.xp / e.characterCount) AS experience ' +
                 'FROM character c ' +
                     'JOIN class ' +
                         'ON c.class_id = class.id ' +
