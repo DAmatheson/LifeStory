@@ -57,21 +57,38 @@
         }
     }
 
+    function genericSuccessCallback(callbackData)
+    {
+        if (callbackData.formIdToReset)
+        {
+            lifeStory.util.triggerReset(callbackData.formIdToReset);
+        }
+
+        lifeStory.ui.displaySuccessMessage(callbackData.successMessage);
+
+        if (callbackData.redirectToPageId)
+        {
+            lifeStory.util.redirectOnSuccessDialogClose(callbackData.redirectToPageId);
+        }
+    }
+
     function modifySuccessCallback(successCallback, callbackData)
     {
         /// <summary>
         ///     Modifies the success callback to pass in additional data to the callback<br/>
-        ///     Only modifies the callback if callbackData is passed in
+        ///     Only modifies the callback if callbackData is passed in.
         /// </summary>
         /// <param name="successCallback" type="function">The intended success callback function</param>
-        /// <param name="callbackData" type="any">Additional data to pass to the success callback</param>
+        /// <param name="callbackData" type="lifeStory.CallbackData">
+        ///     Additional data to pass to the success callback
+        /// </param>
         /// <returns type="function">The modified success callback</returns>
 
         if (successCallback && callbackData)
         {
             return function (transaction, resultSet)
             {
-                successCallback(transaction, resultSet, callbackData);
+                successCallback(callbackData, resultSet, transaction);
             };
         }
 
@@ -84,17 +101,11 @@
     }
 
     // Callback function for successfully saving a race
-    function saveRaceSuccess(transaction, resultSet, callbackData)
+    function saveRaceSuccess(callbackData)
     {
-        lifeStory.util.triggerReset(callbackData.formIdToReset);
+        genericSuccessCallback(callbackData);        
 
-        lifeStory.ui.displaySuccessMessage('New custom race created.');
-
-        if (callbackData.redirectToPageId) // Redirect to the specified page
-        {
-            lifeStory.util.redirectOnSuccessDialogClose(callbackData.redirectToPageId);
-        }
-        else if (callbackData.isCustomizePage) // Repopulate the list and refresh the UI state
+        if (callbackData.isCustomizePage) // Repopulate the list and refresh the UI state
         {
             refreshDeleteRaceUI();
         }
@@ -103,7 +114,7 @@
     dataAccessLibrary.saveRaceToDb = function (form, callbackData)
     {
         var successCallback = modifySuccessCallback(saveRaceSuccess, callbackData);
-        var saveFailure = failureCallback('Failed to create the new race.');
+        var saveFailure = failureCallback(callbackData.failureMessage);
 
         lifeStory.db.addRace(lifeStory.util.createRaceFromInput(form), successCallback, saveFailure);
     };
@@ -137,17 +148,11 @@
     }
 
     // Callback function for successfully saving a class
-    function saveClassSuccess(transaction, resultSet, callbackData)
+    function saveClassSuccess(callbackData)
     {
-        lifeStory.util.triggerReset(callbackData.formIdToReset);
+        genericSuccessCallback(callbackData);
 
-        lifeStory.ui.displaySuccessMessage('New custom class created.');
-
-        if (callbackData.redirectToPageId) // Redirect to the specified page
-        {
-            lifeStory.util.redirectOnSuccessDialogClose(callbackData.redirectToPageId);
-        }
-        else if (callbackData.isCustomizePage) // Repopulate the list and refresh the UI state
+        if (callbackData.isCustomizePage) // Repopulate the list and refresh the UI state
         {
             refreshDeleteClassUI();
         }
@@ -157,7 +162,7 @@
     dataAccessLibrary.saveClassToDb = function (form, callbackData)
     {
         var successCallback = modifySuccessCallback(saveClassSuccess, callbackData);
-        var saveFailure = failureCallback('Failed to create the new class.');
+        var saveFailure = failureCallback(callbackData.failureMessage);
 
         lifeStory.db.addClass(lifeStory.util.createClassFromInput(form), successCallback,
             saveFailure);
@@ -186,20 +191,17 @@
         lifeStory.db.deleteClass(classId, deleteClassSuccess, deleteFailure);
     };
 
-    function saveCharacterSuccess(transaction, resultSet, callbackData)
+    function saveCharacterSuccess(callbackData, resultSet)
     {
-        lifeStory.util.triggerReset(callbackData.formIdToReset);
-
         lifeStory.values.characterId = resultSet.insertId;
 
-        lifeStory.ui.displaySuccessMessage('New character created.');
-        lifeStory.util.redirectOnSuccessDialogClose('eventLog');
+        genericSuccessCallback(callbackData);
     }
 
     dataAccessLibrary.saveCharacterToDb = function (form, callbackData)
     {
         var successCallback = modifySuccessCallback(saveCharacterSuccess, callbackData);
-        var saveFailure = failureCallback('Failed to create the character.');
+        var saveFailure = failureCallback(callbackData.failureMessage);
 
         var newCharacter = lifeStory.util.createCharacterFromInput(form);
         lifeStory.values.characterName = newCharacter.name;
@@ -208,17 +210,10 @@
         lifeStory.db.addCharacter(newCharacter, successCallback, saveFailure);
     };
 
-    function updateCharacterSuccess(transaction, resultSet, callbackData)
-    {
-        lifeStory.util.triggerReset(callbackData.formIdToReset);
-        lifeStory.ui.displaySuccessMessage('Character updated.');
-        lifeStory.util.redirectOnSuccessDialogClose('eventLog');
-    }
-
     dataAccessLibrary.updateCharacterInDb = function (form, callbackData)
     {
-        var successCallback = modifySuccessCallback(updateCharacterSuccess, callbackData);
-        var updateFailure = failureCallback('Failed to update the character.');
+        var successCallback = modifySuccessCallback(genericSuccessCallback, callbackData);
+        var updateFailure = failureCallback(callbackData.failureMessage);
 
         var updatedCharacter = lifeStory.util.createCharacterFromInput(form);
         lifeStory.values.characterName = updatedCharacter.name;
@@ -234,8 +229,11 @@
         lifeStory.values.characterName = null;
         lifeStory.values.characterAlive = null;
 
-        lifeStory.ui.displaySuccessMessage('The character was deleted successfully.');
-        lifeStory.util.redirectOnSuccessDialogClose('home');
+        var callbackData = new lifeStory.CallbackData();
+        callbackData.successMessage = 'The character was deleted successfully.';
+        callbackData.redirectToPageId = 'home';
+
+        genericSuccessCallback(callbackData);
     }
 
     // Attempts to delete the character identified by characterId and displays a message of the outcome
@@ -246,18 +244,10 @@
         lifeStory.db.deleteCharacter(characterId, deleteCharacterSuccess, deleteFailure);
     };
 
-    // Callback function for successfully saving an event
-    function saveEventSuccess(transaction, resultSet, callbackData)
-    {
-        lifeStory.util.triggerReset(callbackData.formIdToReset);
-        lifeStory.ui.displaySuccessMessage('New Event created');
-        lifeStory.util.redirectOnSuccessDialogClose('eventLog');
-    }
-
     dataAccessLibrary.saveEventToDb = function(form, callbackData)
     {
-        var successCallback = modifySuccessCallback(saveEventSuccess, callbackData);
-        var saveFailure = transactionFailureCallback('Failed to save the event.');
+        var successCallback = modifySuccessCallback(genericSuccessCallback, callbackData);
+        var saveFailure = transactionFailureCallback(callbackData.failureMessage);
 
         var newEvent = lifeStory.util.createEventFromInput(form);
         var newEventDetails = lifeStory.util.createEventDetailsFromInput(form, newEvent.eventTypeId);
@@ -271,8 +261,11 @@
     {
         lifeStory.values.eventId = null;
 
-        lifeStory.ui.displaySuccessMessage('The event was deleted successfully.');
-        lifeStory.util.redirectOnSuccessDialogClose('eventLog');
+        var callbackData = new lifeStory.CallbackData();
+        callbackData.successMessage = 'The event was deleted successfully.';
+        callbackData.redirectToPageId = 'eventLog';
+
+        genericSuccessCallback(callbackData);
     }
 
     // Attempts to delete the character identified by eventId and displays a message of the outcome
@@ -283,14 +276,6 @@
         lifeStory.db.deleteEvent(eventId, deleteEventSuccess, deleteFailure);
     };
 
-    // Callback function for successfully saving an event
-    function saveOtherEventSuccess(transaction, resultSet, callbackData)
-    {
-        lifeStory.util.triggerReset(callbackData.formIdToReset);
-        lifeStory.ui.displaySuccessMessage(callbackData.successMessage);
-        lifeStory.util.redirectOnSuccessDialogClose('eventLog');
-    }
-
     dataAccessLibrary.saveOtherEventToDb = function(form, callbackData)
     {
         /// <summary>
@@ -299,7 +284,7 @@
         /// <param name="form" type="DOM Element">The form to get data from</param>
         /// <param name="callbackData" type="object">Additional callback data to pass to the success callback</param>
 
-        var successCallback = modifySuccessCallback(saveOtherEventSuccess, callbackData);
+        var successCallback = modifySuccessCallback(genericSuccessCallback, callbackData);
         var saveFailure = transactionFailureCallback(callbackData.failureMessage);
 
         var newEvent = lifeStory.util.createEventFromInput(form);

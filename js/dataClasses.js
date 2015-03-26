@@ -74,4 +74,14 @@
         this.value = value;
     };
 
+    lifeStory.CallbackData = function callbackData(formIdToReset, redirectToPageId,
+        successMessage, failureMessage)
+    {
+        this.formIdToReset = formIdToReset || null;
+        this.redirectToPageId = redirectToPageId || null;
+
+        this.successMessage = successMessage || '';
+        this.failureMessage = failureMessage || '';
+    }
+
 })(window, window.lifeStory);

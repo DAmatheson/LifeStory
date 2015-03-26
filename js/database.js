@@ -53,14 +53,6 @@
         };
     }
 
-    function initializationError(transaction, error)
-    {
-        localStorage.setItem('dbInitializationError', 'true');
-        localStorage.setItem('dbInitialized', 'false');
-
-        sqlErrorHandler(transaction, error);
-    }
-
     function createRaceTable(transaction)
     {
         transaction.executeSql(
@@ -68,10 +60,7 @@
             '(' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
                 'name VARCHAR(20) NOT NULL UNIQUE' +
-            ');',
-            null,
-            null,
-            initializationError);
+            ');');
     }
 
     function createClassTable(transaction)
@@ -81,10 +70,7 @@
             '(' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
                 'name VARCHAR(20) NOT NULL UNIQUE' +
-            ');',
-            null,
-            null,
-            initializationError);
+            ');');
     }
 
     function createCharacterTable(transaction)
@@ -100,10 +86,7 @@
                 'details TEXT, ' +
                 'FOREIGN KEY (race_id) REFERENCES race (id),' +
                 'FOREIGN KEY (class_id) REFERENCES class (id)' +
-            ');',
-            null,
-            null,
-            initializationError);
+            ');');
     }
 
     function createEventTypeTable(transaction)
@@ -113,10 +96,7 @@
             '(' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
                 'name VARCHAR(20) NOT NULL UNIQUE' +
-            ');',
-            null,
-            null,
-            initializationError);
+            ');');
     }
 
     function createEventTable(transaction)
@@ -132,10 +112,7 @@
                 'xp INTEGER, ' +
                 'description TEXT,' +
                 'FOREIGN KEY (eventType_id) REFERENCES eventType (id)' +
-            ');',
-            null,
-            null,
-            initializationError);
+            ');');
     }
 
     function createEventDetailTable(transaction)
@@ -149,10 +126,7 @@
                 'creatureCount INTEGER, ' +
                 'PRIMARY KEY (id, event_id), ' +
                 'FOREIGN KEY (event_id) REFERENCES event (id)' +
-            ');',
-            null,
-            null,
-            initializationError);
+            ');');
     }
 
     function createCharacterEventTable(transaction)
@@ -165,10 +139,7 @@
                 'PRIMARY KEY (character_id, event_id),' +
                 'FOREIGN KEY (event_id) REFERENCES event (id),' +
                 'FOREIGN KEY (character_id) REFERENCES character (id)' +
-            ');',
-            null,
-            null,
-            initializationError);
+            ');');
     }
 
     // Insert default class records
@@ -180,9 +151,7 @@
         defaultClasses.forEach(function(item)
         {
             transaction.executeSql('INSERT OR IGNORE INTO class (name) VALUES (?);',
-                [item],
-                null,
-                initializationError);
+                [item]);
         });
     }
 
@@ -196,9 +165,7 @@
         {
             transaction.executeSql(
                 'INSERT OR IGNORE INTO race (name) VALUES (?);',
-                [item],
-                null,
-                initializationError);
+                [item]);
         });
     }
 
@@ -211,9 +178,7 @@
         {
             transaction.executeSql(
                 'INSERT OR IGNORE INTO eventType (name) VALUES (?);',
-                [item],
-                null,
-                initializationError);
+                [item]);
         });
     }
 
@@ -233,18 +198,21 @@
             insertDefaultClasses(tx);
             insertDefaultRaces(tx);
             insertEventTypes(tx);
-        });
+        },
+        function initializationError(error)
+        {
+            localStorage.setItem('dbInitialized', 'false');
+            console.error(error.message, error);
 
-        if (localStorage.getItem('dbInitializationError') !== 'true')
+            // TODO: Consider changing this to use the better alert.
+            alert('Database Initialization error: ' + error.message);
+
+            return true; // Roll back the transaction
+        },
+        function initializationSuccess()
         {
             localStorage.setItem('dbInitialized', 'true');
-        }
-        else
-        {
-            // dbInitialized is set to false by initializationError so no need to do that here.
-            // Remove this so future runs don't incorrectly believe an error occured
-            localStorage.removeItem('dbInitializationError');
-        }
+        });
     }
 
     // Initializes the database

@@ -60,12 +60,11 @@
 
         var submitHandler = lifeStory.dataAccess.saveRaceToDb;
 
-        var callbackData =
-        {
-            redirectToPageId: redirectToPageIdOnSubmit,
-            formIdToReset: formId,
-            isCustomizePage: !redirectToPageIdOnSubmit
-        };
+        var callbackData = new lifeStory.CallbackData(formId, redirectToPageIdOnSubmit,
+            'New custom race created.', 'Failed to create the new race.');
+
+        // If redirectToPageIdOnSubmit isn't passed in, the form is on the #customize page
+        callbackData.isCustomizePage = !redirectToPageIdOnSubmit;
 
         setupFormValidation(formId, submitHandler, rules, messages, callbackData);
     };
@@ -83,12 +82,11 @@
             }
         };
 
-        var callbackData =
-        {
-            redirectToPageId: redirectToPageIdOnSubmit,
-            formIdToReset: formId,
-            isCustomizePage: !redirectToPageIdOnSubmit
-        };
+        var callbackData = new lifeStory.CallbackData(formId, redirectToPageIdOnSubmit,
+            'New custom class created.', 'Failed to create the new class.');
+
+        // If redirectToPageIdOnSubmit isn't passed in, the form is on the #customize page
+        callbackData.isCustomizePage = !redirectToPageIdOnSubmit;
 
         var submitHandler = lifeStory.dataAccess.saveClassToDb;
 
@@ -135,18 +133,21 @@
             }
         };
 
-        var callbackData =
-        {
-            formIdToReset: formId
-        };
+        var callbackData = new lifeStory.CallbackData(formId, 'eventLog');
 
         if (isNewCharacterForm)
         {
+            callbackData.successMessage = 'New character created.';
+            callbackData.failureMessage = 'Failed to create the character.';
+
             setupFormValidation(formId, lifeStory.dataAccess.saveCharacterToDb, rules, messages,
                 callbackData);
         }
         else
         {
+            callbackData.successMessage = 'Character updated.';
+            callbackData.failureMessage = 'Failed to update the character.';
+
             setupFormValidation(formId, lifeStory.dataAccess.updateCharacterInDb, rules, messages,
                 callbackData);
         }
@@ -248,10 +249,8 @@
             }
         };
 
-        var callbackData =
-        {
-            formIdToReset: formId
-        };
+        var callbackData = new lifeStory.CallbackData(formId, 'eventLog',
+            'New Event created.', 'Failed to save the event.');
 
         if (isNewEventForm)
         {
@@ -293,13 +292,12 @@
             }
         };
 
-        var callbackData =
-        {
-            formIdToReset: formId,
-            successMessage: isResurrectEvent ? 'You\'ve been resurrected successfully.' : 'You died.', // TODO: Messages
-            failureMessage: 'Failed to save ' + (isResurrectEvent ? 'resurrection.' : 'death.'), // TODO: Messages
-            isResurrection: isResurrectEvent
-        };
+        // TODO: Improve messages or remove this comment
+        var successMessage = isResurrectEvent ? 'You\'ve been resurrected successfully.' : 'You died.';
+        var failureMessage = 'Failed to save ' + (isResurrectEvent ? 'resurrection.' : 'death.');
+
+        var callbackData = new lifeStory.CallbackData(formId, 'eventLog', successMessage, failureMessage);
+        callbackData.isResurrection = isResurrectEvent;
 
         setupFormValidation(formId, lifeStory.dataAccess.saveOtherEventToDb, rules, messages,
             callbackData);
