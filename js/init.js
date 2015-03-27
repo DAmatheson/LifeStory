@@ -26,6 +26,10 @@ $(function()
 
 $('#settings').one('pageinit', function settingsPageInit()
 {
+    $('#faqLink').on('tap', function ()
+    {
+        window.open('http://www.isaac-west.ca/LifeStory/FAQ', '_system');
+    });
     $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharactersTable);
     $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
 });
