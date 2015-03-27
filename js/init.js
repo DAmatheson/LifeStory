@@ -146,6 +146,8 @@ $('#createEvent').one('pageinit', function createEventPageInit()
 $('#editEvent').one('pageinit', function createEventPageInit()
 {
     lifeStory.validation.handleEventForm('editEventForm');
+    lifeStory.validation.handleOtherEventForm('editResurrectEventForm', true);
+    lifeStory.validation.handleOtherEventForm('editDeathEventForm');
 
     var removeButtonSelector = '#editRemoveEnemy';
     // TODO: Consider removing the edit enemy inputs template and just having it be the create template
@@ -179,14 +181,14 @@ $('#editEvent').one('pageinit', function createEventPageInit()
 
 $('#resurrectEvent').one('pageinit', function resurrectEventPageInit()
 {
-    lifeStory.validation.handleOtherEventForm('resurrectEventForm', true);
+    lifeStory.validation.handleOtherEventForm('resurrectEventForm', true, true);
 
     $('#resurrectEventForm span[data-property=characterName]').text(lifeStory.values.characterName);
 });
 
 $('#deathEvent').one('pageinit', function deathEventPageInit()
 {
-    lifeStory.validation.handleOtherEventForm('deathEventForm', false);
+    lifeStory.validation.handleOtherEventForm('deathEventForm', false, true);
 });
 
 $('#customize').one('pageinit', function customizePageInit()

@@ -288,39 +288,80 @@
         lifeStory.db.deleteEvent(eventId, characterId, deleteEventSuccess, deleteFailure);
     };
 
+    function prepareOtherEventData(form, callbackData)
+    {
+        var successCallback = modifySuccessCallback(genericSuccessCallback, callbackData);
+        var saveFailure = transactionFailureCallback(callbackData.failureMessage);
+
+        var event = lifeStory.util.createEventFromInput(form);
+
+        if (callbackData.isResurrection)
+        {
+            event.eventTypeId = lifeStory.RESURRECT_EVENT;
+            lifeStory.values.characterAlive = lifeStory.ALIVE; // TODO: If failure, rollback
+        }
+        else
+        {
+            event.eventTypeId = lifeStory.DEATH_EVENT;
+            lifeStory.values.characterAlive = lifeStory.DEAD;
+        }
+
+        var eventDetails = lifeStory.util.createEventDetailsFromInput(form, event.eventTypeId);
+
+        event.experience = null;
+        event.characterCount = 1;
+
+        return {
+            successCallback: successCallback,
+            saveFailure: saveFailure,
+            event: event,
+            eventDetails: eventDetails
+        };
+    }
+
     dataAccessLibrary.saveOtherEventToDb = function(form, callbackData)
     {
         /// <summary>
-        ///     Saves a resurrection or death even to the DB.
+        ///     Saves a resurrection or death event to the DB.
         /// </summary>
         /// <param name="form" type="DOM Element">The form to get data from</param>
         /// <param name="callbackData" type="object">
         ///     Additional callback data to pass to the success callback
         /// </param>
 
-        var successCallback = modifySuccessCallback(genericSuccessCallback, callbackData);
-        var saveFailure = transactionFailureCallback(callbackData.failureMessage);
+        var data = prepareOtherEventData(form, callbackData);
 
-        var newEvent = lifeStory.util.createEventFromInput(form);
+        var successCallback = data.successCallback;
+        var saveFailure = data.saveFailure;
 
-        if (callbackData.isResurrection)
-        {
-            newEvent.eventTypeId = lifeStory.RESURRECT_EVENT;
-            lifeStory.values.characterAlive = lifeStory.ALIVE;
-        }
-        else
-        {
-            newEvent.eventTypeId = lifeStory.DEATH_EVENT;
-            lifeStory.values.characterAlive = lifeStory.DEAD;
-        }
+        var newEvent = data.event;
 
-        var newEventDetails = lifeStory.util.createEventDetailsFromInput(form, newEvent.eventTypeId);
+        var newEventDetails = data.eventDetails;
         var characterId = lifeStory.values.characterId;
 
-        newEvent.experience = null;
-        newEvent.characterCount = 1;
 
         lifeStory.db.addEvent(newEvent, newEventDetails, characterId, successCallback, saveFailure);
+    };
+
+    dataAccessLibrary.updateOtherEventInDb = function (form, callbackData)
+    {
+        /// <summary>
+        ///     Updates a resurrection or death event in the DB.
+        /// </summary>
+        /// <param name="form" type="DOM Element">The form to get data from</param>
+        /// <param name="callbackData" type="object">
+        ///     Additional callback data to pass to the success callback
+        /// </param>
+
+        var data = prepareOtherEventData(form, callbackData);
+
+        var successCallback = data.successCallback;
+        var saveFailure = data.saveFailure;
+
+        var updatedEvent = data.event;
+        var updatedEventDetails = data.eventDetails;
+
+        lifeStory.db.updateEvent(updatedEvent, updatedEventDetails, successCallback, saveFailure);
     };
     
 })(window, window.lifeStory, jQuery);

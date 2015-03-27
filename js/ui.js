@@ -496,16 +496,10 @@
 
         lifeStory.db.getEvent(eventId, function(event)
         {
-            var $form = $('#editEventForm');
-
-            $form.find('[name=id]').val(event.id);
-            $form.find('[name=eventType]').val(event.eventTypeId);
-            $form.find('[name=eventTypeId]').val(event.eventTypeId);
-            $form.find('[name=experience]').val(event.experience);
-            $form.find('[name=characterCount]').val(event.characterCount);
-            $form.find('[name=description]').val(event.description);
-
-            if (event.eventTypeId === lifeStory.COMBAT_EVENT)
+            var $form;
+            var eventTypeId = event.eventTypeId;
+            
+            if (eventTypeId === lifeStory.COMBAT_EVENT)
             {
                 uiLibrary.showCombatDetailInputs(true);
 
@@ -524,15 +518,41 @@
                     }
                 });
             }
-            else
+            else if (eventTypeId === lifeStory.NON_COMBAT_EVENT)
             {
                 uiLibrary.showEventDetailInputs(true);
+            }
+            else if (eventTypeId === lifeStory.RESURRECT_EVENT)
+            {
+                $('#editEventForm, #editDeathEventForm').hide();
+                $form = $('#editResurrectEventForm').show();
+            }
+            else if (eventTypeId === lifeStory.DEATH_EVENT)
+            {
+                $('#editEventForm, #editResurrectEventForm').hide();
+                $form = $('#editDeathEventForm').show();
+            }
 
-                $form.find('[name=enemyName]').val(''); // Clear out any old values
-                $form.find('[name=creatureCount]').val('');
+            if (eventTypeId === lifeStory.COMBAT_EVENT ||
+                eventTypeId === lifeStory.NON_COMBAT_EVENT)
+            {
+                $('#editResurrectEventForm, #editDeathEventForm').hide();
+                $form = $('#editEventForm').show();
 
+                $form.find('[name=experience]').val(event.experience);
+                $form.find('[name=characterCount]').val(event.characterCount);
+            }
+
+            if (eventTypeId === lifeStory.NON_COMBAT_EVENT ||
+                eventTypeId === lifeStory.RESURRECT_EVENT ||
+                eventTypeId === lifeStory.DEATH_EVENT)
+            {
                 $form.find('[name=eventName]').val(event.eventDetails[0].name);
             }
+
+            $form.find('[name=id]').val(event.id);
+            $form.find('[name=eventType]').val(eventTypeId);
+            $form.find('[name=description]').val(event.description);
         });
     };
 

@@ -269,7 +269,7 @@
         }
     };
 
-    validationLibrary.handleOtherEventForm = function(formId, isResurrectEvent)
+    validationLibrary.handleOtherEventForm = function(formId, isResurrectEvent, isNewEvent)
     {
         var rules =
         {
@@ -297,15 +297,31 @@
             }
         };
 
-        // TODO: Improve messages or remove this comment
-        var successMessage = isResurrectEvent ? 'You\'ve been resurrected successfully.' : 'You died.';
-        var failureMessage = 'Failed to save ' + (isResurrectEvent ? 'resurrection.' : 'death.');
-
-        var callbackData = new lifeStory.CallbackData(formId, 'eventLog', successMessage, failureMessage);
+        var callbackData = new lifeStory.CallbackData(formId, 'eventLog');
         callbackData.isResurrection = isResurrectEvent;
 
-        setupFormValidation(formId, lifeStory.dataAccess.saveOtherEventToDb, rules, messages,
-            callbackData);
+        if (isNewEvent)
+        {
+            // TODO: Improve messages or remove this comment
+            callbackData.successMessage = isResurrectEvent ?
+                'You\'ve been resurrected successfully.' :
+                'You died.';
+            callbackData.failureMessage = 'Failed to save ' +
+                (isResurrectEvent ? 'resurrection.' : 'death.');
+
+            setupFormValidation(formId, lifeStory.dataAccess.saveOtherEventToDb, rules, messages,
+                callbackData);
+        }
+        else
+        {
+            callbackData.successMessage = 'Updated ' +
+                (isResurrectEvent ? 'resurrection' : 'death') + ' event successfully.';
+            callbackData.failureMessage = 'Failed to updated ' +
+                (isResurrectEvent ? 'resurrection' : 'death') + ' event.';
+
+            setupFormValidation(formId, lifeStory.dataAccess.updateOtherEventInDb, rules, messages,
+                callbackData);
+        }
     };
 
 })(window, window.lifeStory, jQuery);
