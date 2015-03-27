@@ -82,11 +82,12 @@
     // Filters the character list to remove deceased characters if the source checkbox is unchecked
     uiLibrary.filterCharacterList = function()
     {
+        localStorage.setItem('showDeceased', this.checked);
+
         var hideDead = !this.checked; // We show when checked, so flip the value
 
         // Add class if hideDead is true, otherwise remove it
         $('#characterList li[data-theme=f]').toggleClass('ui-screen-hidden', hideDead);
-
     };
 
     uiLibrary.refreshDeleteRaceUIState = function ()

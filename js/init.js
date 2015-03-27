@@ -40,9 +40,15 @@ $('#home').one('pageinit', function homePageInit()
     $(this).on('pagebeforeshow', function()
     {
         lifeStory.ui.populateCharacterList('characterList', 'li');
+        $('#showDeceased').trigger('change');
     });
-    
+
     $('#showDeceased').change(lifeStory.ui.filterCharacterList);
+
+    var showDeceasedString = localStorage.getItem('showDeceased');
+    if (showDeceasedString == 'false') {
+        $('#showDeceased').prop('checked', false).checkboxradio('refresh');
+    }
 });
 
 $('#eventLog').one('pageinit', function eventLogPageInit()
