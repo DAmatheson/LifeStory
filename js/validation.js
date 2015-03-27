@@ -6,7 +6,7 @@
  */
 
 // Extend lifeStory with validation functions located under lifeStory.validation
-(function(window, lifeStory, $, undefined)
+(function(lifeStory, $, undefined)
 {
     'use strict';
 
@@ -324,4 +324,4 @@
         }
     };
 
-})(window, window.lifeStory, jQuery);
+})(window.lifeStory, jQuery);

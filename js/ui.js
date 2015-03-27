@@ -6,7 +6,7 @@
  */
 
 // Extend lifeStory with ui functions located under lifeStory.ui
-(function (window, lifeStory, $, undefined)
+(function (lifeStory, $, undefined)
 {
     'use strict';
 
@@ -660,4 +660,4 @@
         });
     };
 
-})(window, window.lifeStory, jQuery);
+})(window.lifeStory, jQuery);

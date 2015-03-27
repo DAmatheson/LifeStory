@@ -6,7 +6,7 @@
  */
 
 // Extend lifeStory with data access functions located under lifeStory.dataAccess
-(function(window, lifeStory, $, undefined)
+(function(window, lifeStory, undefined)
 {
     'use strict';
 
@@ -364,4 +364,4 @@
         lifeStory.db.updateEvent(updatedEvent, updatedEventDetails, successCallback, saveFailure);
     };
     
-})(window, window.lifeStory, jQuery);
+})(window, window.lifeStory);

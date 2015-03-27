@@ -6,7 +6,7 @@
  */
 
 // Extend lifeStory with database functions located under lifeStory.db
-(function(lifeStory, undefined)
+(function(window, lifeStory, undefined)
 {
     'use strict';
 
@@ -935,4 +935,4 @@
         });
     };
 
-})(window.lifeStory);
+})(window, window.lifeStory);

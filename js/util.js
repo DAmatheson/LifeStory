@@ -6,7 +6,7 @@
  */
 
 // Extend lifeStory with utility functions located under lifeStory.util
-(function (window, lifeStory, $, undefined)
+(function (lifeStory, $, undefined)
 {
     'use strict';
 
@@ -36,7 +36,7 @@
         event.id = id;
 
         return event;
-    }
+    };
 
     utilLibrary.createEventDetailsFromInput = function(form, eventTypeId)
     {
@@ -117,7 +117,7 @@
     {
         // TODO: Make this work on both the edit and the create
         return parseInt($('#eventType option:selected').val(), 10) === lifeStory.COMBAT_EVENT;
-    }
+    };
 
     utilLibrary.redirectToPage = function(pageId)
     {
@@ -127,7 +127,7 @@
     utilLibrary.triggerReset = function(formIdToReset)
     {
         $('#' + formIdToReset).trigger('reset');
-    }
+    };
 
     utilLibrary.redirectOnSuccessDialogClose = function(redirectToPageId)
     {
@@ -195,4 +195,4 @@
         return lifeStory.LEVEL_VALUES[level] - xpTotal;
     };
 
-})(window, window.lifeStory, jQuery);
+})(window.lifeStory, jQuery);

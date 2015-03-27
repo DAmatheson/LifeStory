@@ -6,7 +6,7 @@
  */
 
 // Extend lifeStory with model classes located under lifeStory
-(function (window, lifeStory, undefined)
+(function (lifeStory, undefined)
 {
     'use strict';
 
@@ -82,6 +82,6 @@
 
         this.successMessage = successMessage || '';
         this.failureMessage = failureMessage || '';
-    }
+    };
 
-})(window, window.lifeStory);
+})(window.lifeStory);
