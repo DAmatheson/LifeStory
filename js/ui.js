@@ -308,6 +308,7 @@
             }
 
             $listContainer.listview('refresh');
+            $('#showDeceased').trigger('change');
         });
     };
 

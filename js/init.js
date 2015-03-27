@@ -40,7 +40,6 @@ $('#home').one('pageinit', function homePageInit()
     $(this).on('pagebeforeshow', function()
     {
         lifeStory.ui.populateCharacterList('characterList', 'li');
-        $('#showDeceased').trigger('change');
     });
 
     $('#showDeceased').change(lifeStory.ui.filterCharacterList);
