@@ -18,6 +18,7 @@ $(function()
         $('.ui-btn-active:not(.ui-state-persist)').removeClass('ui-btn-active ui-focus');
     });
 
+    // TODO: Actually implement autocomplete
     $('input[type=text]').autocomplete(
     {
         source: []
@@ -30,11 +31,11 @@ $('#settings').one('pageinit', function settingsPageInit()
     {
         window.open('http://www.isaac-west.ca/LifeStory/FAQ', '_system');
     });
+
     $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharactersTable);
     $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
 });
 
-// Initialization stuff for the home page
 $('#home').one('pageinit', function homePageInit()
 {
     $(this).on('pagebeforeshow', function()
@@ -42,12 +43,13 @@ $('#home').one('pageinit', function homePageInit()
         lifeStory.ui.populateCharacterList('characterList', 'li');
     });
 
-    $('#showDeceased').change(lifeStory.ui.filterCharacterList);
-
-    var showDeceasedString = localStorage.getItem('showDeceased');
-    if (showDeceasedString == 'false') {
-        $('#showDeceased').prop('checked', false).checkboxradio('refresh');
+    if (lifeStory.values.showDeceased === 'false')
+    {
+        $('#showDeceased').prop('checked', false).change().checkboxradio('refresh');
     }
+
+    // Hook this up after the initial change since it won't result in a filtered list anyways
+    $('#showDeceased').change(lifeStory.ui.filterCharacterList);
 });
 
 $('#eventLog').one('pageinit', function eventLogPageInit()
@@ -318,6 +320,22 @@ $('#customize').one('pageinit', function customizePageInit()
             else if (value === null)
             {
                 localStorage.removeItem('eventId');
+            }
+        },
+
+        get showDeceased()
+        {
+            return localStorage.getItem('showDeceased');
+        },
+        set showDeceased(value)
+        {
+            if (value !== undefined && value !== null)
+            {
+                localStorage.setItem('showDeceased', value);
+            }
+            else if (value === null)
+            {
+                localStorage.removeItem('showDeceased');
             }
         }
     };

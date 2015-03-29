@@ -82,7 +82,7 @@
     // Filters the character list to remove deceased characters if the source checkbox is unchecked
     uiLibrary.filterCharacterList = function()
     {
-        localStorage.setItem('showDeceased', this.checked);
+        lifeStory.values.showDeceased = this.checked;
 
         var hideDead = !this.checked; // We show when checked, so flip the value
 
@@ -308,7 +308,9 @@
             }
 
             $listContainer.listview('refresh');
-            $('#showDeceased').trigger('change');
+
+            // Manually invoke filterCharacterList with 'this' set to the showDeceased checkbox
+            uiLibrary.filterCharacterList.call($('#showDeceased')[0]);
         });
     };
 
