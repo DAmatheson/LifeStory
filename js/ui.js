@@ -579,7 +579,7 @@
             $detailsTable.find('[data-property=totalXP]').text(Math.floor(character.experience) + ' XP');
             $detailsTable.find('[data-property=nextLevel').text((level + 1));
             $detailsTable.find('[data-property=requiredXP]').text(
-                lifeStory.util.xpToNextLevel(character.experience) + ' XP');
+                lifeStory.util.experienceToNextLevel(character.experience) + ' XP');
 
             $detailsTable.find('[data-property=living]').text(
                 character.living === lifeStory.ALIVE ? 'Alive' : 'Dead');

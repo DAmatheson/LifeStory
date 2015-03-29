@@ -155,6 +155,13 @@
 
     validationLibrary.handleEventForm = function (formId, isNewEventForm)
     {
+        var isNonCombat = function()
+        {
+            // Required because doing 'depends: !lifeStory.util.isCombatEvent' always results in true
+            // as that function is always defined and as a result true
+            return !lifeStory.util.isCombatEvent();
+        }
+
         var rules =
         {
             eventType:
@@ -193,12 +200,12 @@
                 required:
                 {
                     param: true,
-                    depends: !lifeStory.util.isCombatEvent
+                    depends: isNonCombat
                 },
                 maxlength:
                 {
                     param:  30,
-                    depends: !lifeStory.util.isCombatEvent
+                    depends: isNonCombat
                 }
             },
             experience:
