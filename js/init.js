@@ -18,6 +18,8 @@ $(function()
         $('.ui-btn-active:not(.ui-state-persist)').removeClass('ui-btn-active ui-focus');
     });
 
+    //TODO: Fix add event not resetting displayed inputs after form reset
+
     // TODO: Actually implement autocomplete
     $('input[type=text]').autocomplete(
     {

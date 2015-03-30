@@ -251,8 +251,8 @@
             },
             characterCount:
             {
-                required: 'Please enter how many characters shared the XP.',
-                number: 'Character count must be a number.' // TODO: This message needs work
+                required: 'Please enter how many PCs shared the XP.',
+                number: 'This must be a number.'
             }
         };
 
@@ -309,9 +309,8 @@
 
         if (isNewEvent)
         {
-            // TODO: Improve messages or remove this comment
             callbackData.successMessage = isResurrectEvent ?
-                'You\'ve been resurrected successfully.' :
+                'You\'ve been resurrected.' :
                 'You died.';
             callbackData.failureMessage = 'Failed to save ' +
                 (isResurrectEvent ? 'resurrection.' : 'death.');

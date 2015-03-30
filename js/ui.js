@@ -365,7 +365,7 @@
                 }
                 else
                 {
-                    title = event.eventTypeName; // TODO: This shouldn't ever happen so maybe remove
+                    title = event.eventTypeName;
                 }
 
                 $('[data-property=title]', $currentItem).text(title);
@@ -443,7 +443,7 @@
                     typeLabel = 'Defeated:';
                     break;
                 case (lifeStory.NON_COMBAT_EVENT):
-                    typeLabel = 'An Event:'; // TODO: Make a better label for this or remove the todo
+                    typeLabel = 'Event Title:';
                     break;
                 case (lifeStory.RESURRECT_EVENT):
                     typeLabel = 'Resurrected By:';
@@ -454,7 +454,7 @@
             }
 
             $detailsTable.find('[data-property=typeLabel').text(typeLabel);
-            $detailsTable.find('[data-property=eventType]').text(event.eventTypeName); // TODO: Consider changing names in DB to match select list display name for the type
+            $detailsTable.find('[data-property=eventType]').text(event.eventTypeName);
             $detailsTable.find('[data-property=date]').text(event.date);
 
             var names = '';

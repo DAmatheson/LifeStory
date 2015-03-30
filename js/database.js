@@ -174,7 +174,7 @@
             lifeStory.RESURRECT_EVENT, lifeStory.DEATH_EVENT
         ];
 
-        var names = ['Combat', 'Non-Combat', 'Resurrect', 'Death'];
+        var names = ['Combat', 'An Event', 'Resurrect', 'Death'];
 
         names.forEach(function (item, index)
         {
@@ -798,7 +798,7 @@
                     'JOIN eventType et ' +
                         'ON e.eventType_id = et.id ' +
                 'WHERE ce.character_id = ? ' +
-                'ORDER BY date;', // TODO: Decide on sort order
+                'ORDER BY date;',
                 [characterId],
                 function(transaction, resultSet)
                 {
