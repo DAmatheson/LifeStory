@@ -25,6 +25,8 @@ $(function()
     {
         source: []
     });
+
+    $.mobile.defaultPageTransition = 'none';
 });
 
 $('#settings').one('pageinit', function settingsPageInit()
