@@ -342,9 +342,14 @@
                 
                 if (event.eventTypeId === lifeStory.COMBAT_EVENT)
                 {
-                    // TODO: Change to make it a list of all name and creature counts
-                    title = 'Defeated: ' + event.eventDetails[0].creatureCount + ' ' +
-                        event.eventDetails[0].name;
+                    title = 'Defeated: ';
+
+                    event.eventDetails.forEach(function(item)
+                    {
+                        title += item.creatureCount + ' ' + item.name + ', ';
+                    });
+
+                    title = title.slice(0, -2);
                 }
                 else if (event.eventTypeId === lifeStory.NON_COMBAT_EVENT)
                 {

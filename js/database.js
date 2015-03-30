@@ -784,40 +784,32 @@
 
     dbLibrary.getCharactersEvents = function(characterId, callback)
     {
+        var events = [];
+
+        var wrappedCallback = function ()
+        {
+            callback(events);
+        }; 
+
         dbLibrary.getDb().readTransaction(function(tx)
         {
             tx.executeSql(
                 'SELECT e.id AS id, eventType_id, characterCount, date, xp, description, ' +
-                    'et.name AS eventTypeName, ed.name AS eventDetailName, creatureCount ' +
+                    'et.name AS eventTypeName ' +
                 'FROM event e ' +
                     'JOIN characterEvent ce ' +
                         'ON e.id = ce.event_id ' +
                     'JOIN eventType et ' +
                         'ON e.eventType_id = et.id ' +
-                    'JOIN eventDetail ed ' +
-                        'ON e.id = ed.event_id AND ed.id = ' +
-                            '(' +
-                                'SELECT id ' +
-                                'FROM eventDetail ' +
-                                'WHERE event_id = e.id ' +
-                                'ORDER BY id ' +
-                                'LIMIT 1' +
-                            ') ' +
                 'WHERE ce.character_id = ? ' +
                 'ORDER BY date;', // TODO: Decide on sort order
                 [characterId],
                 function(transaction, resultSet)
                 {
-                    var events = [];
-
                     for (var i = 0; i < resultSet.rows.length; i++)
                     {
                         var row = resultSet.rows.item(i);
                         var event = new lifeStory.Event();
-                        var eventDetail = new lifeStory.EventDetail();
-
-                        eventDetail.name = row.eventDetailName;
-                        eventDetail.creatureCount = row.creatureCount;
 
                         event.id = row.id;
                         event.eventTypeId = row.eventType_id;
@@ -826,15 +818,34 @@
                         event.experience = row.xp;
                         event.description = row.description;
                         event.eventTypeName = row.eventTypeName;
-                        event.eventDetails = [eventDetail];
+                        event.eventDetails = [];
+
+                        tx.executeSql(
+                            'SELECT name, creatureCount ' +
+                            'FROM eventDetail ' +
+                            'WHERE event_id = ? ' +
+                            'ORDER BY id;',
+                            [event.id],
+                            function(localEvent, localTransaction, detailResultSet)
+                            {
+                                for (var j = 0; j < detailResultSet.rows.length; j++)
+                                {
+                                    var detailRow = detailResultSet.rows.item(j);
+                                    var eventDetail = new lifeStory.EventDetail();
+
+                                    eventDetail.name = detailRow.name;
+                                    eventDetail.creatureCount = detailRow.creatureCount;
+
+                                    localEvent.eventDetails[j] = eventDetail;
+                                }
+                            }.bind(this, event) // Pass in the current event as the first argument
+                        ); 
 
                         events[i] = event;
                     }
-
-                    callback(events);
                 },
                 sqlErrorHandler);
-        });
+        }, null, wrappedCallback);
     };
 
     dbLibrary.getEvent = function(eventId, callback)
