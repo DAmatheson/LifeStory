@@ -21,9 +21,7 @@
 
     function sqlErrorHandler(transaction, error)
     {
-        // TODO: Consider changing this to use the better alert. Although these are not meant to 
-        // ever be used as they are simply fallback error handlers in case one isn't supplied
-        alert('SQL error: ' + error.message);
+        alert('SQL error: ' + error.message); // Uses default alert to give it more emphasis
         console.error(error.message, error, transaction);
     }
 
@@ -43,9 +41,7 @@
             }
             else
             {
-                // TODO: Consider changing this to use the better alert. Although these are not meant to 
-                // ever be used as they are simply fallback error handlers in case one isn't supplied
-                alert(error.message);
+                alert(error.message); // Uses default alert to give it more emphasis
                 console.error(error.message, error);
             }
 
@@ -210,7 +206,7 @@
             localStorage.setItem('dbInitialized', 'false');
             console.error(error.message, error);
 
-            // TODO: Consider changing this to use the better alert.
+            // Uses default alert to give it more emphasis
             alert('Database Initialization error: ' + error.message);
 
             return true; // Roll back the transaction

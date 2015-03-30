@@ -34,8 +34,8 @@
         ///     Optional. Callback to call if the user declines
         /// </param>
 
-        $('#confirmTitle').html(title);
-        $('#confirmMessage').html(message);
+        $('#confirmTitle').text(title);
+        $('#confirmMessage').text(message);
         $('#confirmDialog').popup('open');
 
         if (acceptCallback)
@@ -443,7 +443,7 @@
                     typeLabel = 'Defeated:';
                     break;
                 case (lifeStory.NON_COMBAT_EVENT):
-                    typeLabel = 'An Event:'; // TODO:
+                    typeLabel = 'An Event:'; // TODO: Make a better label for this or remove the todo
                     break;
                 case (lifeStory.RESURRECT_EVENT):
                     typeLabel = 'Resurrected By:';
@@ -471,18 +471,15 @@
             if (event.eventTypeId === lifeStory.RESURRECT_EVENT ||
                 event.eventTypeId === lifeStory.DEATH_EVENT)
             {
-                $('#experienceRow').addClass('ui-screen-hidden'); // TODO: Consider changing all of these to .hide and .show
+                $('#experienceRow').addClass('ui-screen-hidden');
                 $('#characterCountRow').addClass('ui-screen-hidden');
-
-                $detailsTable.find('[data-property=experience]').text('');
-                $detailsTable.find('[data-property=characterCount]').text('');
             }
             else
             {
                 $('#experienceRow').removeClass('ui-screen-hidden');
                 $('#characterCountRow').removeClass('ui-screen-hidden');
 
-                $detailsTable.find('[data-property=experience]').text(event.experience + ' XP'); // TODO: Should XP just be perm in the td?
+                $detailsTable.find('[data-property=experience]').text(event.experience);
                 $detailsTable.find('[data-property=characterCount]').text(event.characterCount);
             }
 
@@ -624,9 +621,8 @@
             lifeStory.dataAccess.deleteCharacter(lifeStory.values.characterId);
         };
 
-        uiLibrary.displayConfirmation('Delete ' + lifeStory.values.characterName + '?', // TODO: Security hole as this is used with .html
-            'Are you sure you want to delete ' + lifeStory.values.characterName +
-            '? <strong>This cannot be undone.</strong>',
+        uiLibrary.displayConfirmation('Delete ' + lifeStory.values.characterName + '?',
+            'Are you sure you want to delete ' + lifeStory.values.characterName +'?',
             acceptCallback);
     };
 
@@ -638,7 +634,7 @@
         };
 
         uiLibrary.displayConfirmation('Delete Event?',
-            'Are you sure you want to delete this event? <strong>This cannot be undone.</strong>',
+            'Are you sure you want to delete this event?',
             acceptCallback);
     };
 
@@ -650,8 +646,8 @@
         lifeStory.db.getCharacterCount(function (characterCount)
         {
             uiLibrary.displayConfirmation('Clear Characters?',
-                'Are you sure you want to delete all (' + characterCount + ') characters permanently? ' +
-                '<strong>This cannot be undone.</strong>', lifeStory.db.clearCharacterTable);
+                'Are you sure you want to delete all (' + characterCount + ') characters permanently?',
+                lifeStory.db.clearCharacterTable);
         });
     };
 
@@ -664,8 +660,8 @@
         {
             uiLibrary.displayConfirmation('Delete All Data?',
                 'Are you sure you want to delete all data? This will delete all (' + count + ') ' +
-                'characters, their events, and custom races and classes permanently. ' +
-                '<strong>This cannot be undone.</strong>', lifeStory.db.dropAllTables);
+                'characters, their events, and custom races and classes permanently.',
+                lifeStory.db.dropAllTables);
         });
     };
 

@@ -298,7 +298,7 @@
         if (callbackData.isResurrection)
         {
             event.eventTypeId = lifeStory.RESURRECT_EVENT;
-            lifeStory.values.characterAlive = lifeStory.ALIVE; // TODO: If failure, rollback
+            lifeStory.values.characterAlive = lifeStory.ALIVE; // TODO: If failure, rollback. TODO: This should only change on new record not on update
         }
         else
         {
