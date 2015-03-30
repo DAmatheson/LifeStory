@@ -42,7 +42,9 @@
         {
             $('#confirmAccept').one('tap', function()
             {
-                acceptCallback();
+                // Make this run after all of the event handlers so the dialog is closed first
+                setTimeout(acceptCallback, 0);
+
                 $('#confirmDeny').off('tap');
             });
         }
@@ -51,7 +53,8 @@
         {
             $('#confirmDeny').one('tap', function()
             {
-                denyCallback();
+                // Make this run after all of the event handlers
+                setTimeout(denyCallback, 0);
                 $('#confirmAccept').off('tap');
             });
         }
@@ -616,9 +619,13 @@
     // Confirms the user wants to clear the delete the character. If so, deletes the character.
     uiLibrary.confirmDeleteCharacter = function()
     {
-        var acceptCallback = function()
+        var acceptCallback = function () // TODO: If this made an external function it only needs to be created once
         {
-            lifeStory.dataAccess.deleteCharacter(lifeStory.values.characterId);
+            var callbackData = new lifeStory.CallbackData();
+            callbackData.successMessage = 'The character was deleted successfully.';
+            callbackData.redirectToPageId = 'home';
+
+            lifeStory.dataAccess.deleteCharacter(lifeStory.values.characterId, callbackData);
         };
 
         uiLibrary.displayConfirmation('Delete ' + lifeStory.values.characterName + '?',
@@ -628,9 +635,13 @@
 
     uiLibrary.confirmDeleteEvent = function()
     {
-        var acceptCallback = function()
+        var acceptCallback = function() // TODO: If this made an external function it only needs to be created once
         {
-            lifeStory.dataAccess.deleteEvent(lifeStory.values.eventId);
+            var callbackData = new lifeStory.CallbackData();
+            callbackData.successMessage = 'The event was deleted successfully.';
+            callbackData.redirectToPageId = 'eventLog';
+
+            lifeStory.dataAccess.deleteEvent(lifeStory.values.eventId, callbackData);
         };
 
         uiLibrary.displayConfirmation('Delete Event?',

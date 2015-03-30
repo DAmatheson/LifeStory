@@ -5,7 +5,7 @@
  *      Isaac West, 2015.03.05: Created
  */
 
-$(function()
+$(function docReady()
 {
     // Initialize the popups
     $('#successDialog').popup();

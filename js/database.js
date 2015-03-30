@@ -21,7 +21,7 @@
 
     function sqlErrorHandler(transaction, error)
     {
-        alert('SQL error: ' + error.message); // Uses default alert to give it more emphasis
+        alert('SQL Error: ' + error.message); // Uses default alert to give it more emphasis
         console.error(error.message, error, transaction);
     }
 
@@ -41,7 +41,8 @@
             }
             else
             {
-                alert(error.message); // Uses default alert to give it more emphasis
+                // Uses default alert to give it more emphasis
+                alert('SQL Transaction Error: ' + error.message);
                 console.error(error.message, error);
             }
 
