@@ -18,8 +18,6 @@ $(function()
         $('.ui-btn-active:not(.ui-state-persist)').removeClass('ui-btn-active ui-focus');
     });
 
-    //TODO: Fix add event not resetting displayed inputs after form reset
-
     // TODO: Actually implement autocomplete
     $('input[type=text]').autocomplete(
     {
@@ -112,6 +110,11 @@ $('#createEvent').one('pageinit', function createEventPageInit()
 {
     lifeStory.validation.handleEventForm('createEventForm', true);
     $('#removeEnemy').closest('.ui-btn').hide();
+
+    $('#createEventForm').on('reset', function()
+    {
+        lifeStory.ui.showCombatDetailInputs();
+    });
 
     $('#eventType').on('change', function ()
     {
