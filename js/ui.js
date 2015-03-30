@@ -67,7 +67,7 @@
         /// </summary>
         /// <param name="message" type="string">Success message to display</param>
 
-        $('#successMessage').html(message);
+        $('#successMessage').text(message);
         $('#successDialog').popup('open');
     };
 
@@ -78,7 +78,7 @@
         /// </summary>
         /// <param name="message" type="string">Error message to display</param>
 
-        $('#errorMessage').html(message);
+        $('#errorMessage').text(message);
         $('#errorDialog').popup('open');
     };
 

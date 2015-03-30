@@ -69,8 +69,8 @@
 
     dataAccessLibrary.saveRaceToDb = function (form, callbackData)
     {
-        var saveSuccess = saveRaceSuccess.bind(this, callbackData);
-        var saveFailure = dbFailure.bind(this, callbackData.failureMessage);
+        var saveSuccess = saveRaceSuccess.bind(null, callbackData);
+        var saveFailure = dbFailure.bind(null, callbackData.failureMessage);
 
         lifeStory.db.addRace(lifeStory.util.createRaceFromInput(form), saveSuccess, saveFailure);
     };
@@ -93,7 +93,7 @@
     // Attempts to delete the race identified by raceId and displays a message of the outcome
     dataAccessLibrary.deleteRace = function(raceId)
     {
-        var deleteFailure = dbFailure.bind(this, 'Failed to delete the race.');
+        var deleteFailure = dbFailure.bind(null, 'Failed to delete the race.');
 
         lifeStory.db.deleteRace(raceId, deleteRaceSuccess, deleteFailure);
     };
@@ -117,8 +117,8 @@
     // Gets the form data and calls db.addClass
     dataAccessLibrary.saveClassToDb = function (form, callbackData)
     {
-        var saveSuccess = saveClassSuccess.bind(this, callbackData);
-        var saveFailure = dbFailure.bind(this, callbackData.failureMessage);
+        var saveSuccess = saveClassSuccess.bind(null, callbackData);
+        var saveFailure = dbFailure.bind(null, callbackData.failureMessage);
 
         lifeStory.db.addClass(lifeStory.util.createClassFromInput(form), saveSuccess, saveFailure);
     };
@@ -141,7 +141,7 @@
     // Attempts to delete the class identified by classId and displays a message of the outcome
     dataAccessLibrary.deleteClass = function(classId)
     {
-        var deleteFailure = dbFailure.bind(this, 'Failed to delete the class.');
+        var deleteFailure = dbFailure.bind(null, 'Failed to delete the class.');
 
         lifeStory.db.deleteClass(classId, deleteClassSuccess, deleteFailure);
     };
@@ -155,8 +155,8 @@
 
     dataAccessLibrary.saveCharacterToDb = function (form, callbackData)
     {
-        var saveSuccess = saveCharacterSuccess.bind(this, callbackData);
-        var saveFailure = dbFailure.bind(this, callbackData.failureMessage);
+        var saveSuccess = saveCharacterSuccess.bind(null, callbackData);
+        var saveFailure = dbFailure.bind(null, callbackData.failureMessage);
 
         var newCharacter = lifeStory.util.createCharacterFromInput(form);
         lifeStory.values.characterName = newCharacter.name;
@@ -167,8 +167,8 @@
 
     dataAccessLibrary.updateCharacterInDb = function (form, callbackData)
     {
-        var updateSuccess = genericSuccessCallback.bind(this, callbackData);
-        var updateFailure = dbFailure.bind(this, callbackData.failureMessage);
+        var updateSuccess = genericSuccessCallback.bind(null, callbackData);
+        var updateFailure = dbFailure.bind(null, callbackData.failureMessage);
 
         var updatedCharacter = lifeStory.util.createCharacterFromInput(form);
         lifeStory.values.characterName = updatedCharacter.name;
@@ -190,16 +190,16 @@
     // Attempts to delete the character identified by characterId and displays a message of the outcome
     dataAccessLibrary.deleteCharacter = function(characterId, callbackData)
     {
-        var deleteSuccess = deleteCharacterSuccess.bind(this, callbackData);
-        var deleteFailure = dbFailure.bind(this, 'Failed to delete the character.');
+        var deleteSuccess = deleteCharacterSuccess.bind(null, callbackData);
+        var deleteFailure = dbFailure.bind(null, 'Failed to delete the character.');
 
         lifeStory.db.deleteCharacter(characterId, deleteSuccess, deleteFailure);
     };
 
     dataAccessLibrary.saveEventToDb = function(form, callbackData)
     {
-        var saveSuccess = genericSuccessCallback.bind(this, callbackData);
-        var saveFailure = dbFailure.bind(this, callbackData.failureMessage);
+        var saveSuccess = genericSuccessCallback.bind(null, callbackData);
+        var saveFailure = dbFailure.bind(null, callbackData.failureMessage);
 
         var newEvent = lifeStory.util.createEventFromInput(form);
         var newEventDetails = lifeStory.util.createEventDetailsFromInput(form, newEvent.eventTypeId);
@@ -210,8 +210,8 @@
 
     dataAccessLibrary.updateEventInDb = function(form, callbackData)
     {
-        var saveSuccess = genericSuccessCallback.bind(callbackData);
-        var saveFailure = dbFailure.bind(this, callbackData.failureMessage);
+        var saveSuccess = genericSuccessCallback.bind(null, callbackData);
+        var saveFailure = dbFailure.bind(null, callbackData.failureMessage);
 
         var event = lifeStory.util.createEventFromInput(form);
         var eventDetails = lifeStory.util.createEventDetailsFromInput(form, event.eventTypeId);
@@ -230,8 +230,8 @@
     // Attempts to delete the character identified by eventId and displays a message of the outcome
     dataAccessLibrary.deleteEvent = function(eventId, callbackData)
     {
-        var deleteSuccess = deleteEventSuccess.bind(this, callbackData);
-        var deleteFailure = dbFailure.bind(this, 'Failed to delete the event.');
+        var deleteSuccess = deleteEventSuccess.bind(null, callbackData);
+        var deleteFailure = dbFailure.bind(null, 'Failed to delete the event.');
         var characterId = lifeStory.values.characterId;
 
         lifeStory.db.deleteEvent(eventId, characterId, deleteSuccess, deleteFailure);
@@ -246,8 +246,8 @@
 
     function prepareOtherEventData(form, callbackData)
     {
-        var successCallback = otherEventSuccess.bind(this, callbackData);
-        var saveFailure = dbFailure.bind(this, callbackData.failureMessage);
+        var successCallback = otherEventSuccess.bind(null, callbackData);
+        var saveFailure = dbFailure.bind(null, callbackData.failureMessage);
 
         var event = lifeStory.util.createEventFromInput(form);
 
@@ -289,7 +289,7 @@
             ? lifeStory.ALIVE
             : lifeStory.DEAD;
 
-        var saveSuccess = data.successCallback.bind(this, newAliveStatus);
+        var saveSuccess = data.successCallback.bind(null, newAliveStatus);
         var saveFailure = data.failureCallback;
 
         var newEvent = data.event;

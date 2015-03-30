@@ -835,7 +835,7 @@
 
                                     localEvent.eventDetails[j] = eventDetail;
                                 }
-                            }.bind(this, event) // Pass in the current event as the first argument
+                            }.bind(null, event) // Pass in the current event as the first argument
                         ); 
 
                         events[i] = event;
