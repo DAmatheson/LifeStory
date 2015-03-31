@@ -616,37 +616,37 @@
         });
     };
 
+    function deleteCharacterAccepted()
+    {
+        var callbackData = new lifeStory.CallbackData();
+        callbackData.successMessage = 'The character was deleted successfully.';
+        callbackData.redirectToPageId = 'home';
+
+        lifeStory.dataAccess.deleteCharacter(lifeStory.values.characterId, callbackData);
+    }
+
     // Confirms the user wants to clear the delete the character. If so, deletes the character.
     uiLibrary.confirmDeleteCharacter = function()
     {
-        var acceptCallback = function () // TODO: If this made an external function it only needs to be created once
-        {
-            var callbackData = new lifeStory.CallbackData();
-            callbackData.successMessage = 'The character was deleted successfully.';
-            callbackData.redirectToPageId = 'home';
-
-            lifeStory.dataAccess.deleteCharacter(lifeStory.values.characterId, callbackData);
-        };
-
         uiLibrary.displayConfirmation('Delete ' + lifeStory.values.characterName + '?',
             'Are you sure you want to delete ' + lifeStory.values.characterName +'?',
-            acceptCallback);
+            deleteCharacterAccepted);
     };
+
+    function deleteEventAccepted()
+    {
+        var callbackData = new lifeStory.CallbackData();
+        callbackData.successMessage = 'The event was deleted successfully.';
+        callbackData.redirectToPageId = 'eventLog';
+
+        lifeStory.dataAccess.deleteEvent(lifeStory.values.eventId, callbackData);
+    }
 
     uiLibrary.confirmDeleteEvent = function()
     {
-        var acceptCallback = function() // TODO: If this made an external function it only needs to be created once
-        {
-            var callbackData = new lifeStory.CallbackData();
-            callbackData.successMessage = 'The event was deleted successfully.';
-            callbackData.redirectToPageId = 'eventLog';
-
-            lifeStory.dataAccess.deleteEvent(lifeStory.values.eventId, callbackData);
-        };
-
         uiLibrary.displayConfirmation('Delete Event?',
             'Are you sure you want to delete this event?',
-            acceptCallback);
+            deleteEventAccepted);
     };
 
     // Confirms the user wants to clear the character table. If so, clears the table.
