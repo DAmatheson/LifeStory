@@ -43,7 +43,7 @@
             $('#confirmAccept').one('tap', function()
             {
                 // Make this run after all of the event handlers so the dialog is closed first
-                setTimeout(acceptCallback, 0);
+                setTimeout(acceptCallback, 50);
 
                 $('#confirmDeny').off('tap');
             });
@@ -54,7 +54,7 @@
             $('#confirmDeny').one('tap', function()
             {
                 // Make this run after all of the event handlers
-                setTimeout(denyCallback, 0);
+                setTimeout(denyCallback, 50);
                 $('#confirmAccept').off('tap');
             });
         }
