@@ -626,17 +626,28 @@
         });
     };
 
-    uiLibrary.populateAutocomplete = function(pageSelector)
+    uiLibrary.populateEventAutocomplete = function(pageId)
     {
         lifeStory.db.getEventTitles(function(combatTitles, eventTitles)
         {
-            $('#' + pageSelector + ' input[name=enemyName]').autocomplete(
+            $('#' + pageId + ' input[name=enemyName]').autocomplete(
             {
                 source: combatTitles
             });
-            $('#' + pageSelector + ' input[name=eventName]').autocomplete(
+            $('#' + pageId + ' input[name=eventName]').autocomplete(
             {
                 source: eventTitles
+            });
+        });
+    };
+
+    uiLibrary.populateDeathAutocomplete = function()
+    {
+        lifeStory.db.getEventTitles(function (combatTitles, eventTitles)
+        {
+            $('#causeOfDeath').autocomplete(
+            {
+                source: combatTitles
             });
         });
     };

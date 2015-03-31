@@ -103,7 +103,7 @@ $('#createEvent').one('pageinit', function createEventPageInit()
     $('#removeEnemy').closest('.ui-btn').hide();
 
     $(this).on('pagebeforeshow', function () {
-        lifeStory.ui.populateAutocomplete($(this).prop('id'));
+        lifeStory.ui.populateEventAutocomplete($(this).prop('id'));
     });
 
     $('#createEventForm').on('reset', function()
@@ -164,7 +164,7 @@ $('#editEvent').one('pageinit', function createEventPageInit()
     {
         lifeStory.ui.removeInputSet(extraInputsSelector, removeButtonSelector);
         lifeStory.ui.populateEventEdit(appendToSelector, templateElementId, removeButtonSelector);
-        lifeStory.ui.populateAutocomplete($(this).prop('id'));
+        lifeStory.ui.populateEventAutocomplete($(this).prop('id'));
     });
 
     $('#editAddEnemy').on('tap', function ()
@@ -195,6 +195,7 @@ $('#resurrectEvent').one('pageinit', function resurrectEventPageInit()
 $('#deathEvent').one('pageinit', function deathEventPageInit()
 {
     lifeStory.validation.handleOtherEventForm('deathEventForm', false, true);
+    lifeStory.ui.populateDeathAutocomplete();
 });
 
 $('#customize').one('pageinit', function customizePageInit()
