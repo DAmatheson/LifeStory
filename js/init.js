@@ -18,12 +18,6 @@ $(function docReady()
         $('.ui-btn-active:not(.ui-state-persist)').removeClass('ui-btn-active ui-focus');
     });
 
-    // TODO: Actually implement autocomplete
-    $('input[type=text]').autocomplete(
-    {
-        source: []
-    });
-
     $.mobile.defaultPageTransition = 'none';
 });
 
@@ -108,6 +102,10 @@ $('#createEvent').one('pageinit', function createEventPageInit()
     lifeStory.validation.handleEventForm('createEventForm', true);
     $('#removeEnemy').closest('.ui-btn').hide();
 
+    $(this).on('pagebeforeshow', function () {
+        lifeStory.ui.populateAutocomplete($(this).prop('id'));
+    });
+
     $('#createEventForm').on('reset', function()
     {
         lifeStory.ui.showCombatDetailInputs();
@@ -166,6 +164,7 @@ $('#editEvent').one('pageinit', function createEventPageInit()
     {
         lifeStory.ui.removeInputSet(extraInputsSelector, removeButtonSelector);
         lifeStory.ui.populateEventEdit(appendToSelector, templateElementId, removeButtonSelector);
+        lifeStory.ui.populateAutocomplete($(this).prop('id'));
     });
 
     $('#editAddEnemy').on('tap', function ()

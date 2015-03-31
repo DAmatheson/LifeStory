@@ -905,6 +905,42 @@
         }, null, wrappedCallback);
     };
 
+    dbLibrary.getEventTitles = function(callback)
+    {
+        var combatTitles = [];
+        var eventTitles = [];
+
+        var wrappedCallback = function () {
+            callback(combatTitles, eventTitles);
+        };
+
+        dbLibrary.getDb().readTransaction(function(tx)
+        {
+            tx.executeSql(
+                'SELECT DISTINCT name, eventType_id ' +
+                'FROM eventDetail ed JOIN event e ' +
+                    'ON ed.event_id = e.id;',
+                [],
+                function (transaction, resultSet)
+                {
+                    for (var i = 0; i < resultSet.rows.length; i++)
+                    {
+                        var row = resultSet.rows.item(i);
+
+                        if (row.eventType_id === lifeStory.COMBAT_EVENT)
+                        {
+                            combatTitles.push(row.name);
+                        }
+                        else if (row.eventType_id === lifeStory.NON_COMBAT_EVENT)
+                        {
+                            eventTitles.push(row.name);
+                        }
+                    }
+                },
+                sqlErrorHandler);
+        }, null, wrappedCallback);
+    };
+
     // Clears the character, characterEvent, event, and eventDetail tables
     dbLibrary.clearCharacterTable = function clearCharacterTable()
     {

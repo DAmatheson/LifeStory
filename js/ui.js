@@ -231,6 +231,10 @@
             $(removeButtonSelector).closest('.ui-btn').show();
         }
 
+        // Use the autocomplete source already on the first input to avoid accessing the db again
+        var autocompleteTitles = $('#' + templateElementId + 
+            ' input[name=enemyName]:first-child').autocomplete("option", "source");
+
         $(appendToSelector).after(
             $('#' + templateElementId).
                 clone().
@@ -238,7 +242,13 @@
                 find('label').remove(). // Find and remove the labels
                 end(). // Collapse the jQuery object down to keep only the remaining elements
                 find('input').removeAttr('id').val(''). // Find the inputs and remove their ids and values
-                end() // Collapse the jQuery object down again
+                end(). // Collapse the jQuery object down again
+                find('input[name=enemyName]'). // Find the new enemy name input
+                autocomplete(
+                {
+                    source: autocompleteTitles // Give the new input the same autocomplete as the first one
+                }).
+                end() // Collapse the new input fields down
         );
     };
 
@@ -613,6 +623,21 @@
             $form.find('[name=raceId]').val(character.raceId).selectmenu('refresh');
             $form.find('[name=classId]').val(character.classId).selectmenu('refresh');
             $form.find('[name=details]').val(character.details);
+        });
+    };
+
+    uiLibrary.populateAutocomplete = function(pageSelector)
+    {
+        lifeStory.db.getEventTitles(function(combatTitles, eventTitles)
+        {
+            $('#' + pageSelector + ' input[name=enemyName]').autocomplete(
+            {
+                source: combatTitles
+            });
+            $('#' + pageSelector + ' input[name=eventName]').autocomplete(
+            {
+                source: eventTitles
+            });
         });
     };
 
