@@ -103,7 +103,7 @@ $('#createEvent').one('pageinit', function createEventPageInit()
     $('#removeEnemy').closest('.ui-btn').hide();
 
     $(this).on('pagebeforeshow', function () {
-        lifeStory.ui.populateEventAutocomplete($(this).prop('id'));
+        lifeStory.ui.populateEventAutocomplete('enemyName', 'eventName');
     });
 
     $('#createEventForm').on('reset', function()
@@ -164,7 +164,8 @@ $('#editEvent').one('pageinit', function createEventPageInit()
     {
         lifeStory.ui.removeInputSet(extraInputsSelector, removeButtonSelector);
         lifeStory.ui.populateEventEdit(appendToSelector, templateElementId, removeButtonSelector);
-        lifeStory.ui.populateEventAutocomplete($(this).prop('id'));
+        lifeStory.ui.populateEventAutocomplete('editEnemyName', 'editEventName');
+        lifeStory.ui.populateDeathAutocomplete('editCauseOfDeath'); // TODO: ^ + this cause 2 DB queries so it could be better.
     });
 
     $('#editAddEnemy').on('tap', function ()
@@ -195,7 +196,7 @@ $('#resurrectEvent').one('pageinit', function resurrectEventPageInit()
 $('#deathEvent').one('pageinit', function deathEventPageInit()
 {
     lifeStory.validation.handleOtherEventForm('deathEventForm', false, true);
-    lifeStory.ui.populateDeathAutocomplete();
+    lifeStory.ui.populateDeathAutocomplete('causeOfDeath');
 });
 
 $('#customize').one('pageinit', function customizePageInit()

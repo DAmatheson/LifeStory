@@ -233,7 +233,7 @@
 
         // Use the autocomplete source already on the first input to avoid accessing the db again
         var autocompleteTitles = $('#' + templateElementId + 
-            ' input[name=enemyName]:first-child').autocomplete("option", "source");
+            ' input[name=enemyName]:first-child').autocomplete('option', 'source');
 
         $(appendToSelector).after(
             $('#' + templateElementId).
@@ -626,26 +626,26 @@
         });
     };
 
-    uiLibrary.populateEventAutocomplete = function(pageId)
+    uiLibrary.populateEventAutocomplete = function(combatInputId, eventInputId)
     {
         lifeStory.db.getEventTitles(function(combatTitles, eventTitles)
         {
-            $('#' + pageId + ' input[name=enemyName]').autocomplete(
+            $('#' + combatInputId).autocomplete(
             {
                 source: combatTitles
             });
-            $('#' + pageId + ' input[name=eventName]').autocomplete(
+            $('#' + eventInputId).autocomplete(
             {
                 source: eventTitles
             });
         });
     };
 
-    uiLibrary.populateDeathAutocomplete = function()
+    uiLibrary.populateDeathAutocomplete = function(causeOfDeathInputId)
     {
-        lifeStory.db.getEventTitles(function (combatTitles, eventTitles)
+        lifeStory.db.getEventTitles(function (combatTitles)
         {
-            $('#causeOfDeath').autocomplete(
+            $('#' + causeOfDeathInputId).autocomplete(
             {
                 source: combatTitles
             });

@@ -907,13 +907,6 @@
 
     dbLibrary.getEventTitles = function(callback)
     {
-        var combatTitles = [];
-        var eventTitles = [];
-
-        var wrappedCallback = function () {
-            callback(combatTitles, eventTitles);
-        };
-
         dbLibrary.getDb().readTransaction(function(tx)
         {
             tx.executeSql(
@@ -923,6 +916,9 @@
                 [],
                 function (transaction, resultSet)
                 {
+                    var combatTitles = [];
+                    var eventTitles = [];
+
                     for (var i = 0; i < resultSet.rows.length; i++)
                     {
                         var row = resultSet.rows.item(i);
@@ -936,9 +932,11 @@
                             eventTitles.push(row.name);
                         }
                     }
+
+                    callback(combatTitles, eventTitles);
                 },
                 sqlErrorHandler);
-        }, null, wrappedCallback);
+        });
     };
 
     // Clears the character, characterEvent, event, and eventDetail tables
