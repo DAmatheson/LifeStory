@@ -905,35 +905,47 @@
         }, null, wrappedCallback);
     };
 
-    dbLibrary.getEventTitles = function(callback)
+    dbLibrary.getEventTitles = function(eventTypeIds, callback)
     {
+        var inParameterList = '';
+        eventTypeIds.forEach(function()
+        {
+            inParameterList += (inParameterList === '' ? '' : ', ') + '?';
+        });
+
         dbLibrary.getDb().readTransaction(function(tx)
         {
             tx.executeSql(
                 'SELECT DISTINCT name, eventType_id ' +
                 'FROM eventDetail ed JOIN event e ' +
-                    'ON ed.event_id = e.id;',
-                [],
+                    'ON ed.event_id = e.id ' +
+                'WHERE eventType_id IN (' + inParameterList + ');',
+                eventTypeIds,
                 function (transaction, resultSet)
                 {
-                    var combatTitles = [];
-                    var eventTitles = [];
+                    var titles = [];
+
+                    eventTypeIds.forEach(function(item)
+                    {
+                        titles[item] = [];
+                    });
 
                     for (var i = 0; i < resultSet.rows.length; i++)
                     {
                         var row = resultSet.rows.item(i);
 
-                        if (row.eventType_id === lifeStory.COMBAT_EVENT)
+                        for (var j = 0; j < eventTypeIds.length; j++)
                         {
-                            combatTitles.push(row.name);
-                        }
-                        else if (row.eventType_id === lifeStory.NON_COMBAT_EVENT)
-                        {
-                            eventTitles.push(row.name);
+                            if (row.eventType_id === eventTypeIds[j])
+                            {
+                                titles[row.eventType_id].push(row.name);
+
+                                break;
+                            }
                         }
                     }
 
-                    callback(combatTitles, eventTitles);
+                    callback(titles);
                 },
                 sqlErrorHandler);
         });

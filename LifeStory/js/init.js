@@ -103,7 +103,7 @@ $('#createEvent').one('pageinit', function createEventPageInit()
     $('#removeEnemy').closest('.ui-btn').hide();
 
     $(this).on('pagebeforeshow', function () {
-        lifeStory.ui.populateEventAutocomplete('enemyName', 'eventName');
+        lifeStory.ui.populateCreateEventAutocomplete();
     });
 
     $('#createEventForm').on('reset', function()
@@ -164,8 +164,6 @@ $('#editEvent').one('pageinit', function createEventPageInit()
     {
         lifeStory.ui.removeInputSet(extraInputsSelector, removeButtonSelector);
         lifeStory.ui.populateEventEdit(appendToSelector, templateElementId, removeButtonSelector);
-        lifeStory.ui.populateEventAutocomplete('editEnemyName', 'editEventName');
-        lifeStory.ui.populateDeathAutocomplete('editCauseOfDeath'); // TODO: ^ + this cause 2 DB queries so it could be better.
     });
 
     $('#editAddEnemy').on('tap', function ()
@@ -190,13 +188,18 @@ $('#resurrectEvent').one('pageinit', function resurrectEventPageInit()
 {
     lifeStory.validation.handleOtherEventForm('resurrectEventForm', true, true);
 
-    $('#resurrectEventForm span[data-property=characterName]').text(lifeStory.values.characterName);
+    $(this).on('pagebeforeshow', function()
+    {
+        lifeStory.ui.populateResurrectAutocomplete();
+        $('#resurrectEventForm span[data-property=characterName]').text(lifeStory.values.characterName);
+    });
 });
 
 $('#deathEvent').one('pageinit', function deathEventPageInit()
 {
     lifeStory.validation.handleOtherEventForm('deathEventForm', false, true);
-    lifeStory.ui.populateDeathAutocomplete('causeOfDeath');
+
+    $(this).on('pagebeforeshow', lifeStory.ui.populateDeathAutocomplete);
 });
 
 $('#customize').one('pageinit', function customizePageInit()

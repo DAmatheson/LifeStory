@@ -509,6 +509,41 @@
         });
     };
 
+    function setupEditEventAutocomplete(eventTypeId)
+    {
+        lifeStory.db.getEventTitles([eventTypeId], function (titles)
+        {
+            if (eventTypeId === lifeStory.COMBAT_EVENT)
+            {
+                $('#editEnemyName').autocomplete(
+                {
+                    source: titles[lifeStory.COMBAT_EVENT]
+                });
+            }
+            else if (eventTypeId === lifeStory.NON_COMBAT_EVENT)
+            {
+                $('#editEventName').autocomplete(
+                {
+                    source: titles[lifeStory.NON_COMBAT_EVENT]
+                });
+            }
+            else if (eventTypeId === lifeStory.RESURRECT_EVENT)
+            {
+                $('#editCauseOfResurrect').autocomplete(
+                {
+                    source: titles[lifeStory.RESURRECT_EVENT]
+                });
+            }
+            else if (eventTypeId === lifeStory.DEATH_EVENT)
+            {
+                $('#editCauseOfDeath').autocomplete(
+                {
+                    source: titles[lifeStory.DEATH_EVENT]
+                });
+            }
+        });
+    }
+
     uiLibrary.populateEventEdit = function(appendToSelector, templateElementId, removeButtonSelector)
     {
         var eventId = lifeStory.values.eventId;
@@ -517,7 +552,9 @@
         {
             var $form;
             var eventTypeId = event.eventTypeId;
-            
+
+            setupEditEventAutocomplete(eventTypeId);
+
             if (eventTypeId === lifeStory.COMBAT_EVENT)
             {
                 uiLibrary.showCombatDetailInputs(true);
@@ -626,28 +663,42 @@
         });
     };
 
-    uiLibrary.populateEventAutocomplete = function(combatInputId, eventInputId)
+    uiLibrary.populateCreateEventAutocomplete = function()
     {
-        lifeStory.db.getEventTitles(function(combatTitles, eventTitles)
+        var eventTypeIds = [lifeStory.COMBAT_EVENT, lifeStory.NON_COMBAT_EVENT];
+
+        lifeStory.db.getEventTitles(eventTypeIds, function(titles)
         {
-            $('#' + combatInputId).autocomplete(
+            $('#enemyName').autocomplete(
             {
-                source: combatTitles
+                source: titles[lifeStory.COMBAT_EVENT]
             });
-            $('#' + eventInputId).autocomplete(
+
+            $('#eventName').autocomplete(
             {
-                source: eventTitles
+                source: titles[lifeStory.NON_COMBAT_EVENT]
             });
         });
     };
 
-    uiLibrary.populateDeathAutocomplete = function(causeOfDeathInputId)
+    uiLibrary.populateDeathAutocomplete = function()
     {
-        lifeStory.db.getEventTitles(function (combatTitles)
+        lifeStory.db.getEventTitles([lifeStory.DEATH_EVENT], function (titles)
         {
-            $('#' + causeOfDeathInputId).autocomplete(
+            $('#causeOfDeath').autocomplete(
             {
-                source: combatTitles
+                source: titles[lifeStory.DEATH_EVENT]
+            });
+        });
+    };
+
+    uiLibrary.populateResurrectAutocomplete = function()
+    {
+        lifeStory.db.getEventTitles([lifeStory.RESURRECT_EVENT], function(titles)
+        {
+            $('#causeOfResurrect').autocomplete(
+            {
+                source: titles[lifeStory.RESURRECT_EVENT]
             });
         });
     };
