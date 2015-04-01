@@ -692,7 +692,7 @@
         // is returned from getCharacterCount if a callback isn't used.
         lifeStory.db.getCharacterCount(function (characterCount)
         {
-            uiLibrary.displayConfirmation('Clear Characters?',
+            uiLibrary.displayConfirmation('Delete Characters?',
                 'Are you sure you want to delete all (' + characterCount + ') characters permanently?',
                 lifeStory.dataAccess.clearCharacterData);
         });
