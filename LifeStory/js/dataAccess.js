@@ -297,7 +297,6 @@
         var newEventDetails = data.eventDetails;
         var characterId = lifeStory.values.characterId;
 
-
         lifeStory.db.addEvent(newEvent, newEventDetails, characterId, saveSuccess, saveFailure);
     };
 

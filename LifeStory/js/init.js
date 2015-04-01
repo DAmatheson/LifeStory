@@ -30,7 +30,7 @@ $('#home').one('pageinit', function homePageInit()
         lifeStory.ui.populateCharacterList('characterList', 'li');
     });
 
-    if (lifeStory.values.showDeceased === 'false')
+    if (!lifeStory.values.showDeceased)
     {
         $('#showDeceased').prop('checked', false).change().checkboxradio('refresh');
     }
@@ -288,8 +288,8 @@ $('#settings').one('pageinit', function settingsPageInit()
     {
         get characterId()
         {
-            /// <summary>Gets the character Id for the current context of the app</summary> // TODO: Consider parse into int here
-            return localStorage.getItem('characterId');
+            /// <summary>Gets the character Id for the current context of the app</summary>
+            return parseInt(localStorage.getItem('characterId'), 10);
         },
         set characterId(value)
         {
@@ -332,8 +332,8 @@ $('#settings').one('pageinit', function settingsPageInit()
 
         get characterAlive()
         {
-            /// <summary>Gets the character living status for the current context of the app</summary> // TODO: Consider parse into int here
-            return localStorage.getItem('characterAlive');
+            /// <summary>Gets the character living status for the current context of the app</summary>
+            return parseInt(localStorage.getItem('characterAlive'), 10);
         },
         set characterAlive(value)
         {
@@ -354,8 +354,8 @@ $('#settings').one('pageinit', function settingsPageInit()
 
         get eventId()
         {
-            /// <summary>Gets the current event id for the current context of the app</summary> // TODO: Consider parsing into int here
-            return localStorage.getItem('eventId');
+            /// <summary>Gets the current event id for the current context of the app</summary>
+            return parseInt(localStorage.getItem('eventId'), 10);
         },
         set eventId(value)
         {
@@ -376,8 +376,8 @@ $('#settings').one('pageinit', function settingsPageInit()
 
         get showDeceased()
         {
-            /// <summary>Gets the current showDeceased filter status for the app</summary> // TODO: Consider parse into bool here
-            return localStorage.getItem('showDeceased');
+            /// <summary>Gets the current showDeceased filter status for the app</summary>
+            return localStorage.getItem('showDeceased') === 'true';
         },
         set showDeceased(value)
         {
