@@ -194,23 +194,25 @@
             throw 'The entries in the data argument for populateSelectList must be instances ' +
                 'of lifeStory.SelectEntry';
         }
-        // TODO: Security issue again
-        var text = '';
+
+        $('#' + selectElementId).children().remove().end();
+
+        var $option = $('<option></option>');
 
         for (var i = 0; i < data.length; i++)
         {
-            text += '<option value="' + data[i].key + '">' + data[i].value + '</option>';
+            var currentOption = $option.clone();
+            currentOption.val(data[i].key).text(data[i].value);
+
+            $('#' + selectElementId).append(currentOption);
         }
 
         if (data.length === 0)
         {
-            text = '<option disabled>-- No Races Created --</option>';
+            $('#' + selectElementId).append('<option disabled>-- No Races Created --</option>');
         }
 
-        $('#' + selectElementId).
-            children().remove().end().
-            append(text).
-            selectmenu('refresh');
+        $('#' + selectElementId).selectmenu('refresh');
     };
 
     uiLibrary.populateClassList = function(classListId, populationCompleteCallback)
