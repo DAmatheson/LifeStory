@@ -50,6 +50,12 @@ namespace EndToEndTests
             }
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            ((IJavaScriptExecutor) driver).ExecuteScript("lifeStory.db.dropAllTables(); localStorage.clear();");
+        }
+
         [Test]
         public void View_EmptyDatabase_ShowsAddCharacterItem()
         {
