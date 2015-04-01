@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* CharacterTests.cs
+ * Purpose: Selenium/NUnit end to end tests for LifeStory
+ * 
+ * Revision History:
+ *      Drew Matheson, 2015.03.30: Created
+ */ 
+
+using System;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -14,8 +21,7 @@ namespace EndToEndTests
             {
                 var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
 
-
-                wait.Until( drv => drv.FindElement(bySelector) );
+                wait.Until(drv => drv.FindElement(bySelector));
             }
 
             return driver.FindElement(bySelector);
@@ -27,6 +33,12 @@ namespace EndToEndTests
     {
         private IWebDriver driver;
         private string baseURL;
+
+        private void ClearData()
+        {
+            ((IJavaScriptExecutor) driver).ExecuteScript(
+                "lifeStory.db.dropAllTables(); localStorage.clear();");
+        }
 
         [TestFixtureSetUp]
         public void StartUp()
@@ -46,14 +58,8 @@ namespace EndToEndTests
             }
             catch (Exception)
             {
-                // Don't care that the chrome window wasn't closed
+                // Don't care that the chrome window and driver weren't closed
             }
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            ((IJavaScriptExecutor) driver).ExecuteScript("lifeStory.db.dropAllTables(); localStorage.clear();");
         }
 
         [Test]
@@ -83,7 +89,8 @@ namespace EndToEndTests
         {
             driver.Navigate().GoToUrl(baseURL + "#createCharacter");
 
-            driver.FindElement(By.CssSelector("#createCharacter #characterName")).SendKeys("Test Character");
+            driver.FindElement(By.CssSelector("#createCharacter #characterName")).
+                SendKeys("Test Character");
             driver.FindElement(By.CssSelector("#createCharacter #details")).SendKeys("Test Details.");
             driver.FindElement(By.CssSelector("#createCharacter button:last-of-type")).Click();
 
@@ -96,6 +103,8 @@ namespace EndToEndTests
 
             Assert.That(testCharacterItem.Text, Is.StringContaining("Test Character").IgnoreCase);
             Assert.That(testCharacterItem.GetAttribute("href"), Is.EqualTo(baseURL + "#eventLog"));
+
+            ClearData();
         }
     }
 }
