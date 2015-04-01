@@ -33,6 +33,8 @@ namespace EndToEndTests
         {
             baseURL = "http://localhost:6632/";
             driver = new ChromeDriver();
+
+            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(5));
         }
 
         [TestFixtureTearDown]
@@ -54,9 +56,10 @@ namespace EndToEndTests
             driver.Navigate().GoToUrl(baseURL);
 
             IWebElement addCharacterItem = driver.FindElement(
-                By.CssSelector("#characterList>li:not(.ui-screen-hidden) a"), 2);
+                By.CssSelector("#characterList>li:not(.ui-screen-hidden) a"));
 
             Assert.That(addCharacterItem.Text, Is.EqualTo("Add a Character").IgnoreCase);
+            Assert.That(addCharacterItem.GetAttribute("href"), Is.EqualTo(baseURL + "#createCharacter"));
         }
 
         [Test]
@@ -64,9 +67,29 @@ namespace EndToEndTests
         {
             driver.Navigate().GoToUrl(baseURL);
 
-            driver.FindElement(By.CssSelector("#home div[data-role=content]>div.right>a"), 2).Click();
+            driver.FindElement(By.CssSelector("#home div.right>a[href='#createCharacter'")).Click();
 
             Assert.That(driver.Url, Is.StringContaining("#createCharacter"));
+        }
+
+        [Test]
+        public void NewCharacterForm_ValidData_CharacterDisplayedOnHomePage()
+        {
+            driver.Navigate().GoToUrl(baseURL + "#createCharacter");
+
+            driver.FindElement(By.CssSelector("#createCharacter #characterName")).SendKeys("Test Character");
+            driver.FindElement(By.CssSelector("#createCharacter #details")).SendKeys("Test Details.");
+            driver.FindElement(By.CssSelector("#createCharacter button:last-of-type")).Click();
+
+            driver.FindElement(By.CssSelector("#successDialog-popup.ui-popup-active #successBtn")).Click();
+
+            driver.Navigate().GoToUrl(baseURL);
+
+            IWebElement testCharacterItem = driver.FindElement(
+                By.CssSelector("#characterList>li:not(.ui-screen-hidden) a"));
+
+            Assert.That(testCharacterItem.Text, Is.StringContaining("Test Character").IgnoreCase);
+            Assert.That(testCharacterItem.GetAttribute("href"), Is.EqualTo(baseURL + "#eventLog"));
         }
     }
 }
