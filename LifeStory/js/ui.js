@@ -616,9 +616,20 @@
         /// <summary>
         ///     Sets up autocomplete for the edit events page for non combat, resurrect, and death events
         /// </summary>
-        /// <param name="eventTypeId" type="number">the eventType Id for the event type</param>
+        /// <param name="eventTypeId" type="number">The eventType Id for the event type</param>
 
-        lifeStory.db.getEventTitles([eventTypeId], function (titles)
+        var eventTypeIds = [];
+
+        if (eventTypeId === lifeStory.DEATH_EVENT)
+        {
+            eventTypeIds = [eventTypeId, lifeStory.COMBAT_EVENT];
+        }
+        else
+        {
+            eventTypeIds = [eventTypeId];
+        }
+
+        lifeStory.db.getEventTitles(eventTypeIds, function (titles)
         {
             if (eventTypeId === lifeStory.NON_COMBAT_EVENT)
             {
@@ -638,7 +649,7 @@
             {
                 $('#editCauseOfDeath').autocomplete(
                 {
-                    source: titles[lifeStory.DEATH_EVENT]
+                    source: titles[lifeStory.DEATH_EVENT].concat(titles[lifeStory.COMBAT_EVENT])
                 });
             }
         });
@@ -815,11 +826,11 @@
         ///     Populates the autocomplete data for the create death event form
         /// </summary>
 
-        lifeStory.db.getEventTitles([lifeStory.DEATH_EVENT], function (titles)
+        lifeStory.db.getEventTitles([lifeStory.DEATH_EVENT, lifeStory.COMBAT_EVENT], function (titles)
         {
             $('#causeOfDeath').autocomplete(
             {
-                source: titles[lifeStory.DEATH_EVENT]
+                source: titles[lifeStory.DEATH_EVENT].concat(titles[lifeStory.COMBAT_EVENT])
             });
         });
     };
