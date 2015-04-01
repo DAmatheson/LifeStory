@@ -78,7 +78,7 @@
                 'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
                 'race_id INTEGER, ' +
                 'class_id INTEGER, ' +
-                'name VARCHAR(50) NOT NULL, ' + // TODO: Decide on max length, update validation to match
+                'name VARCHAR(50) NOT NULL, ' +
                 'living BOOLEAN NOT NULL DEFAULT 1,' +
                 'details TEXT, ' +
                 'FOREIGN KEY (race_id) REFERENCES race (id),' +

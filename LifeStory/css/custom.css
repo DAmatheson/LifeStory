@@ -96,9 +96,9 @@ img {
      max-width: 100%;
 }
 
-h2[data-property="characterName"] {
+h2.left[data-property="characterName"] {
     font-size: 1.4em;
-    max-width: 64%;
+    max-width: 60%;
     overflow: hidden;
     word-wrap: break-word;
 }
