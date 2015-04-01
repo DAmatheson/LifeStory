@@ -321,5 +321,31 @@
 
         lifeStory.db.updateEvent(updatedEvent, updatedEventDetails, updateSuccess, updateFailure);
     };
-    
+
+    function clearDataSuccess(successMessage)
+    {
+        lifeStory.values.characterId = null;
+        lifeStory.values.characterAlive = null;
+        lifeStory.values.characterName = null;
+        lifeStory.values.eventId = null;
+
+        lifeStory.ui.displaySuccessMessage(successMessage);
+    }
+
+    dataAccessLibrary.clearCharacterData = function ()
+    {
+        var clearSuccess = clearDataSuccess.bind(null, 'All characters deleted successfully.');
+        var clearFailure = dbFailure.bind(null, 'Failed to delete all characters. All character data is still intact.');
+
+        lifeStory.db.clearCharacterData(clearSuccess, clearFailure);
+    };
+
+    dataAccessLibrary.clearDatabase = function()
+    {
+        var clearSuccess = clearDataSuccess.bind(null, 'All data deleted successfully.');
+        var clearFailure = dbFailure.bind(null, 'Failed to delete all data. All data is still intact.');
+
+        lifeStory.db.dropAllTables(clearSuccess, clearFailure);
+    };
+
 })(window, window.lifeStory);

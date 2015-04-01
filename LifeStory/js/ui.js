@@ -685,16 +685,16 @@
             deleteEventAccepted);
     };
 
-    // Confirms the user wants to clear the character table. If so, clears the table.
-    uiLibrary.confirmClearCharactersTable = function ()
+    // Confirms the user wants to clear the character data. If so, clears the table.
+    uiLibrary.confirmClearCharacterData = function ()
     {
         // This must be done this way because the confirm dialog will be shown before a value
         // is returned from getCharacterCount if a callback isn't used.
         lifeStory.db.getCharacterCount(function (characterCount)
         {
-            uiLibrary.displayConfirmation('Clear Characters?',
+            uiLibrary.displayConfirmation('Delete Characters?',
                 'Are you sure you want to delete all (' + characterCount + ') characters permanently?',
-                lifeStory.db.clearCharacterTable);
+                lifeStory.dataAccess.clearCharacterData);
         });
     };
 
@@ -708,7 +708,7 @@
             uiLibrary.displayConfirmation('Delete All Data?',
                 'Are you sure you want to delete all data? This will delete all (' + count + ') ' +
                 'characters, their events, and custom races and classes permanently.',
-                lifeStory.db.dropAllTables);
+                lifeStory.dataAccess.clearDatabase);
         });
     };
 

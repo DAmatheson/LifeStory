@@ -23,7 +23,7 @@ $(function docReady()
 
 $('#settings').one('pageinit', function settingsPageInit()
 {
-    $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharactersTable);
+    $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharacterData);
     $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
 });
 
