@@ -155,7 +155,6 @@ $('#editEvent').one('pageinit', function createEventPageInit()
     lifeStory.validation.handleOtherEventForm('editDeathEventForm');
 
     var removeButtonSelector = '#editRemoveEnemy';
-    // TODO: Consider removing the edit enemy inputs template and just having it be the create template
     var extraInputsSelector = '#editCombatDetailInputs fieldset:not(#editEnemyInputsTemplate)';
     var appendToSelector = '#editCombatDetailInputs fieldset:last';
     var templateElementId = 'editEnemyInputsTemplate';
