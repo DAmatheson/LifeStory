@@ -5,6 +5,7 @@
  *      Isaac West, 2015.03.05: Created
  */
 
+// Initialize things which are application wide 
 $(function docReady()
 {
     // Initialize the popups
@@ -21,12 +22,7 @@ $(function docReady()
     $.mobile.defaultPageTransition = 'none';
 });
 
-$('#settings').one('pageinit', function settingsPageInit()
-{
-    $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharacterData);
-    $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
-});
-
+// Initialize the home page
 $('#home').one('pageinit', function homePageInit()
 {
     $(this).on('pagebeforeshow', function()
@@ -43,6 +39,7 @@ $('#home').one('pageinit', function homePageInit()
     $('#showDeceased').change(lifeStory.ui.filterCharacterList);
 });
 
+// Initialize the event log page
 $('#eventLog').one('pageinit', function eventLogPageInit()
 {
     $(this).on('pagebeforeshow', function ()
@@ -51,6 +48,7 @@ $('#eventLog').one('pageinit', function eventLogPageInit()
     });
 });
 
+// Initialize the character details page
 $('#characterDetails').one('pageinit', function characterDetailsPageInit()
 {
     $(this).on('pagebeforeshow', lifeStory.ui.populateCharacterDetail);
@@ -61,12 +59,14 @@ $('#characterDetails').one('pageinit', function characterDetailsPageInit()
     });
 });
 
+// Initialize the event details page
 $('#eventDetails').one('pageinit', function eventDetailsPageInit()
 {
     $(this).on('pagebeforeshow', lifeStory.ui.populateEventDetail);
     $('#deleteEvent').on('tap', lifeStory.ui.confirmDeleteEvent);
 });
 
+// Initialize the create character page
 $('#createCharacter').one('pageinit', function createCharacterPageInit()
 {
     $(this).on('pagebeforeshow', function()
@@ -77,16 +77,19 @@ $('#createCharacter').one('pageinit', function createCharacterPageInit()
     lifeStory.validation.handleCharacterForm('createCharacterForm', true);
 });
 
+// Initialize the add class page
 $('#addClass').one('pageinit', function addClassPageInit()
 {
     lifeStory.validation.handleClassForm('addClassForm', 'createCharacter');
 });
 
+// Initialize the add race page
 $('#addRace').one('pageinit', function addRacePageInit()
 {
     lifeStory.validation.handleRaceForm('addRaceForm', 'createCharacter');
 });
 
+// Initialize the edit character page
 $('#editCharacter').one('pageinit', function customizePageInit() {
     lifeStory.validation.handleCharacterForm('editCharacterForm');
 
@@ -97,6 +100,7 @@ $('#editCharacter').one('pageinit', function customizePageInit() {
     });
 });
 
+// Initialize the create event page
 $('#createEvent').one('pageinit', function createEventPageInit()
 {
     lifeStory.validation.handleEventForm('createEventForm', true);
@@ -148,6 +152,7 @@ $('#createEvent').one('pageinit', function createEventPageInit()
     });
 });
 
+// Initialize the edit event page
 $('#editEvent').one('pageinit', function createEventPageInit()
 {
     lifeStory.validation.handleEventForm('editEventForm');
@@ -183,6 +188,7 @@ $('#editEvent').one('pageinit', function createEventPageInit()
     });
 });
 
+// Initialize the create resurrect event page
 $('#resurrectEvent').one('pageinit', function resurrectEventPageInit()
 {
     lifeStory.validation.handleOtherEventForm('resurrectEventForm', true, true);
@@ -194,6 +200,7 @@ $('#resurrectEvent').one('pageinit', function resurrectEventPageInit()
     });
 });
 
+// Initialize the create death event page
 $('#deathEvent').one('pageinit', function deathEventPageInit()
 {
     lifeStory.validation.handleOtherEventForm('deathEventForm', false, true);
@@ -201,6 +208,7 @@ $('#deathEvent').one('pageinit', function deathEventPageInit()
     $(this).on('pagebeforeshow', lifeStory.ui.populateDeathAutocomplete);
 });
 
+// Initialize the customize page
 $('#customize').one('pageinit', function customizePageInit()
 {
     lifeStory.validation.handleRaceForm('createRaceForm');
@@ -222,6 +230,13 @@ $('#customize').one('pageinit', function customizePageInit()
     });
 });
 
+// Initialize the settings page
+$('#settings').one('pageinit', function settingsPageInit()
+{
+    $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharacterData);
+    $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
+});
+
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
 (function (window, undefined)
 {
@@ -231,30 +246,37 @@ $('#customize').one('pageinit', function customizePageInit()
     {
         get COMBAT_EVENT()
         {
+            /// <summary>Constant for Combat eventType id</summary>
             return 1;
         },
         get NON_COMBAT_EVENT()
         {
+            /// <summary>Constant for Non Combat eventType id</summary>
             return 2;
         },
         get RESURRECT_EVENT()
         {
+            /// <summary>Constant for Resurrect eventType id</summary>
             return 3;
         },
         get DEATH_EVENT()
         {
+            /// <summary>Constant for Death eventType id</summary>
             return 4;
         },
         get ALIVE()
         {
+            /// <summary>Constant for Alive character living status</summary>
             return 1;
         },
         get DEAD()
         {
+            /// <summary>Constant for Dead character living status</summary>
             return 0;
         },
         get LEVEL_VALUES()
         {
+            /// <summary>Array of experience required to be a certain level</summary>
             return [0, 300, 900, 2700, 6500,
                 14000, 23000, 34000, 48000, 64000,
                 85000, 100000, 120000, 140000, 165000,
@@ -266,10 +288,16 @@ $('#customize').one('pageinit', function customizePageInit()
     {
         get characterId()
         {
+            /// <summary>Gets the character Id for the current context of the app</summary> // TODO: Consider parse into int here
             return localStorage.getItem('characterId');
         },
         set characterId(value)
         {
+            /// <summary>Sets the character Id for the current context of the app</summary>
+            /// <param name="value" type="any">
+            ///     The value to set. If null, the current character Id is removed
+            /// </param>
+
             if (value !== undefined && value !== null)
             {
                 localStorage.setItem('characterId', value);
@@ -282,10 +310,16 @@ $('#customize').one('pageinit', function customizePageInit()
 
         get characterName()
         {
+            /// <summary>Gets the character name for the current context of the app</summary>
             return localStorage.getItem('characterName');
         },
         set characterName(value)
         {
+            /// <summary>Sets the character name for the current context of the app</summary>
+            /// <param name="value" type="any">
+            ///     The value to set. If null, the current character name is removed
+            /// </param>
+
             if (value !== undefined && value !== null)
             {
                 localStorage.setItem('characterName', value);
@@ -298,10 +332,16 @@ $('#customize').one('pageinit', function customizePageInit()
 
         get characterAlive()
         {
+            /// <summary>Gets the character living status for the current context of the app</summary> // TODO: Consider parse into int here
             return localStorage.getItem('characterAlive');
         },
         set characterAlive(value)
         {
+            /// <summary>Sets the character living status for the current context of the app</summary>
+            /// <param name="value" type="any">
+            ///     The value to set. If null, the current living status is removed
+            /// </param>
+
             if (value !== undefined && value !== null)
             {
                 localStorage.setItem('characterAlive', value);
@@ -314,10 +354,16 @@ $('#customize').one('pageinit', function customizePageInit()
 
         get eventId()
         {
+            /// <summary>Gets the current event id for the current context of the app</summary> // TODO: Consider parsing into int here
             return localStorage.getItem('eventId');
         },
         set eventId(value)
         {
+            /// <summary>Sets the event id for the current context of the app</summary>
+            /// <param name="value" type="any">
+            ///     The value to set. If null, the current event id is removed
+            /// </param>
+
             if (value !== undefined && value !== null)
             {
                 localStorage.setItem('eventId', value);
@@ -330,10 +376,16 @@ $('#customize').one('pageinit', function customizePageInit()
 
         get showDeceased()
         {
+            /// <summary>Gets the current showDeceased filter status for the app</summary> // TODO: Consider parse into bool here
             return localStorage.getItem('showDeceased');
         },
         set showDeceased(value)
         {
+            /// <summary>Sets the showDeceased filter status for the app</summary>
+            /// <param name="value" type="any">
+            ///     The value to set. If null, the current value is removed
+            /// </param>
+
             if (value !== undefined && value !== null)
             {
                 localStorage.setItem('showDeceased', value);

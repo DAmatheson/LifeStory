@@ -82,9 +82,13 @@
         $('#errorDialog').popup('open');
     };
 
-    // Filters the character list to remove deceased characters if the source checkbox is unchecked
     uiLibrary.filterCharacterList = function()
     {
+        /// <summary>
+        ///     Filters the character list to remove deceased characters if the source checkbox is
+        ///     unchecked
+        /// </summary>
+
         lifeStory.values.showDeceased = this.checked;
 
         var hideDead = !this.checked; // We show when checked, so flip the value
@@ -95,6 +99,10 @@
 
     uiLibrary.refreshDeleteRaceUIState = function ()
     {
+        /// <summary>
+        ///     Updates the state of the delete race select list to match its current options
+        /// </summary>
+
         if ($('#deleteRaceSelect option:first').is(':disabled'))
         {
             $('#deleteRace').button('disable');
@@ -109,6 +117,10 @@
 
     uiLibrary.refreshDeleteClassUIState = function ()
     {
+        /// <summary>
+        ///     Updates the state of the delete class select list to match its current options
+        /// </summary>
+
         if ($('#deleteClassSelect option:first').is(':disabled'))
         {
             $('#deleteClass').button('disable');
@@ -123,6 +135,13 @@
 
     uiLibrary.showCombatDetailInputs = function(isEdit)
     {
+        /// <summary>
+        ///     Shows the combat detail inputs
+        /// </summary>
+        /// <param name="isEdit" type="boolean">
+        ///     If true, shows the inputs on the edit page. Otherwise, shows the inputs on the create page
+        /// </param>
+
         if (isEdit)
         {
             $('#editEventDetailInputs').hide();
@@ -137,6 +156,13 @@
 
     uiLibrary.showEventDetailInputs = function(isEdit)
     {
+        /// <summary>
+        ///     Shows the event detail inputs
+        /// </summary>
+        /// <param name="isEdit" type="boolean">
+        ///     If true, shows the inputs on the edit page. Otherwise, shows the inputs on the create page
+        /// </param>
+
         if (isEdit)
         {
             $('#editCombatDetailInputs').hide();
@@ -149,9 +175,16 @@
         }
     };
 
-    // Populate the select element matching selectElementId with key and values from data
     uiLibrary.populateSelectList = function (selectElementId, data)
     {
+        /// <summary>
+        ///     Populate the select element matching selectElementId with key and values from data
+        /// </summary>
+        /// <param name="selectElementId" type="string">Id of the select element to add options to</param>
+        /// <param name="data" type="Array">
+        ///     An array containing the data as lifeStory.SelectEntry objects
+        /// </param>
+
         if (!Array.isArray(data))
         {
             throw 'The data argument for populateSelectList must be an array';
@@ -161,7 +194,7 @@
             throw 'The entries in the data argument for populateSelectList must be instances ' +
                 'of lifeStory.SelectEntry';
         }
-
+        // TODO: Security issue again
         var text = '';
 
         for (var i = 0; i < data.length; i++)
@@ -175,13 +208,21 @@
         }
 
         $('#' + selectElementId).
-            children().remove().end(). // Remove placeholder option which prevents an error in jQM 1.1.2
+            children().remove().end().
             append(text).
             selectmenu('refresh');
     };
 
     uiLibrary.populateClassList = function(classListId, populationCompleteCallback)
     {
+        /// <summary>
+        ///     Populates the class lists with the data in the database
+        /// </summary>
+        /// <param name="classListId" type="string">Id of the class list to populate</param>
+        /// <param name="refreshDeleteUI" type="string">
+        ///     Callback to call when the list has been populated
+        /// </param>
+
         lifeStory.db.getClasses(function(selectEntries)
         {
             uiLibrary.populateSelectList(classListId, selectEntries);
@@ -195,6 +236,14 @@
 
     uiLibrary.populateRaceList = function(raceListId, populationCompleteCallback)
     {
+        /// <summary>
+        ///     Populates the race lists with the data in the database
+        /// </summary>
+        /// <param name="raceListId" type="string">Id of the race list to populate</param>
+        /// <param name="refreshDeleteUI" type="string">
+        ///     Callback to call when the list has been populated
+        /// </param>
+
         lifeStory.db.getRaces(function(selectEntries)
         {
             uiLibrary.populateSelectList(raceListId, selectEntries);
@@ -211,8 +260,8 @@
         /// <summary>
         ///     Populates the race and class lists with the data in the database
         /// </summary>
-        /// <param name="raceListId" type="">Id of the race list to populate</param>
-        /// <param name="classListId" type="">Id of the class list to populate</param>
+        /// <param name="raceListId" type="string">Id of the race list to populate</param>
+        /// <param name="classListId" type="string">Id of the class list to populate</param>
         /// <param name="refreshDeleteUI" type="boolean">
         ///     True if the delete UI on customize page should be refreshed
         /// </param>
@@ -224,9 +273,22 @@
             refreshDeleteUI ? uiLibrary.refreshDeleteClassUIState : undefined);
     };
 
-    uiLibrary.duplicateInputSet = function(appendToSelector, templateElementId, removeButtonSelector)
+    uiLibrary.duplicateInputSet = function(insertAfterSelector, templateElementId, removeButtonSelector)
     {
-        if ($(appendToSelector + ':not(#' + templateElementId + ')').length === 0)
+        /// <summary>
+        ///     Duplicates combat event the input set identified by templateElementId and inserts
+        ///     it after insertAfterSelector. Shows removeButtonSelector
+        /// </summary>
+        /// <param name="insertAfterSelector" type="string">
+        ///     jQuery selector string for the element to place the duplicated input set after
+        /// </param>
+        /// <param name="templateElementId" type="string">Id of the templateElement to duplicate</param>
+        /// <param name="removeButtonSelector" type="string">
+        ///     jQuery selector for the remove button to show if the element to append to contains only
+        ///     the templateElementId element
+        /// </param>
+
+        if ($(insertAfterSelector + ':not(#' + templateElementId + ')').length === 0)
         {
             $(removeButtonSelector).closest('.ui-btn').show();
         }
@@ -235,7 +297,7 @@
         var autocompleteTitles = $('#' + templateElementId + 
             ' input[name=enemyName]:first-child').autocomplete('option', 'source');
 
-        $(appendToSelector).after(
+        $(insertAfterSelector).after(
             $('#' + templateElementId).
                 clone().
                 removeAttr('id'). // Remove id from the clone
@@ -254,6 +316,18 @@
 
     uiLibrary.removeInputSet = function(toRemoveSelector, removeButtonSelector)
     {
+        /// <summary>
+        ///     Removes combat event input sets which match toRemoveSelector and hides the remove button
+        ///     if no extra input sets remain
+        /// </summary>
+        /// <param name="toRemoveSelector" type="string">
+        ///     jQuery selector string for the input sets to remove
+        /// </param>
+        /// <param name="removeButtonSelector" type="string">
+        ///     jQuery selector for the remove button to hide if no elements matching 
+        ///     toRemoveSelector remain
+        /// </param>
+
         $(toRemoveSelector).remove();
 
         if ($(toRemoveSelector).length === 0)
@@ -264,6 +338,13 @@
 
     function characterLinkClicked(event)
     {
+        /// <summary>
+        ///     Sets the values of lifeStory.values to the values for the clicked character
+        /// </summary>
+        /// <param name="event" type="jQuery.Event">
+        ///     Event containing the character information for the clicked character
+        /// </param>
+
         lifeStory.values.characterId = event.data.id;
         lifeStory.values.characterName = event.data.name;
         lifeStory.values.characterAlive = event.data.alive;
@@ -271,6 +352,10 @@
 
     uiLibrary.populateCharacterList = function(listViewId, itemElementType)
     {
+        /// <summary>
+        ///     Populates the character list with all of the user's characters
+        /// </summary>
+
         lifeStory.db.getCharacters(function (characters)
         {
             var $listContainer = $('#' + listViewId);
@@ -329,11 +414,22 @@
 
     function eventLogItemClicked(event)
     {
+        /// <summary>
+        ///     Sets the value of lifeStory.values.eventId to the Id of the clicked event
+        /// </summary>
+        /// <param name="event" type="jQuery.Event">
+        ///     Event containing the eventId for the clicked event
+        /// </param>
+
         lifeStory.values.eventId = event.data.eventId;
     }
 
     uiLibrary.populateEventLog = function (listViewId, itemElementType)
     {
+        /// <summary>
+        ///     Populates the event log page with the events for the selected character
+        /// </summary>
+
         $('#eventLog h2[data-property=characterName]').text(lifeStory.values.characterName);
 
         lifeStory.db.getCharactersEvents(lifeStory.values.characterId, function (events)
@@ -439,6 +535,10 @@
 
     uiLibrary.populateEventDetail = function()
     {
+        /// <summary>
+        ///     Populates the event details page with the data for the selected event
+        /// </summary>
+
         var characterName = lifeStory.values.characterName;
         var eventId = lifeStory.values.eventId;
 
@@ -544,6 +644,10 @@
 
     uiLibrary.populateEventEdit = function(appendToSelector, templateElementId, removeButtonSelector)
     {
+        /// <summary>
+        ///     Populates the event edit form with the data for the selected event
+        /// </summary>
+
         var eventId = lifeStory.values.eventId;
 
         lifeStory.db.getEvent(eventId, function(event)
@@ -624,6 +728,10 @@
 
     uiLibrary.populateCharacterDetail = function()
     {
+        /// <summary>
+        ///     Populates the character details page with the data for the selected character
+        /// </summary>
+
         var characterId = lifeStory.values.characterId;
         var characterName = lifeStory.values.characterName;
 
@@ -661,6 +769,10 @@
 
     uiLibrary.populateCharacterEdit = function()
     {
+        /// <summary>
+        ///     Populates the character edit form with the data for the selected character
+        /// </summary>
+
         lifeStory.db.getCharacter(lifeStory.values.characterId, function(character)
         {
             var $form = $('#editCharacterForm');
@@ -675,6 +787,10 @@
 
     uiLibrary.populateCreateEventAutocomplete = function()
     {
+        /// <summary>
+        ///     Populates the autocomplete data for the create event form
+        /// </summary>
+
         var eventTypeIds = [lifeStory.COMBAT_EVENT, lifeStory.NON_COMBAT_EVENT];
 
         lifeStory.db.getEventTitles(eventTypeIds, function(titles)
@@ -693,6 +809,10 @@
 
     uiLibrary.populateDeathAutocomplete = function()
     {
+        /// <summary>
+        ///     Populates the autocomplete data for the create death event form
+        /// </summary>
+
         lifeStory.db.getEventTitles([lifeStory.DEATH_EVENT], function (titles)
         {
             $('#causeOfDeath').autocomplete(
@@ -704,6 +824,10 @@
 
     uiLibrary.populateResurrectAutocomplete = function()
     {
+        /// <summary>
+        ///     Populates the autocomplete data for the create resurrect event form
+        /// </summary>
+
         lifeStory.db.getEventTitles([lifeStory.RESURRECT_EVENT], function(titles)
         {
             $('#causeOfResurrect').autocomplete(
@@ -715,6 +839,10 @@
 
     function deleteCharacterAccepted()
     {
+        /// <summary>
+        ///     Callback function for a user accepting the delete character confirmation dialog
+        /// </summary>
+
         var callbackData = new lifeStory.CallbackData();
         callbackData.successMessage = 'The character was deleted successfully.';
         callbackData.redirectToPageId = 'home';
@@ -722,9 +850,12 @@
         lifeStory.dataAccess.deleteCharacter(lifeStory.values.characterId, callbackData);
     }
 
-    // Confirms the user wants to clear the delete the character. If so, deletes the character.
     uiLibrary.confirmDeleteCharacter = function()
     {
+        /// <summary>
+        ///     Confirms the user wants to clear the delete the character. If so, deletes the character.
+        /// </summary>
+
         uiLibrary.displayConfirmation('Delete ' + lifeStory.values.characterName + '?',
             'Are you sure you want to delete ' + lifeStory.values.characterName +'?',
             deleteCharacterAccepted);
@@ -732,6 +863,10 @@
 
     function deleteEventAccepted()
     {
+        /// <summary>
+        ///     Callback function for a user accepting the delete event confirmation dialog
+        /// </summary>
+
         var callbackData = new lifeStory.CallbackData();
         callbackData.successMessage = 'The event was deleted successfully.';
         callbackData.redirectToPageId = 'eventLog';
@@ -741,14 +876,21 @@
 
     uiLibrary.confirmDeleteEvent = function()
     {
+        /// <summary>
+        ///     Confirms the user wants to delete the event. If so, deletes the event.
+        /// </summary>
+
         uiLibrary.displayConfirmation('Delete Event?',
             'Are you sure you want to delete this event?',
             deleteEventAccepted);
     };
 
-    // Confirms the user wants to clear the character data. If so, clears the table.
     uiLibrary.confirmClearCharacterData = function ()
     {
+        /// <summary>
+        ///     Confirms the user wants to clear the character data. If so, clears the table.
+        /// </summary>
+
         // This must be done this way because the confirm dialog will be shown before a value
         // is returned from getCharacterCount if a callback isn't used.
         lifeStory.db.getCharacterCount(function (characterCount)
@@ -759,9 +901,12 @@
         });
     };
 
-    // Confirms the user wants to clear the database. If so, clears the database.
     uiLibrary.confirmClearDatabase = function ()
     {
+        /// <summary>
+        ///     Confirms the user wants to clear the database. If so, clears the database.
+        /// </summary>
+
         // This must be done this way because the confirm dialog will be shown before a value
         // is returned from getCharacterCount if a callback isn't used.
         lifeStory.db.getCharacterCount(function (count)
