@@ -511,16 +511,14 @@
 
     function setupEditEventAutocomplete(eventTypeId)
     {
+        /// <summary>
+        ///     Sets up autocomplete for the edit events page for non combat, resurrect, and death events
+        /// </summary>
+        /// <param name="eventTypeId" type="number">the eventType Id for the event type</param>
+
         lifeStory.db.getEventTitles([eventTypeId], function (titles)
         {
-            if (eventTypeId === lifeStory.COMBAT_EVENT)
-            {
-                $('#editEnemyName').autocomplete(
-                {
-                    source: titles[lifeStory.COMBAT_EVENT]
-                });
-            }
-            else if (eventTypeId === lifeStory.NON_COMBAT_EVENT)
+            if (eventTypeId === lifeStory.NON_COMBAT_EVENT)
             {
                 $('#editEventName').autocomplete(
                 {
@@ -553,25 +551,37 @@
             var $form;
             var eventTypeId = event.eventTypeId;
 
-            setupEditEventAutocomplete(eventTypeId);
+            if (eventTypeId !== lifeStory.COMBAT_EVENT)
+            {
+                setupEditEventAutocomplete(eventTypeId);
+            }
 
             if (eventTypeId === lifeStory.COMBAT_EVENT)
             {
                 uiLibrary.showCombatDetailInputs(true);
 
-                event.eventDetails.forEach(function(item, index)
+                // Need to have autocomplete setup before any of this can run
+                lifeStory.db.getEventTitles([eventTypeId], function(titles)
                 {
-                    var $detailInputs = $(appendToSelector);
-
-                    $detailInputs.find('[name=enemyName]').val(item.name);
-                    $detailInputs.find('[name=creatureCount]').val(item.creatureCount);
-
-                    // Duplicate after so first event goes in the template
-                    if (index + 1 < event.eventDetails.length)
+                    $('#editEnemyName').autocomplete(
                     {
-                        uiLibrary.duplicateInputSet(appendToSelector, templateElementId,
-                            removeButtonSelector);
-                    }
+                        source: titles[lifeStory.COMBAT_EVENT]
+                    });
+
+                    event.eventDetails.forEach(function(item, index)
+                    {
+                        var $detailInputs = $(appendToSelector);
+
+                        $detailInputs.find('[name=enemyName]').val(item.name);
+                        $detailInputs.find('[name=creatureCount]').val(item.creatureCount);
+
+                        // Duplicate after so first event goes in the template
+                        if (index + 1 < event.eventDetails.length)
+                        {
+                            uiLibrary.duplicateInputSet(appendToSelector, templateElementId,
+                                removeButtonSelector);
+                        }
+                    });
                 });
             }
             else if (eventTypeId === lifeStory.NON_COMBAT_EVENT)
