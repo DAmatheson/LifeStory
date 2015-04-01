@@ -28,7 +28,8 @@ label.error {
 	color: red;
 }
 
-label.ui-input-text:not(.error), label.ui-select, td.tableLabel {
+label.ui-input-text:not(.error),
+label.ui-select, td.tableLabel {
     font-weight: bold;
 }
 
@@ -50,14 +51,11 @@ label > a[data-role="button"][data-iconpos="notext"][data-inline="true"] {
     text-align: center;
 }
 
-/* Footer selector is to remove top/bottom margin due to inputs and labels*/
-.margin0, footer > div.ui-checkbox > label.margin0 {
-    margin-top: 0;
-    margin-bottom:0;
-}
-
-.allMargin0 {
-    margin: 0 !important;
+/* Footer selector is to remove top/bottom margin due to inputs and labels */
+.margin0,
+footer > div.ui-checkbox > label.margin0,
+footer > fieldset.ui-grid-a > div > a.ui-btn {
+    margin: 0;
 }
 
 .rightPadHalf {
@@ -98,12 +96,19 @@ img {
      max-width: 100%;
 }
 
+h2[data-property="characterName"] {
+    font-size: 1.4em;
+    max-width: 64%;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
 /* Prevent the header text and new character button breaking into two lines */
 html, body, section {
-    -moz-min-width: 300px;
-    -ms-min-width: 300px;
-    -o-min-width: 300px;
-    -webkit-min-width: 300px;
-    min-width: 300px;
+    -moz-min-width: 320px;
+    -ms-min-width: 320px;
+    -o-min-width: 320px;
+    -webkit-min-width: 320px;
+    min-width: 320px;
 } 
 /*#endregion*/
