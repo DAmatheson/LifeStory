@@ -940,11 +940,19 @@
     };
 
     // Clears the character, characterEvent, event, and eventDetail tables
-    dbLibrary.clearCharacterTable = function clearCharacterTable()
+    dbLibrary.clearCharacterData = function clearCharacterData(successCallback, failureCallback)
     {
-        // TODO: Consider taking a success and failure callback
+        /// <summary>
+        ///     Deletes all character related data. Use with extreme caution!
+        /// </summary>
+        /// <param name="successCallback" type="function">
+        ///     The callback for character data deletion success
+        /// </param>
+        /// <param name="failureCallback" type="function">
+        ///     The callback for character data deletion failure
+        /// </param>
 
-        var failureHandler = wrapTransactionFailureCallback();
+        var wrappedFailureCallback = wrapTransactionFailureCallback(failureCallback);
 
         dbLibrary.getDb().transaction(function (tx)
         {
@@ -953,28 +961,45 @@
             tx.executeSql('DROP TABLE IF EXISTS event;');
             tx.executeSql('DROP TABLE IF EXISTS eventDetail;');
 
+            // Need to recreate the tables because the DB wasn't totally wiped out
             createCharacterTable(tx);
             createEventTable(tx);
             createEventDetailTable(tx);
             createCharacterEventTable(tx);
-        }, failureHandler);
+        }, wrappedFailureCallback, successCallback);
     };
 
-    // Drops all tables, used for resetting the database
-    dbLibrary.dropAllTables = function dropAllTables()
+    dbLibrary.dropAllTables = function dropAllTables(successCallback, failureCallback)
     {
+        /// <summary>
+        ///     Drops all tables. Use with extreme caution!
+        /// </summary>
+        /// <param name="successCallback" type="function">The callback for DB clearing success</param>
+        /// <param name="failureCallback" type="function">The callback for DB clearing failure</param>
+
+        var wrappedFailureCallback = function(error)
+        {
+            // Reset the value back to true as the transaction failed and was rolled back
+            localStorage.setItem('dbInitialized', 'true');
+
+            // Call wrapTransactionFailureCallback and immediately invoke the returned function
+            wrapTransactionFailureCallback(failureCallback)(error);
+        }
+
         dbLibrary.getDb().transaction(function (tx)
         {
-            tx.executeSql('DROP TABLE IF EXISTS character;', null, null, sqlErrorHandler);
-            tx.executeSql('DROP TABLE IF EXISTS characterEvent;', null, null, sqlErrorHandler);
-            tx.executeSql('DROP TABLE IF EXISTS class;', null, null, sqlErrorHandler);
-            tx.executeSql('DROP TABLE IF EXISTS event;', null, null, sqlErrorHandler);
-            tx.executeSql('DROP TABLE IF EXISTS eventType;', null, null, sqlErrorHandler);
-            tx.executeSql('DROP TABLE IF EXISTS eventDetail;', null, null, sqlErrorHandler);
-            tx.executeSql('DROP TABLE IF EXISTS race;', null, null, sqlErrorHandler);
+            tx.executeSql('DROP TABLE IF EXISTS character;');
+            tx.executeSql('DROP TABLE IF EXISTS characterEvent;');
+            tx.executeSql('DROP TABLE IF EXISTS class;');
+            tx.executeSql('DROP TABLE IF EXISTS event;');
+            tx.executeSql('DROP TABLE IF EXISTS eventType;');
+            tx.executeSql('DROP TABLE IF EXISTS eventDetail;');
+            tx.executeSql('DROP TABLE IF EXISTS race;');
 
+            // Don't need to recreate the tables because the DB was totally wiped out so
+            // the next call to getDb will initialize it
             localStorage.setItem('dbInitialized', 'false');
-        });
+        }, wrappedFailureCallback, successCallback);
     };
 
 })(window, window.lifeStory);
