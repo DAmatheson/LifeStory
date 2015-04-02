@@ -540,7 +540,7 @@ $.extend( $.validator, {
 			.not( this.settings.ignore )
 			.filter(function ()
 			{
-                // TODO: This is the unmodified version, below is a possible fix for duplicate name input validation
+                // Note: This is the unmodified version
 				//if ( !this.name && validator.settings.debug && window.console ) {
 				//	console.error( "%o has no name assigned", this );
 				//}
@@ -554,6 +554,7 @@ $.extend( $.validator, {
 
 			    //return true;
 
+                // Note: This is the modified version to fix duplicate name input validation
 			    // filter out checkable elements whose name already in cache
 			    if (validator.checkable(this) && this.name in rulesCache)
 			    {
