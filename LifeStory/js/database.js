@@ -21,6 +21,13 @@
 
     function sqlErrorHandler(transaction, error)
     {
+        /// <summary>
+        ///     Displays an alert with the error message and writes the message, error,
+        ///     and transaction to console
+        /// </summary>
+        /// <param name="transaction">The transaction object from the error</param>
+        /// <param name="error">The error object</param>
+
         alert('SQL Error: ' + error.message); // Uses default alert to give it more emphasis
         console.error(error.message, error, transaction);
     }
@@ -52,6 +59,11 @@
 
     function createRaceTable(transaction)
     {
+        /// <summary>
+        ///     Creates the race table
+        /// </summary>
+        /// <param name="transaction">Transaction to use to create the table</param>
+
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS race ' +
             '(' +
@@ -62,6 +74,11 @@
 
     function createClassTable(transaction)
     {
+        /// <summary>
+        ///     Creates the class table
+        /// </summary>
+        /// <param name="transaction">Transaction to use to create the table</param>
+
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS class ' +
             '(' +
@@ -72,6 +89,11 @@
 
     function createCharacterTable(transaction)
     {
+        /// <summary>
+        ///     Creates the character table
+        /// </summary>
+        /// <param name="transaction">Transaction to use to create the table</param>
+
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS character ' +
             '(' +
@@ -88,6 +110,11 @@
 
     function createEventTypeTable(transaction)
     {
+        /// <summary>
+        ///     Creates the eventType table
+        /// </summary>
+        /// <param name="transaction">Transaction to use to create the table</param>
+
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS eventType ' +
             '(' +
@@ -98,6 +125,10 @@
 
     function createEventTable(transaction)
     {
+        /// <summary>
+        ///     Creates the event table
+        /// </summary>
+        /// <param name="transaction">Transaction to use to create the table</param>
 
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS event ' +
@@ -114,6 +145,11 @@
 
     function createEventDetailTable(transaction)
     {
+        /// <summary>
+        ///     Creates the eventDetail table
+        /// </summary>
+        /// <param name="transaction">Transaction to use to create the table</param>
+
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS eventDetail ' +
             '(' +
@@ -128,6 +164,11 @@
 
     function createCharacterEventTable(transaction)
     {
+        /// <summary>
+        ///     Creates the characterEvent table
+        /// </summary>
+        /// <param name="transaction">Transaction to use to create the table</param>
+
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS characterEvent ' +
             '(' +
@@ -139,9 +180,13 @@
             ');');
     }
 
-    // Insert default class records
     function insertDefaultClasses(transaction)
     {
+        /// <summary>
+        ///     Inserts the default classes into the class table
+        /// </summary>
+        /// <param name="transaction">Transaction to use to insert the records</param>
+
         var defaultClasses = ['Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk',
             'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'];
 
@@ -152,9 +197,13 @@
         });
     }
 
-    // Insert default race records
     function insertDefaultRaces(transaction)
     {
+        /// <summary>
+        ///     Inserts the default race into the race table
+        /// </summary>
+        /// <param name="transaction">Transaction to use to insert the records</param>
+
         var names = ['Dwarf', 'Human', 'Halfling', 'Elf', 'Half-elf',
             'Half-orc', 'Gnome', 'Dragonborn', 'Tiefling'];
 
@@ -166,9 +215,13 @@
         });
     }
 
-    // Insert event type records
     function insertEventTypes(transaction)
     {
+        /// <summary>
+        ///     Inserts the default event types into the eventType table
+        /// </summary>
+        /// <param name="transaction">Transaction to use to insert the records</param>
+
         var ids =
         [
             lifeStory.COMBAT_EVENT, lifeStory.NON_COMBAT_EVENT,
@@ -188,6 +241,11 @@
     // Creates the database tables and inserts default records
     function initializeTables(database)
     {
+        /// <summary>
+        ///     Creates the database tables and inserts the default records
+        /// </summary>
+        /// <param name="database">The database to create tables and insert records into</param>
+
         database.transaction(function createTables(tx)
         {
             createRaceTable(tx);
@@ -218,9 +276,13 @@
         });
     }
 
-    // Initializes the database
     function initializeDb()
     {
+        /// <summary>
+        ///     Initializes the database<br/>
+        ///     If WebSQL isn't supported, a dummy DB object is created
+        /// </summary>
+
         if (window.openDatabase === undefined)
         {
             alert('WebSQL isn\'t supported in this browser.');
@@ -253,9 +315,13 @@
         }
     }
 
-    // Returns the database for the application
     dbLibrary.getDb = function getDb()
     {
+        /// <summary>
+        ///     Gets the database for the application
+        /// </summary>
+        /// <returns type="WebSQL Database">The application's database</returns>
+
         // Initialize the database if it hasn't been
         if (db === undefined || localStorage.getItem('dbInitialized') !== 'true')
         {
@@ -294,9 +360,19 @@
         });
     };
 
-    // Saves the CharacterClass to the database and calls the corresponding success or failure callback
     dbLibrary.addClass = function addClass(characterClass, successCallback, failureCallback)
     {
+        /// <summary>
+        ///     Adds the class to the class table
+        /// </summary>
+        /// <param name="characterClass" type="lifeStory.CharacterClass">The class to add</param>
+        /// <param name="successCallback" type="function">
+        ///     Optional, function to be called on successful save
+        /// </param>
+        /// <param name="failureCallback" type="function">
+        ///     Optional, function to be called on failed save
+        /// </param>
+
         if (!(characterClass instanceof lifeStory.CharacterClass))
         {
             throw 'characterClass parameter to addClass must be an instance of lifeStory.CharacterClass';
@@ -311,9 +387,19 @@
         });
     };
 
-    // Saves the Character into the database and calls the corresponding success or failure callback
     dbLibrary.addCharacter = function addCharacter(character, successCallback, failureCallback)
     {
+        /// <summary>
+        ///     Adds the character to the character table
+        /// </summary>
+        /// <param name="characterClass" type="lifeStory.Character">The character to add</param>
+        /// <param name="successCallback" type="function">
+        ///     Optional, function to be called on successful save
+        /// </param>
+        /// <param name="failureCallback" type="function">
+        ///     Optional, function to be called on failed save
+        /// </param>
+
         if (!(character instanceof lifeStory.Character))
         {
             throw 'character parameter to addCharacter must be an instance of lifeStory.Character';
@@ -337,6 +423,22 @@
     dbLibrary.addEvent = function addEvent(event, eventDetails, characterId, successCallback,
         transactionFailureCallback)
     {
+        /// <summary>
+        ///     Adds the event and event details to the database.<br/>
+        ///     If any of the inserts fail, the database remains as it was before this function was called
+        /// </summary>
+        /// <param name="event" type="lifeStory.Event">The event to add</param>
+        /// <param name="eventDetails" type="Array">Array of lifeStory.EventDetail objects to add</param>
+        /// <param name="characterId" type="number">
+        ///     The Id of the character that the event belongs to
+        /// </param>
+        /// <param name="successCallback" type="function">
+        ///     Optional, function to be called on successful save
+        /// </param>
+        /// <param name="transactionFailureCallback" type="function">
+        ///     Optional, function to be called on failed save transaction
+        /// </param>
+
         if (!(event instanceof lifeStory.Event))
         {
             throw 'event parameter to addEvent must be an instance of lifestory.Event';
@@ -399,6 +501,17 @@
 
     dbLibrary.updateCharacter = function updateCharacter(character, successCallback, failureCallback)
     {
+        /// <summary>
+        ///     Updates a character in the database
+        /// </summary>
+        /// <param name="character" type="lifeStory.Character">The character to update</param>
+        /// <param name="successCallback" type="function">
+        ///     Optional, function to be called on successful update
+        /// </param>
+        /// <param name="failureCallback" type="function">
+        ///     Optional, function to be called on failed update
+        /// </param>
+
         if (!(character instanceof lifeStory.Character))
         {
             throw 'character parameter to updateCharacter must be an instance of lifeStory.Character';
@@ -422,6 +535,19 @@
     dbLibrary.updateEvent = function updateEvent(event, eventDetails, successCallback,
         transactionFailureCallback)
     {
+        /// <summary>
+        ///     Updates the event and event details in the database.<br/>
+        ///     If any of the updates fail, the database remains as it was before this function was called
+        /// </summary>
+        /// <param name="event" type=""></param>
+        /// <param name="eventDetails" type=""></param>
+        /// <param name="successCallback" type="function">
+        ///     Optional, function to be called on successful update
+        /// </param>
+        /// <param name="transactionFailureCallback" type="function">
+        ///     Optional, function to be called on failed update transaction
+        /// </param>
+
         if (!(event instanceof lifeStory.Event))
         {
             throw 'event parameter to updateEvent must be an instance of lifestory.Event';
@@ -475,6 +601,17 @@
 
     dbLibrary.deleteRace = function deleteRace(id, successCallback, failureCallback)
     {
+        /// <summary>
+        ///     Deletes the race from the database
+        /// </summary>
+        /// <param name="id" type="number">The Id of the race to delete</param>
+        /// <param name="successCallback" type="function">
+        ///     Optional, function to be called on successful delete
+        /// </param>
+        /// <param name="failureCallback" type="function">
+        ///     Optional, function to be called on failed delete
+        /// </param>
+
         dbLibrary.getDb().transaction(function(tx)
         {
             tx.executeSql(
@@ -491,6 +628,17 @@
 
     dbLibrary.deleteClass = function deleteClass(id, successCallback, failureCallback)
     {
+        /// <summary>
+        ///     Deletes the class from the database
+        /// </summary>
+        /// <param name="id" type="number">The Id of the class to delete</param>
+        /// <param name="successCallback" type="function">
+        ///     Optional, function to be called on successful delete
+        /// </param>
+        /// <param name="failureCallback" type="function">
+        ///     Optional, function to be called on failed delete
+        /// </param>
+
         dbLibrary.getDb().transaction(function(tx)
         {
             tx.executeSql(
@@ -512,9 +660,9 @@
         ///     If the transaction fails, it is rolled back and no data is deleted.
         /// </summary>
         /// <param name="id" type="number">The id of the character to delete</param>
-        /// <param name="successCallback" type="function">The callback for deletion success</param>
+        /// <param name="successCallback" type="function">Optional callback for deletion success</param>
         /// <param name="transactionFailureCallback" type="function">
-        ///     The callback for deletion failure
+        ///     Optional callback for deletion failure
         /// </param>
 
         var wrappedFailureCallback = wrapTransactionFailureCallback(transactionFailureCallback);
@@ -566,9 +714,9 @@
         /// </summary>
         /// <param name="id" type="number">The id of the event to delete</param>
         /// <param name="characterId" type="number">The id of the character the event belongs to</param>
-        /// <param name="successCallback" type="function">The callback for deletion success</param>
+        /// <param name="successCallback" type="function">Optional callback for deletion success</param>
         /// <param name="transactionFailureCallback" type="function">
-        ///     The callback for deletion failure
+        ///     Optional callback for deletion failure
         /// </param>
 
         var originalAliveValue = lifeStory.values.characterAlive;
@@ -642,9 +790,13 @@
         }, wrappedFailureCallback, successCallback);
     };
 
-    // Gets the character count and passes it as the sole argument to callBack
     dbLibrary.getCharacterCount = function getCharacterCount(callback)
     {
+        /// <summary>
+        ///     Gets the character count as passes it as the sole argument to callback
+        /// </summary>
+        /// <param name="callback" type="function">Callback function to pass the count to</param>
+
         dbLibrary.getDb().readTransaction(function (tx)
         {
             tx.executeSql(
@@ -666,9 +818,15 @@
         });
     };
 
-    // Gets the classes and passes them as the sole argument to callBack
     dbLibrary.getClasses = function getClasses(callback)
     {
+        /// <summary>
+        ///     Gets the classes and passes them as the sole argument to callback
+        /// </summary>
+        /// <param name="callback" type="function">
+        ///     Callback function to pass the class SelectEntry objects to
+        /// </param>
+
         dbLibrary.getDb().readTransaction(function (tx)
         {
             tx.executeSql(
@@ -684,9 +842,15 @@
         });
     };
 
-    // Gets the races and passes them as the sole argument to callBack
     dbLibrary.getRaces = function getRaces(callback)
     {
+        /// <summary>
+        ///     Gets the races and passes them as the sole argument to callback
+        /// </summary>
+        /// <param name="callback" type="function">
+        ///     Callback function to pass the race SelectEntry objects to
+        /// </param>
+
         dbLibrary.getDb().readTransaction(function (tx)
         {
             tx.executeSql(
@@ -704,6 +868,13 @@
 
     dbLibrary.getCharacters = function (callback)
     {
+        /// <summary>
+        ///     Gets the characters and passes them as the sole argument to callback
+        /// </summary>
+        /// <param name="callback" type="function">
+        ///     Callback function to pass the array of Character objects to
+        /// </param>
+
         dbLibrary.getDb().readTransaction(function (tx)
         {
             tx.executeSql(
@@ -741,6 +912,12 @@
 
     dbLibrary.getCharacter = function(characterId, callback)
     {
+        /// <summary>
+        ///     Gets the character matching characterId and passes it as the sole argument to callback
+        /// </summary>
+        /// <param name="characterId" type="number">The Id of the character to retrieve</param>
+        /// <param name="callback" type="function">Callback function to pass the Character to</param>
+
         dbLibrary.getDb().readTransaction(function(tx)
         {
             tx.executeSql(
@@ -781,6 +958,15 @@
 
     dbLibrary.getCharactersEvents = function(characterId, callback)
     {
+        /// <summary>
+        ///     Gets the character identified by characterId's events and passes them as
+        ///     the sole argument to callback
+        /// </summary>
+        /// <param name="characterId" type="number">The Id of the character to get events for</param>
+        /// <param name="callback" type="function">
+        ///     Callback function to pass the array of Event objects to
+        /// </param>
+
         var events = [];
 
         var wrappedCallback = function ()
@@ -847,6 +1033,12 @@
 
     dbLibrary.getEvent = function(eventId, callback)
     {
+        /// <summary>
+        ///     Gets the event matching eventId and passes it as the sole argument to callback
+        /// </summary>
+        /// <param name="eventId" type="number">The Id of the event to retrieve</param>
+        /// <param name="callback" type="function">Callback function to pass the Event to</param>
+
         var event = new lifeStory.Event();
 
         var wrappedCallback = function()
@@ -907,6 +1099,16 @@
 
     dbLibrary.getEventTitles = function(eventTypeIds, callback)
     {
+        /// <summary>
+        ///     Gets the name value for all events with an eventType Id matching those in eventTypeIds and
+        ///     passes them as an array to the callback
+        /// </summary>
+        /// <param name="eventTypeIds" type="Array">Array of eventTypeIds to get names from</param>
+        /// <param name="callback" type="function">
+        ///     Callback function to pass the array of titles to <br/>
+        ///     The titles for each eventType Id are located in an array at the index matching the Id
+        /// </param>
+
         var inParameterList = '';
         eventTypeIds.forEach(function()
         {
@@ -951,7 +1153,6 @@
         });
     };
 
-    // Clears the character, characterEvent, event, and eventDetail tables
     dbLibrary.clearCharacterData = function clearCharacterData(successCallback, failureCallback)
     {
         /// <summary>

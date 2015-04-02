@@ -17,6 +17,7 @@
 
     var validationLibrary = lifeStory.validation = {};
 
+    // Validation rules for race and class forms
     var classRaceNameRules =
     {
         required: true,
@@ -25,16 +26,24 @@
 
     function setupFormValidation(formId, submitHandler, rules, messages, submitCallbackData)
     {
-        // If callback data is passed in, set up a function to call the submit handler with
-        // the form and that callback data
+        /// <summary>
+        ///     Sets up form validation for the formId using the submit handler, rules, and messages
+        /// </summary>
+        /// <param name="formId" type="string">The Id of the form to add validation to</param>
+        /// <param name="submitHandler" type="function">
+        ///     The function to call when a valid form is submitted
+        /// </param>
+        /// <param name="rules" type="object">The validation rules for the form</param>
+        /// <param name="messages" type="object">Messages for when the validation rules aren't met</param>
+        /// <param name="submitCallbackData" type="lifeStory.CallbackData">
+        ///     Optional addition submit callback data
+        /// </param>
+
+        // If callback data is passed in, set up the submit handler with the callback data as
+        // the first argument
         if (submitCallbackData)
         {
-            var passedInSubmitHandler = submitHandler;
-
-            submitHandler = function(form)
-            {
-                passedInSubmitHandler(form, submitCallbackData);
-            };
+            submitHandler = submitHandler.bind(null, submitCallbackData);
         }
 
         $('#' + formId).validate(
@@ -47,6 +56,14 @@
 
     validationLibrary.handleRaceForm = function(formId, redirectToPageIdOnSubmit)
     {
+        /// <summary>
+        ///     Sets up validation for the race form identified by formId.
+        /// </summary>
+        /// <param name="formId" type="string">The id of the race form to add validation to</param>
+        /// <param name="redirectToPageIdOnSubmit" type="boolean">
+        ///     True if the form should redirect on valid submit
+        /// </param>
+
         var rules = { raceName: classRaceNameRules };
 
         var messages =
@@ -71,6 +88,14 @@
 
     validationLibrary.handleClassForm = function(formId, redirectToPageIdOnSubmit)
     {
+        /// <summary>
+        ///     Sets up validation for the class form identified by formId.
+        /// </summary>
+        /// <param name="formId" type="string">The id of the class form to add validation to</param>
+        /// <param name="redirectToPageIdOnSubmit" type="boolean">
+        ///     True if the form should redirect on valid submit
+        /// </param>
+
         var rules = { className: classRaceNameRules };
 
         var messages =
@@ -95,6 +120,14 @@
 
     validationLibrary.handleCharacterForm = function(formId, isNewCharacterForm)
     {
+        /// <summary>
+        ///     Sets up validation for the character form identified by formId.
+        /// </summary>
+        /// <param name="formId" type="string">The id of the race form to add validation to</param>
+        /// <param name="isNewCharacterForm" type="boolean">
+        ///     True if the form is a new character form
+        /// </param>
+
         var rules =
         {
             name:
@@ -155,6 +188,14 @@
 
     validationLibrary.handleEventForm = function (formId, isNewEventForm)
     {
+        /// <summary>
+        ///     Sets up validation for the combat or non combat form identified by formId.
+        /// </summary>
+        /// <param name="formId" type="string">The id of the event form to add validation to</param>
+        /// <param name="isNewCharacterForm" type="boolean">
+        ///     True if the form is a new event form
+        /// </param>
+
         var isNonCombat = function()
         {
             // Required because doing 'depends: !lifeStory.util.isCombatEvent' always results in true
@@ -278,6 +319,17 @@
 
     validationLibrary.handleOtherEventForm = function(formId, isResurrectEvent, isNewEvent)
     {
+        /// <summary>
+        ///     Sets up validation for the resurrect or death form identified by formId.
+        /// </summary>
+        /// <param name="formId" type="string">The id of the event form to add validation to</param>
+        /// <param name="isResurrectEvent" type="boolean">
+        ///     True if the form is a resurrection form
+        /// </param>
+        /// <param name="isNewEvent" type="boolean">
+        ///     True if the form is a new other event form
+        /// </param>
+
         var rules =
         {
             eventName:
