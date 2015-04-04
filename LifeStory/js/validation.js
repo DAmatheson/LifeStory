@@ -54,14 +54,14 @@
         });
     }
 
-    validationLibrary.handleRaceForm = function(formId, redirectToPageIdOnSubmit)
+    validationLibrary.handleRaceForm = function(formId, isCustomizePage)
     {
         /// <summary>
         ///     Sets up validation for the race form identified by formId.
         /// </summary>
         /// <param name="formId" type="string">The id of the race form to add validation to</param>
-        /// <param name="redirectToPageIdOnSubmit" type="boolean">
-        ///     True if the form should redirect on valid submit
+        /// <param name="isCustomizePage" type="boolean">
+        ///     True if the form is on the customize page
         /// </param>
 
         var rules = { raceName: classRaceNameRules };
@@ -77,23 +77,22 @@
 
         var submitHandler = lifeStory.dataAccess.saveRaceToDb;
 
-        var callbackData = new lifeStory.CallbackData(formId, redirectToPageIdOnSubmit,
-            'New custom race created.', 'Failed to create the new race.');
-
-        // If redirectToPageIdOnSubmit isn't passed in, the form is on the #customize page
-        callbackData.isCustomizePage = !redirectToPageIdOnSubmit;
+        var callbackData = new lifeStory.CallbackData(formId);
+        callbackData.successMessage = 'New custom race created.';
+        callbackData.failureMessage = 'Failed to create the new race.';
+        callbackData.isCustomizePage = isCustomizePage;
 
         setupFormValidation(formId, submitHandler, rules, messages, callbackData);
     };
 
-    validationLibrary.handleClassForm = function(formId, redirectToPageIdOnSubmit)
+    validationLibrary.handleClassForm = function(formId, isCustomizePage)
     {
         /// <summary>
         ///     Sets up validation for the class form identified by formId.
         /// </summary>
         /// <param name="formId" type="string">The id of the class form to add validation to</param>
-        /// <param name="redirectToPageIdOnSubmit" type="boolean">
-        ///     True if the form should redirect on valid submit
+        /// <param name="isCustomizePage" type="boolean">
+        ///     True if the form is on the customize page
         /// </param>
 
         var rules = { className: classRaceNameRules };
@@ -107,11 +106,10 @@
             }
         };
 
-        var callbackData = new lifeStory.CallbackData(formId, redirectToPageIdOnSubmit,
-            'New custom class created.', 'Failed to create the new class.');
-
-        // If redirectToPageIdOnSubmit isn't passed in, the form is on the #customize page
-        callbackData.isCustomizePage = !redirectToPageIdOnSubmit;
+        var callbackData = new lifeStory.CallbackData(formId);
+        callbackData.successMessage = 'New custom class created.';
+        callbackData.failureMessage ='Failed to create the new class.';
+        callbackData.isCustomizePage = isCustomizePage;
 
         var submitHandler = lifeStory.dataAccess.saveClassToDb;
 

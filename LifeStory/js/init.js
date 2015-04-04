@@ -73,6 +73,11 @@ $('#createCharacter').one('pageinit', function createCharacterPageInit()
     {
         lifeStory.ui.populateRaceAndClassList('raceSelect', 'classSelect');
     });
+
+    $('#createAddClass, #createAddRace').on('tap', function()
+    {
+        lifeStory.values.goBackToPageId = '#createCharacter';
+    });
     
     lifeStory.validation.handleCharacterForm('createCharacterForm', true);
 });
@@ -80,13 +85,13 @@ $('#createCharacter').one('pageinit', function createCharacterPageInit()
 // Initialize the add class page
 $('#addClass').one('pageinit', function addClassPageInit()
 {
-    lifeStory.validation.handleClassForm('addClassForm', 'createCharacter');
+    lifeStory.validation.handleClassForm('addClassForm');
 });
 
 // Initialize the add race page
 $('#addRace').one('pageinit', function addRacePageInit()
 {
-    lifeStory.validation.handleRaceForm('addRaceForm', 'createCharacter');
+    lifeStory.validation.handleRaceForm('addRaceForm');
 });
 
 // Initialize the edit character page
@@ -97,6 +102,11 @@ $('#editCharacter').one('pageinit', function customizePageInit() {
     {
         lifeStory.ui.populateRaceAndClassList('editCharacterRaceSelect', 'editCharacterClassSelect');
         lifeStory.ui.populateCharacterEdit();
+    });
+
+    $('#editAddClass, #editAddRace').on('tap', function ()
+    {
+        lifeStory.values.goBackToPageId = '#editCharacter';
     });
 });
 
@@ -211,8 +221,8 @@ $('#deathEvent').one('pageinit', function deathEventPageInit()
 // Initialize the customize page
 $('#customize').one('pageinit', function customizePageInit()
 {
-    lifeStory.validation.handleRaceForm('createRaceForm');
-    lifeStory.validation.handleClassForm('createClassForm');
+    lifeStory.validation.handleRaceForm('createRaceForm', true);
+    lifeStory.validation.handleClassForm('createClassForm', true);
 
     $(this).on('pagebeforeshow', function ()
     {
@@ -394,6 +404,28 @@ $('#settings').one('pageinit', function settingsPageInit()
             {
                 localStorage.removeItem('showDeceased');
             }
+        },
+
+        get goBackToPageId()
+        {
+            /// <summary>
+            ///     Gets the Id of the page to redirect to after success on
+            ///     the addClass and addRace pages <br/>
+            ///     Once this value has been retrieved, it is removed.
+            /// </summary>
+
+            var id = localStorage.getItem('goBackToPageId');
+            localStorage.removeItem('goBackToPageId');
+
+            return id;
+        },
+        set goBackToPageId(value)
+        {
+            /// <summary>
+            ///     Sets the Id of the page to redirect to after success on the addClass and addRace pages
+            /// </summary>
+
+            localStorage.setItem('goBackToPageId', value);
         }
     };
 

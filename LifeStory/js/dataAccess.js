@@ -91,6 +91,8 @@
         /// <param name="callbackData" type="lifeStory.CallbackData">Additional callback data</param>
         /// <param name="form" type="DOMElement">The form to get data from</param>
 
+        callbackData.redirectToPageId = lifeStory.values.goBackToPageId;
+
         var saveSuccess = saveRaceSuccess.bind(null, callbackData);
         var saveFailure = dbFailure.bind(null, callbackData.failureMessage);
 
@@ -160,6 +162,8 @@
         /// </summary>
         /// <param name="callbackData" type="lifeStory.CallbackData">Additional callback data</param>
         /// <param name="form" type="DOMElement">The form to get data from</param>
+
+        callbackData.redirectToPageId = lifeStory.values.goBackToPageId;
 
         var saveSuccess = saveClassSuccess.bind(null, callbackData);
         var saveFailure = dbFailure.bind(null, callbackData.failureMessage);

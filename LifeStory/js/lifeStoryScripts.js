@@ -74,6 +74,11 @@ $('#createCharacter').one('pageinit', function createCharacterPageInit()
     {
         lifeStory.ui.populateRaceAndClassList('raceSelect', 'classSelect');
     });
+
+    $('#createAddClass, #createAddRace').on('tap', function()
+    {
+        lifeStory.values.goBackToPageId = '#createCharacter';
+    });
     
     lifeStory.validation.handleCharacterForm('createCharacterForm', true);
 });
@@ -81,13 +86,13 @@ $('#createCharacter').one('pageinit', function createCharacterPageInit()
 // Initialize the add class page
 $('#addClass').one('pageinit', function addClassPageInit()
 {
-    lifeStory.validation.handleClassForm('addClassForm', 'createCharacter');
+    lifeStory.validation.handleClassForm('addClassForm');
 });
 
 // Initialize the add race page
 $('#addRace').one('pageinit', function addRacePageInit()
 {
-    lifeStory.validation.handleRaceForm('addRaceForm', 'createCharacter');
+    lifeStory.validation.handleRaceForm('addRaceForm');
 });
 
 // Initialize the edit character page
@@ -98,6 +103,11 @@ $('#editCharacter').one('pageinit', function customizePageInit() {
     {
         lifeStory.ui.populateRaceAndClassList('editCharacterRaceSelect', 'editCharacterClassSelect');
         lifeStory.ui.populateCharacterEdit();
+    });
+
+    $('#editAddClass, #editAddRace').on('tap', function ()
+    {
+        lifeStory.values.goBackToPageId = '#editCharacter';
     });
 });
 
@@ -212,8 +222,8 @@ $('#deathEvent').one('pageinit', function deathEventPageInit()
 // Initialize the customize page
 $('#customize').one('pageinit', function customizePageInit()
 {
-    lifeStory.validation.handleRaceForm('createRaceForm');
-    lifeStory.validation.handleClassForm('createClassForm');
+    lifeStory.validation.handleRaceForm('createRaceForm', true);
+    lifeStory.validation.handleClassForm('createClassForm', true);
 
     $(this).on('pagebeforeshow', function ()
     {
@@ -395,6 +405,28 @@ $('#settings').one('pageinit', function settingsPageInit()
             {
                 localStorage.removeItem('showDeceased');
             }
+        },
+
+        get goBackToPageId()
+        {
+            /// <summary>
+            ///     Gets the Id of the page to redirect to after success on
+            ///     the addClass and addRace pages <br/>
+            ///     Once this value has been retrieved, it is removed.
+            /// </summary>
+
+            var id = localStorage.getItem('goBackToPageId');
+            localStorage.removeItem('goBackToPageId');
+
+            return id;
+        },
+        set goBackToPageId(value)
+        {
+            /// <summary>
+            ///     Sets the Id of the page to redirect to after success on the addClass and addRace pages
+            /// </summary>
+
+            localStorage.setItem('goBackToPageId', value);
         }
     };
 
@@ -2121,6 +2153,8 @@ $('#settings').one('pageinit', function settingsPageInit()
         /// <param name="callbackData" type="lifeStory.CallbackData">Additional callback data</param>
         /// <param name="form" type="DOMElement">The form to get data from</param>
 
+        callbackData.redirectToPageId = lifeStory.values.goBackToPageId;
+
         var saveSuccess = saveRaceSuccess.bind(null, callbackData);
         var saveFailure = dbFailure.bind(null, callbackData.failureMessage);
 
@@ -2190,6 +2224,8 @@ $('#settings').one('pageinit', function settingsPageInit()
         /// </summary>
         /// <param name="callbackData" type="lifeStory.CallbackData">Additional callback data</param>
         /// <param name="form" type="DOMElement">The form to get data from</param>
+
+        callbackData.redirectToPageId = lifeStory.values.goBackToPageId;
 
         var saveSuccess = saveClassSuccess.bind(null, callbackData);
         var saveFailure = dbFailure.bind(null, callbackData.failureMessage);
@@ -3503,14 +3539,14 @@ $('#settings').one('pageinit', function settingsPageInit()
         });
     }
 
-    validationLibrary.handleRaceForm = function(formId, redirectToPageIdOnSubmit)
+    validationLibrary.handleRaceForm = function(formId, isCustomizePage)
     {
         /// <summary>
         ///     Sets up validation for the race form identified by formId.
         /// </summary>
         /// <param name="formId" type="string">The id of the race form to add validation to</param>
-        /// <param name="redirectToPageIdOnSubmit" type="boolean">
-        ///     True if the form should redirect on valid submit
+        /// <param name="isCustomizePage" type="boolean">
+        ///     True if the form is on the customize page
         /// </param>
 
         var rules = { raceName: classRaceNameRules };
@@ -3526,23 +3562,22 @@ $('#settings').one('pageinit', function settingsPageInit()
 
         var submitHandler = lifeStory.dataAccess.saveRaceToDb;
 
-        var callbackData = new lifeStory.CallbackData(formId, redirectToPageIdOnSubmit,
-            'New custom race created.', 'Failed to create the new race.');
-
-        // If redirectToPageIdOnSubmit isn't passed in, the form is on the #customize page
-        callbackData.isCustomizePage = !redirectToPageIdOnSubmit;
+        var callbackData = new lifeStory.CallbackData(formId);
+        callbackData.successMessage = 'New custom race created.';
+        callbackData.failureMessage = 'Failed to create the new race.';
+        callbackData.isCustomizePage = isCustomizePage;
 
         setupFormValidation(formId, submitHandler, rules, messages, callbackData);
     };
 
-    validationLibrary.handleClassForm = function(formId, redirectToPageIdOnSubmit)
+    validationLibrary.handleClassForm = function(formId, isCustomizePage)
     {
         /// <summary>
         ///     Sets up validation for the class form identified by formId.
         /// </summary>
         /// <param name="formId" type="string">The id of the class form to add validation to</param>
-        /// <param name="redirectToPageIdOnSubmit" type="boolean">
-        ///     True if the form should redirect on valid submit
+        /// <param name="isCustomizePage" type="boolean">
+        ///     True if the form is on the customize page
         /// </param>
 
         var rules = { className: classRaceNameRules };
@@ -3556,11 +3591,10 @@ $('#settings').one('pageinit', function settingsPageInit()
             }
         };
 
-        var callbackData = new lifeStory.CallbackData(formId, redirectToPageIdOnSubmit,
-            'New custom class created.', 'Failed to create the new class.');
-
-        // If redirectToPageIdOnSubmit isn't passed in, the form is on the #customize page
-        callbackData.isCustomizePage = !redirectToPageIdOnSubmit;
+        var callbackData = new lifeStory.CallbackData(formId);
+        callbackData.successMessage = 'New custom class created.';
+        callbackData.failureMessage ='Failed to create the new class.';
+        callbackData.isCustomizePage = isCustomizePage;
 
         var submitHandler = lifeStory.dataAccess.saveClassToDb;
 
