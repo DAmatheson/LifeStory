@@ -279,7 +279,7 @@
             },
             eventName:
             {
-                required: 'Please enter what got you experience.',
+                required: 'Please enter a title.',
                 maxlength: 'Max 30 characters long.'
             },
             experience:
