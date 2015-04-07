@@ -195,6 +195,8 @@
                 'of lifeStory.SelectEntry';
         }
 
+        var previousValue = parseInt($('#' + selectElementId).val(), 10);
+
         $('#' + selectElementId).children().remove().end();
 
         var $option = $('<option></option>');
@@ -203,6 +205,11 @@
         {
             var currentOption = $option.clone();
             currentOption.val(data[i].key).text(data[i].value);
+
+            if (data[i].key === previousValue)
+            {
+                currentOption.prop('selected', 'selected');
+            }
 
             $('#' + selectElementId).append(currentOption);
         }

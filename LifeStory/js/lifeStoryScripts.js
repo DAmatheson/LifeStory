@@ -2751,6 +2751,8 @@ $('#settings').one('pageinit', function settingsPageInit()
                 'of lifeStory.SelectEntry';
         }
 
+        var previousValue = parseInt($('#' + selectElementId).val(), 10);
+
         $('#' + selectElementId).children().remove().end();
 
         var $option = $('<option></option>');
@@ -2759,6 +2761,11 @@ $('#settings').one('pageinit', function settingsPageInit()
         {
             var currentOption = $option.clone();
             currentOption.val(data[i].key).text(data[i].value);
+
+            if (data[i].key === previousValue)
+            {
+                currentOption.prop('selected', 'selected');
+            }
 
             $('#' + selectElementId).append(currentOption);
         }
@@ -3770,7 +3777,7 @@ $('#settings').one('pageinit', function settingsPageInit()
             },
             eventName:
             {
-                required: 'Please enter what got you experience.',
+                required: 'Please enter a title.',
                 maxlength: 'Max 30 characters long.'
             },
             experience:
