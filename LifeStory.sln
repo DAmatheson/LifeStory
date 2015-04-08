@@ -29,6 +29,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D38433C2-8807-4FE4-B20F-7133729BC59D}"
 	ProjectSection(SolutionItems) = preProject
 		config.xml = config.xml
+		configRelease.xml = configRelease.xml
 		README.md = README.md
 	EndProjectSection
 EndProject
