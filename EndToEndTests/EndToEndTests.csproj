@@ -60,6 +60,7 @@
     <Compile Include="Helpers\IWebElementExtensionMethods.cs" />
     <Compile Include="LifeStorySeleniumTestsBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ClassTests.cs" />
     <Compile Include="RaceTests.cs" />
   </ItemGroup>
   <ItemGroup>
