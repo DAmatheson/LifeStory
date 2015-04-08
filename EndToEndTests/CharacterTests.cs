@@ -1,39 +1,28 @@
 ﻿/* CharacterTests.cs
- * Purpose: Selenium/NUnit end to end tests for LifeStory
+ * Purpose: Selenium/NUnit end to end tests for LifeStory's Character CRUD pages
  * 
  * Revision History:
  *      Drew Matheson, 2015.03.30: Created
  */ 
 
-using System;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using EndToEndTests.Helpers;
 
 namespace EndToEndTests
 {
     [TestFixture]
-    public class CharacterTests
+    public class CharacterTests : LifeStorySeleniumTestsBase
     {
-        private IWebDriver driver;
-        private const string baseURL = @"http://localhost:6632/";
-
-        /// <summary>
-        ///     Clears the database and localstorage then goes to reloadPageUrl.
-        ///     By default, reloadPageUrl is baseURL.
-        /// </summary>
-        /// <param name="reloadPageUrl">The page to reload after deleting the database</param>
-        private void ClearData(string reloadPageUrl = baseURL)
+        [SetUp]
+        public void SetUp()
         {
-            ((IJavaScriptExecutor) driver).ExecuteScript(
-                "lifeStory.db.dropAllTables(); localStorage.clear();");
-
-            driver.Navigate().GoToUrl(reloadPageUrl);
+            driver.Navigate().GoToUrl(baseURL);
+            ClearData();
         }
 
-        public void CreateCharacter(string name, string details = "")
+        private void CreateCharacter(string name, string details = "")
         {
             driver.FindElement(By.CssSelector("#createCharacter #characterName")).
                 SendKeys(name);
@@ -43,34 +32,9 @@ namespace EndToEndTests
             driver.FindElement(By.CssSelector("#successDialog-popup.ui-popup-active #successBtn")).Click();
         }
 
-        [TestFixtureSetUp]
-        public void StartUp()
-        {
-            driver = new ChromeDriver();
-
-            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(5));
-        }
-
-        [TestFixtureTearDown]
-        public void ShutDown()
-        {
-            try
-            {
-                driver.Quit();
-            }
-            catch (Exception)
-            {
-                // Don't care that the chrome window and driver weren't closed
-            }
-        }
-
         [Test]
         public void View_EmptyDatabase_ShowsAddCharacterItem()
         {
-            driver.Navigate().GoToUrl(baseURL);
-
-            ClearData();
-
             IWebElement addCharacterItem = driver.FindElement(
                 By.CssSelector("#characterList>li:not(.ui-screen-hidden) a"));
 
@@ -81,10 +45,6 @@ namespace EndToEndTests
         [Test]
         public void Click_NewCharacter_ShowsNewCharacterForm()
         {
-            driver.Navigate().GoToUrl(baseURL);
-
-            ClearData();
-
             driver.FindElement(By.CssSelector("#home div.right>a[href='#createCharacter']")).Click();
 
             Assert.That(driver.Url, Is.StringContaining("#createCharacter"));
@@ -97,7 +57,6 @@ namespace EndToEndTests
 
             driver.Navigate().GoToUrl(baseURL + "#createCharacter");
 
-            ClearData(baseURL + "#createCharacter");
             CreateCharacter(name);
 
             driver.Navigate().GoToUrl(baseURL);
@@ -112,22 +71,24 @@ namespace EndToEndTests
         [Test]
         public void NewCharacterForm_ValidNameCreateNewRaceCreateNewClassValidDetails_HasCorrectDetails()
         {
-            driver.Navigate().GoToUrl(baseURL);
-
-            ClearData();
+            string newRace = "ANewRace";
+            string newClass = "ANewClass";
 
             driver.FindElement(By.LinkText("Add a Character")).Click();
             driver.FindElement(By.Id("characterName")).SendKeys("TestCharacter");
 
             driver.FindElement(By.Id("createAddRace")).Click();
-            driver.FindElement(By.Id("addRaceName")).SendKeys("ANewRace");
+            driver.FindElement(By.Id("addRaceName")).SendKeys(newRace);
             driver.FindElement(By.CssSelector("#addRaceForm > div.ui-btn.ui-shadow.ui-btn-corner-all.ui-btn-up-b > button")).Click();
             driver.FindElement(By.LinkText("Continue")).Click();
 
             driver.FindElement(By.Id("createAddClass")).Click();
-            driver.FindElement(By.Id("addClassName")).SendKeys("ANewClass");
+            driver.FindElement(By.Id("addClassName")).SendKeys(newClass);
             driver.FindElement(By.CssSelector("#addClassForm > div.ui-btn.ui-shadow.ui-btn-corner-all.ui-btn-up-b > button")).Click();
             driver.FindElement(By.LinkText("Continue")).Click();
+
+            new SelectElement(driver.FindElement(By.Id("raceSelect"))).SelectByText(newRace);
+            new SelectElement(driver.FindElement(By.Id("classSelect"))).SelectByText(newClass);
 
             driver.FindElement(By.Id("details")).SendKeys("Details");
             driver.FindElement(By.CssSelector("button.ui-btn-hidden")).Click();
@@ -137,8 +98,8 @@ namespace EndToEndTests
             IWebElement detailsTable = driver.FindElement(By.Id("characterDetailsTable"));
 
             Assert.That(driver.FindElement(By.CssSelector("#characterDetails h2[data-property='characterName']")).Text, Is.EqualTo("TestCharacter"));
-            Assert.That(detailsTable.FindElement(By.CssSelector("td[data-property='race']")).Text, Is.EqualTo("ANewRace"));
-            Assert.That(detailsTable.FindElement(By.CssSelector("td[data-property='class']")).Text, Is.EqualTo("ANewClass"));
+            Assert.That(detailsTable.FindElement(By.CssSelector("td[data-property='race']")).Text, Is.EqualTo(newRace));
+            Assert.That(detailsTable.FindElement(By.CssSelector("td[data-property='class']")).Text, Is.EqualTo(newClass));
             Assert.That(detailsTable.FindElement(By.CssSelector("td[data-property='level']")).Text, Is.EqualTo("1"));
             Assert.That(detailsTable.FindElement(By.CssSelector("td[data-property='totalXP']")).Text, Is.EqualTo("0 XP"));
             Assert.That(detailsTable.FindElement(By.CssSelector("td[data-property='requiredXP']")).Text, Is.EqualTo("300 XP"));
@@ -149,11 +110,10 @@ namespace EndToEndTests
         [Test]
         public void ViewCharacterDetails_DeleteCharacter_HomePageShowsAddCharacterItem()
         {
-            driver.Navigate().GoToUrl(baseURL);
-
-            ClearData();
             driver.FindElement(By.LinkText("Add a Character")).Click();
+
             CreateCharacter("ToDelete");
+
             driver.FindElement(By.LinkText("Details")).Click();
             driver.FindElement(By.Id("deleteCharacter")).Click();
             driver.FindElement(By.Id("confirmAccept")).Click();
@@ -172,18 +132,17 @@ namespace EndToEndTests
             string updatedName = "UpdatedName";
             string updatedDetails = "UpdatedDetails.";
 
-            driver.Navigate().GoToUrl(baseURL);
-
-            ClearData();
             driver.FindElement(By.LinkText("Add a Character")).Click();
             CreateCharacter("ToDelete");
             driver.FindElement(By.LinkText("Details")).Click();
 
             driver.FindElement(By.CssSelector("a[href='#editCharacter']")).Click();
+
             driver.FindElement(By.Id("editCharacterName")).Empty().SendKeys(updatedName);
-            (new SelectElement(driver.FindElement(By.Id("editCharacterRaceSelect")))).SelectByText("Elf");
-            (new SelectElement(driver.FindElement(By.Id("editCharacterClassSelect")))).SelectByText("Druid");
+            new SelectElement(driver.FindElement(By.Id("editCharacterRaceSelect"))).SelectByText("Elf");
+            new SelectElement(driver.FindElement(By.Id("editCharacterClassSelect"))).SelectByText("Druid");
             driver.FindElement(By.Id("editDetails")).Empty().SendKeys(updatedDetails);
+
             driver.FindElement(By.CssSelector("#editCharacterForm > div.ui-btn.ui-shadow.ui-btn-corner-all.ui-btn-up-b > button")).Click();
 
             driver.FindElement(By.LinkText("Continue")).Click();
