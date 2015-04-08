@@ -5,6 +5,13 @@
  *      Isaac West, 2015.03.05: Created
  */
 
+// Initialize cordova related things
+$(document).on('deviceready', function()
+{
+    // Handle android backbutton
+    $(this).on('backbutton', lifeStory.util.handleAndroidBackButton);
+});
+
 // Initialize things which are application wide 
 $(function docReady()
 {

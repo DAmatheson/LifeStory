@@ -6,6 +6,13 @@
  *      Isaac West, 2015.03.05: Created
  */
 
+// Initialize cordova related things
+$(document).on('deviceready', function()
+{
+    // Handle android backbutton
+    $(this).on('backbutton', lifeStory.util.handleAndroidBackButton);
+});
+
 // Initialize things which are application wide 
 $(function docReady()
 {
@@ -2056,6 +2063,63 @@ $('#settings').one('pageinit', function settingsPageInit()
         var level = utilLibrary.getLevel(xpTotal);
 
         return lifeStory.LEVEL_VALUES[level] - xpTotal;
+    };
+
+    utilLibrary.handleAndroidBackButton = function(event)
+    {
+        /// <summary>
+        ///     Handles the Android backbutton so that it does what you would expect it to
+        ///     given the current context
+        /// </summary>
+        /// <param name="event" type="jQuery Event">The enhanced backbutton event</param>
+
+        var activePage = $.mobile.activePage.attr('id');
+
+        switch (activePage)
+        {
+            case 'home':
+                event.preventDefault();
+                break;
+            case 'eventLog':
+                lifeStory.util.redirectToPage('home');
+                break;
+            case 'characterDetails':
+                lifeStory.util.redirectToPage('eventLog');
+                break;
+            case 'eventDetails':
+                lifeStory.util.redirectToPage('eventLog');
+                break;
+            case 'createCharacter':
+                lifeStory.util.redirectToPage('home');
+                break;
+            case 'addClass':
+            case 'addRace':
+                lifeStory.util.redirectToPage(lifeStory.values.goBackToPageId);
+                break;
+            case 'editCharacter':
+                lifeStory.util.redirectToPage('characterDetails');
+                break;
+            case 'createEvent':
+                lifeStory.util.redirectToPage('eventLog');
+                break;
+            case 'editEvent':
+                lifeStory.util.redirectToPage('eventDetails');
+                break;
+            case 'resurrectEvent':
+                lifeStory.util.redirectToPage('eventLog');
+                break;
+            case 'deathEvent':
+                lifeStory.util.redirectToPage('eventLog');
+                break;
+            case 'customize':
+                event.preventDefault();
+                break;
+            case 'settings':
+                event.preventDefault();
+                break;
+            default:
+                event.preventDefault();
+        }
     };
 
 })(window.lifeStory, jQuery);
