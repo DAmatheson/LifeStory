@@ -60,7 +60,7 @@
         }
     };
 
-    uiLibrary.displaySuccessMessage = function(message)
+    uiLibrary.displaySuccessMessage = function (message, dismissCallback)
     {
         /// <summary>
         ///     Displays the passed in success message to the user
@@ -69,6 +69,16 @@
 
         $('#successMessage').text(message);
         $('#successDialog').popup('open');
+
+        if (dismissCallback)
+        {
+            $('#successBtn').one('tap', function ()
+            {
+                // Make this run after all of the event handlers
+                setTimeout(dismissCallback, 50);
+                $('#successBtn').off('tap');
+            });
+        }
     };
 
     uiLibrary.displayErrorMessage = function(message)
@@ -629,7 +639,7 @@
         /// </summary>
         /// <param name="eventTypeId" type="number">The eventType Id for the event type</param>
 
-        var eventTypeIds = [];
+        var eventTypeIds;
 
         if (eventTypeId === lifeStory.DEATH_EVENT)
         {

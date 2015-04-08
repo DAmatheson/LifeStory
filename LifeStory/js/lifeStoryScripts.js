@@ -1055,7 +1055,7 @@ $('#settings').one('pageinit', function settingsPageInit()
 
         var wrappedFailureCallback = wrapTransactionFailureCallback(transactionFailureCallback);
 
-        dbLibrary.getDb().transaction(function(tx)
+        dbLibrary.getDb().transaction(function (tx)
         {
             tx.executeSql(
                 'INSERT INTO event (eventType_Id, characterCount, xp, description) ' +
@@ -1072,7 +1072,7 @@ $('#settings').one('pageinit', function settingsPageInit()
                             characterId, resultSet.insertId
                         ]);
 
-                    eventDetails.forEach(function(item)
+                    eventDetails.forEach(function (item)
                     {
                         tx.executeSql(
                             'INSERT INTO eventDetail (id, event_id, name, creatureCount) ' +
@@ -1096,7 +1096,53 @@ $('#settings').one('pageinit', function settingsPageInit()
                         characterId
                     ]);
             }
-        }, wrappedFailureCallback, successCallback);
+        }, wrappedFailureCallback,
+        function ()
+        {
+            dbLibrary.getDb().transaction(function (tx)
+            {
+                tx.executeSql(
+                'SELECT c.id, race_id, class_id, c.name, living, details, ' +
+                    'SUM(e.xp / e.characterCount) AS experience ' +
+                'FROM character c ' +
+                    'LEFT OUTER JOIN characterEvent ce ' +
+                        'ON c.id = ce.character_id ' +
+                    'LEFT OUTER JOIN event e ' +
+                        'ON ce.event_id = e.id ' +
+                'WHERE c.id = ?;',
+                [
+                    characterId
+                ],
+                function (transaction, resultSet)
+                {
+                    var wrappedSuccessCallback;
+
+                    if (resultSet.rows.length > 0)
+                    {
+                        var newLevel = lifeStory.util.getLevelUp(resultSet.rows.item(0).experience, event.experience);
+
+                        if (newLevel != null)
+                        {
+                            wrappedSuccessCallback = function ()
+                            {
+                                lifeStory.ui.displaySuccessMessage('You advanced to level ' +
+                                    newLevel + '!', successCallback);
+                            }
+                        }
+                    }
+
+                    if (wrappedSuccessCallback)
+                    {
+                        wrappedSuccessCallback();
+                    }
+                    else
+                    {
+                        successCallback();
+                    }
+                },
+                sqlErrorHandler);
+            });
+        });
     };
 
     dbLibrary.updateCharacter = function updateCharacter(character, successCallback, failureCallback)
@@ -2060,6 +2106,23 @@ $('#settings').one('pageinit', function settingsPageInit()
         return lifeStory.LEVEL_VALUES.length;
     };
 
+    utilLibrary.getLevelUp = function (newTotal, xpGained) {
+        /// <summary>
+        ///     Checks if a character leveled up from a new event
+        /// </summary>
+        /// <param name="previousTotal" type="number">The amount of XP the character has accrued</param>
+        /// <param name="xpGained" type="number">The amount of XP the character gained in the new event</param>
+        /// <returns type="boolean">The new level if the character leveled up, null otherwise</returns>
+        var oldLevel = utilLibrary.getLevel(newTotal - xpGained);
+        var newLevel = utilLibrary.getLevel(newTotal);
+
+        if (newLevel > oldLevel) {
+            return newLevel;
+        }
+
+        return null;
+    };
+
     utilLibrary.experienceToNextLevel = function(xpTotal)
     {
         /// <summary>
@@ -2688,7 +2751,7 @@ $('#settings').one('pageinit', function settingsPageInit()
         }
     };
 
-    uiLibrary.displaySuccessMessage = function(message)
+    uiLibrary.displaySuccessMessage = function (message, dismissCallback)
     {
         /// <summary>
         ///     Displays the passed in success message to the user
@@ -2697,6 +2760,16 @@ $('#settings').one('pageinit', function settingsPageInit()
 
         $('#successMessage').text(message);
         $('#successDialog').popup('open');
+
+        if (dismissCallback)
+        {
+            $('#successBtn').one('tap', function ()
+            {
+                // Make this run after all of the event handlers
+                setTimeout(dismissCallback, 50);
+                $('#successBtn').off('tap');
+            });
+        }
     };
 
     uiLibrary.displayErrorMessage = function(message)
@@ -3257,7 +3330,7 @@ $('#settings').one('pageinit', function settingsPageInit()
         /// </summary>
         /// <param name="eventTypeId" type="number">The eventType Id for the event type</param>
 
-        var eventTypeIds = [];
+        var eventTypeIds;
 
         if (eventTypeId === lifeStory.DEATH_EVENT)
         {

@@ -456,7 +456,7 @@
 
         var wrappedFailureCallback = wrapTransactionFailureCallback(transactionFailureCallback);
 
-        dbLibrary.getDb().transaction(function(tx)
+        dbLibrary.getDb().transaction(function (tx)
         {
             tx.executeSql(
                 'INSERT INTO event (eventType_Id, characterCount, xp, description) ' +
@@ -473,7 +473,7 @@
                             characterId, resultSet.insertId
                         ]);
 
-                    eventDetails.forEach(function(item)
+                    eventDetails.forEach(function (item)
                     {
                         tx.executeSql(
                             'INSERT INTO eventDetail (id, event_id, name, creatureCount) ' +
@@ -497,7 +497,53 @@
                         characterId
                     ]);
             }
-        }, wrappedFailureCallback, successCallback);
+        }, wrappedFailureCallback,
+        function ()
+        {
+            dbLibrary.getDb().transaction(function (tx)
+            {
+                tx.executeSql(
+                'SELECT c.id, race_id, class_id, c.name, living, details, ' +
+                    'SUM(e.xp / e.characterCount) AS experience ' +
+                'FROM character c ' +
+                    'LEFT OUTER JOIN characterEvent ce ' +
+                        'ON c.id = ce.character_id ' +
+                    'LEFT OUTER JOIN event e ' +
+                        'ON ce.event_id = e.id ' +
+                'WHERE c.id = ?;',
+                [
+                    characterId
+                ],
+                function (transaction, resultSet)
+                {
+                    var wrappedSuccessCallback;
+
+                    if (resultSet.rows.length > 0)
+                    {
+                        var newLevel = lifeStory.util.getLevelUp(resultSet.rows.item(0).experience, event.experience);
+
+                        if (newLevel != null)
+                        {
+                            wrappedSuccessCallback = function ()
+                            {
+                                lifeStory.ui.displaySuccessMessage('You advanced to level ' +
+                                    newLevel + '!', successCallback);
+                            }
+                        }
+                    }
+
+                    if (wrappedSuccessCallback)
+                    {
+                        wrappedSuccessCallback();
+                    }
+                    else
+                    {
+                        successCallback();
+                    }
+                },
+                sqlErrorHandler);
+            });
+        });
     };
 
     dbLibrary.updateCharacter = function updateCharacter(character, successCallback, failureCallback)

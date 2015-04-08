@@ -241,6 +241,23 @@
         return lifeStory.LEVEL_VALUES.length;
     };
 
+    utilLibrary.getLevelUp = function (newTotal, xpGained) {
+        /// <summary>
+        ///     Checks if a character leveled up from a new event
+        /// </summary>
+        /// <param name="previousTotal" type="number">The amount of XP the character has accrued</param>
+        /// <param name="xpGained" type="number">The amount of XP the character gained in the new event</param>
+        /// <returns type="boolean">The new level if the character leveled up, null otherwise</returns>
+        var oldLevel = utilLibrary.getLevel(newTotal - xpGained);
+        var newLevel = utilLibrary.getLevel(newTotal);
+
+        if (newLevel > oldLevel) {
+            return newLevel;
+        }
+
+        return null;
+    };
+
     utilLibrary.experienceToNextLevel = function(xpTotal)
     {
         /// <summary>
