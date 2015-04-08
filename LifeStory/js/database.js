@@ -302,7 +302,8 @@
         }
         else
         {
-            db = window.openDatabase('LifeStory', '1.0', 'Life Story Database',
+            // Version is left empty because it doesn't matter to us, and any other value throws exception
+            db = window.openDatabase('LifeStory', '', 'Life Story Database',
                 5 * 1024 * 1024, initializeTables);
 
             // Ensure the database has been initialized as openDatabase will only call

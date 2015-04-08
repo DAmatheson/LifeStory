@@ -106,7 +106,14 @@
         this.id = null;
         this.eventTypeId = parseInt(eventTypeId, 10) || null;
         this.characterCount = parseInt(characterCount, 10) || null;
-        this.experience = parseInt(experience, 10) || null;
+
+        this.experience = parseInt(experience, 10);
+
+        if (isNaN(this.experience) || this.experience < 0)
+        {
+            this.experience = null;
+        }
+
         this.description = description || null;
 
         this.date = date || null;

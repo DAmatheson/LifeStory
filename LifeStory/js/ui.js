@@ -491,8 +491,12 @@
                 if (event.eventTypeId === lifeStory.COMBAT_EVENT ||
                     event.eventTypeId === lifeStory.NON_COMBAT_EVENT)
                 {
-                    $('[data-property=experience]', $currentItem).text(
-                        Math.floor(event.experience / event.characterCount) + ' XP');
+                    var characterExperience = Math.floor(event.experience / event.characterCount);
+
+                    if (characterExperience > 0)
+                    {
+                        $('[data-property=experience]', $currentItem).text(characterExperience + ' XP');
+                    }
                 }
 
                 if (event.eventTypeId === lifeStory.DEATH_EVENT)

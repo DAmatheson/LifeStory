@@ -10,31 +10,10 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
+using EndToEndTests.Helpers;
 
 namespace EndToEndTests
 {
-    public static class WaitExtension
-    {
-        public static IWebElement FindElement(this IWebDriver driver, By bySelector, int timeoutInSeconds)
-        {
-            if (timeoutInSeconds > 0)
-            {
-                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
-
-                wait.Until(drv => drv.FindElement(bySelector));
-            }
-
-            return driver.FindElement(bySelector);
-        }
-
-        public static IWebElement Clear(this IWebElement element, bool returnElement)
-        {
-            element.Clear();
-
-            return element;
-        }
-    }
-
     [TestFixture]
     public class CharacterTests
     {
@@ -54,7 +33,7 @@ namespace EndToEndTests
             driver.Navigate().GoToUrl(reloadPageUrl);
         }
 
-        private void CreateCharacter(string name, string details = "")
+        public void CreateCharacter(string name, string details = "")
         {
             driver.FindElement(By.CssSelector("#createCharacter #characterName")).
                 SendKeys(name);
@@ -106,7 +85,7 @@ namespace EndToEndTests
 
             ClearData();
 
-            driver.FindElement(By.CssSelector("#home div.right>a[href='#createCharacter'")).Click();
+            driver.FindElement(By.CssSelector("#home div.right>a[href='#createCharacter']")).Click();
 
             Assert.That(driver.Url, Is.StringContaining("#createCharacter"));
         }
@@ -139,14 +118,17 @@ namespace EndToEndTests
 
             driver.FindElement(By.LinkText("Add a Character")).Click();
             driver.FindElement(By.Id("characterName")).SendKeys("TestCharacter");
-            driver.FindElement(By.CssSelector("a[href='#addRace'")).Click();
+
+            driver.FindElement(By.Id("createAddRace")).Click();
             driver.FindElement(By.Id("addRaceName")).SendKeys("ANewRace");
             driver.FindElement(By.CssSelector("#addRaceForm > div.ui-btn.ui-shadow.ui-btn-corner-all.ui-btn-up-b > button")).Click();
             driver.FindElement(By.LinkText("Continue")).Click();
-            driver.FindElement(By.CssSelector("a[href='#addClass")).Click();
+
+            driver.FindElement(By.Id("createAddClass")).Click();
             driver.FindElement(By.Id("addClassName")).SendKeys("ANewClass");
             driver.FindElement(By.CssSelector("#addClassForm > div.ui-btn.ui-shadow.ui-btn-corner-all.ui-btn-up-b > button")).Click();
             driver.FindElement(By.LinkText("Continue")).Click();
+
             driver.FindElement(By.Id("details")).SendKeys("Details");
             driver.FindElement(By.CssSelector("button.ui-btn-hidden")).Click();
             driver.FindElement(By.LinkText("Continue")).Click();
@@ -197,11 +179,11 @@ namespace EndToEndTests
             CreateCharacter("ToDelete");
             driver.FindElement(By.LinkText("Details")).Click();
 
-            driver.FindElement(By.CssSelector("a[href='#editCharacter'")).Click();
-            driver.FindElement(By.Id("editCharacterName")).Clear(true).SendKeys(updatedName);
+            driver.FindElement(By.CssSelector("a[href='#editCharacter']")).Click();
+            driver.FindElement(By.Id("editCharacterName")).Empty().SendKeys(updatedName);
             (new SelectElement(driver.FindElement(By.Id("editCharacterRaceSelect")))).SelectByText("Elf");
             (new SelectElement(driver.FindElement(By.Id("editCharacterClassSelect")))).SelectByText("Druid");
-            driver.FindElement(By.Id("editDetails")).Clear(true).SendKeys(updatedDetails);
+            driver.FindElement(By.Id("editDetails")).Empty().SendKeys(updatedDetails);
             driver.FindElement(By.CssSelector("#editCharacterForm > div.ui-btn.ui-shadow.ui-btn-corner-all.ui-btn-up-b > button")).Click();
 
             driver.FindElement(By.LinkText("Continue")).Click();

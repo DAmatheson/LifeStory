@@ -550,7 +550,14 @@ $('#settings').one('pageinit', function settingsPageInit()
         this.id = null;
         this.eventTypeId = parseInt(eventTypeId, 10) || null;
         this.characterCount = parseInt(characterCount, 10) || null;
-        this.experience = parseInt(experience, 10) || null;
+
+        this.experience = parseInt(experience, 10);
+
+        if (isNaN(this.experience) || this.experience < 0)
+        {
+            this.experience = null;
+        }
+
         this.description = description || null;
 
         this.date = date || null;
@@ -894,7 +901,8 @@ $('#settings').one('pageinit', function settingsPageInit()
         }
         else
         {
-            db = window.openDatabase('LifeStory', '1.0', 'Life Story Database',
+            // Version is left empty because it doesn't matter to us, and any other value throws exception
+            db = window.openDatabase('LifeStory', '', 'Life Story Database',
                 5 * 1024 * 1024, initializeTables);
 
             // Ensure the database has been initialized as openDatabase will only call
@@ -3111,8 +3119,12 @@ $('#settings').one('pageinit', function settingsPageInit()
                 if (event.eventTypeId === lifeStory.COMBAT_EVENT ||
                     event.eventTypeId === lifeStory.NON_COMBAT_EVENT)
                 {
-                    $('[data-property=experience]', $currentItem).text(
-                        Math.floor(event.experience / event.characterCount) + ' XP');
+                    var characterExperience = Math.floor(event.experience / event.characterCount);
+
+                    if (characterExperience > 0)
+                    {
+                        $('[data-property=experience]', $currentItem).text(characterExperience + ' XP');
+                    }
                 }
 
                 if (event.eventTypeId === lifeStory.DEATH_EVENT)

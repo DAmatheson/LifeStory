@@ -57,7 +57,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CharacterTests.cs" />
+    <Compile Include="Helpers\IWebElementExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RaceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
