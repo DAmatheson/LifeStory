@@ -68,12 +68,17 @@
         lifeStory.ui.populateRaceList('deleteRaceSelect', lifeStory.ui.refreshDeleteRaceUIState);
     }
 
-    function saveRaceSuccess(callbackData)
+    function saveRaceSuccess(callbackData, transaction, resultSet)
     {
         /// <summary>
         ///     Success callback for saving a race
         /// </summary>
         /// <param name="callbackData" type="lifeStory.CallbackData">Additional callback data</param>
+
+        if (!callbackData.isCustomizePage)
+        {
+            lifeStory.values.newRaceId = resultSet.insertId;
+        }
 
         genericSuccessCallback(callbackData);        
 
@@ -143,12 +148,17 @@
         lifeStory.ui.populateClassList('deleteClassSelect', lifeStory.ui.refreshDeleteClassUIState);
     }
 
-    function saveClassSuccess(callbackData)
+    function saveClassSuccess(callbackData, transaction, resultSet)
     {
         /// <summary>
         ///     Success callback for saving a class
         /// </summary>
         /// <param name="callbackData" type="lifeStory.CallbackData">Additional callback data</param>
+
+        if (!callbackData.isCustomizePage)
+        {
+            lifeStory.values.newClassId = resultSet.insertId;
+        }
 
         genericSuccessCallback(callbackData);
 

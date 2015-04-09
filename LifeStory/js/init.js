@@ -433,6 +433,48 @@ $('#settings').one('pageinit', function settingsPageInit()
             /// </summary>
 
             localStorage.setItem('goBackToPageId', value);
+        },
+
+        get newClassId()
+        {
+            /// <summary>
+            ///     Gets the Id of the new Class to preselect in a dropdown<br/>
+            ///     Once this value has been retrieved, it is removed.
+            /// </summary>
+
+            var id = localStorage.getItem('newClassId');
+            localStorage.removeItem('newClassId');
+
+            return parseInt(id, 10);
+        },
+        set newClassId(value)
+        {
+            /// <summary>
+            ///     Sets the Id of the new Class to preselect in a dropdown
+            /// </summary>
+
+            localStorage.setItem('newClassId', value);
+        },
+
+        get newRaceId()
+        {
+            /// <summary>
+            ///     Gets the Id of the new Race to preselect in a dropdown<br/>
+            ///     Once this value has been retrieved, it is removed.
+            /// </summary>
+
+            var id = localStorage.getItem('newRaceId');
+            localStorage.removeItem('newRaceId');
+
+            return parseInt(id, 10);
+        },
+        set newRaceId(value)
+        {
+            /// <summary>
+            ///     Sets the Id of the new Race to preselect in a dropdown
+            /// </summary>
+
+            localStorage.setItem('newRaceId', value);
         }
     };
 

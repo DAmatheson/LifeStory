@@ -434,6 +434,48 @@ $('#settings').one('pageinit', function settingsPageInit()
             /// </summary>
 
             localStorage.setItem('goBackToPageId', value);
+        },
+
+        get newClassId()
+        {
+            /// <summary>
+            ///     Gets the Id of the new Class to preselect in a dropdown<br/>
+            ///     Once this value has been retrieved, it is removed.
+            /// </summary>
+
+            var id = localStorage.getItem('newClassId');
+            localStorage.removeItem('newClassId');
+
+            return parseInt(id, 10);
+        },
+        set newClassId(value)
+        {
+            /// <summary>
+            ///     Sets the Id of the new Class to preselect in a dropdown
+            /// </summary>
+
+            localStorage.setItem('newClassId', value);
+        },
+
+        get newRaceId()
+        {
+            /// <summary>
+            ///     Gets the Id of the new Race to preselect in a dropdown<br/>
+            ///     Once this value has been retrieved, it is removed.
+            /// </summary>
+
+            var id = localStorage.getItem('newRaceId');
+            localStorage.removeItem('newRaceId');
+
+            return parseInt(id, 10);
+        },
+        set newRaceId(value)
+        {
+            /// <summary>
+            ///     Sets the Id of the new Race to preselect in a dropdown
+            /// </summary>
+
+            localStorage.setItem('newRaceId', value);
         }
     };
 
@@ -2265,12 +2307,17 @@ $('#settings').one('pageinit', function settingsPageInit()
         lifeStory.ui.populateRaceList('deleteRaceSelect', lifeStory.ui.refreshDeleteRaceUIState);
     }
 
-    function saveRaceSuccess(callbackData)
+    function saveRaceSuccess(callbackData, transaction, resultSet)
     {
         /// <summary>
         ///     Success callback for saving a race
         /// </summary>
         /// <param name="callbackData" type="lifeStory.CallbackData">Additional callback data</param>
+
+        if (!callbackData.isCustomizePage)
+        {
+            lifeStory.values.newRaceId = resultSet.insertId;
+        }
 
         genericSuccessCallback(callbackData);        
 
@@ -2340,12 +2387,17 @@ $('#settings').one('pageinit', function settingsPageInit()
         lifeStory.ui.populateClassList('deleteClassSelect', lifeStory.ui.refreshDeleteClassUIState);
     }
 
-    function saveClassSuccess(callbackData)
+    function saveClassSuccess(callbackData, transaction, resultSet)
     {
         /// <summary>
         ///     Success callback for saving a class
         /// </summary>
         /// <param name="callbackData" type="lifeStory.CallbackData">Additional callback data</param>
+
+        if (!callbackData.isCustomizePage)
+        {
+            lifeStory.values.newClassId = resultSet.insertId;
+        }
 
         genericSuccessCallback(callbackData);
 
@@ -2876,7 +2928,7 @@ $('#settings').one('pageinit', function settingsPageInit()
         }
     };
 
-    uiLibrary.populateSelectList = function (selectElementId, data)
+    uiLibrary.populateSelectList = function (selectElementId, data, name)
     {
         /// <summary>
         ///     Populate the select element matching selectElementId with key and values from data
@@ -2896,7 +2948,18 @@ $('#settings').one('pageinit', function settingsPageInit()
                 'of lifeStory.SelectEntry';
         }
 
-        var previousValue = parseInt($('#' + selectElementId).val(), 10);
+        var previousValue;
+
+        if (name === 'class')
+        {
+            previousValue = lifeStory.values.newClassId;
+        }
+        else if (name === 'race')
+        {
+            previousValue = lifeStory.values.newRaceId;
+        }
+
+        previousValue = previousValue || parseInt($('#' + selectElementId).val(), 10);
 
         $('#' + selectElementId).children().remove().end();
 
@@ -2935,7 +2998,7 @@ $('#settings').one('pageinit', function settingsPageInit()
 
         lifeStory.db.getClasses(function(selectEntries)
         {
-            uiLibrary.populateSelectList(classListId, selectEntries);
+            uiLibrary.populateSelectList(classListId, selectEntries, 'class');
 
             if (typeof populationCompleteCallback === 'function')
             {
@@ -2956,7 +3019,7 @@ $('#settings').one('pageinit', function settingsPageInit()
 
         lifeStory.db.getRaces(function(selectEntries)
         {
-            uiLibrary.populateSelectList(raceListId, selectEntries);
+            uiLibrary.populateSelectList(raceListId, selectEntries, 'race');
 
             if (typeof populationCompleteCallback === 'function')
             {

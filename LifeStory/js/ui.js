@@ -185,7 +185,7 @@
         }
     };
 
-    uiLibrary.populateSelectList = function (selectElementId, data)
+    uiLibrary.populateSelectList = function (selectElementId, data, name)
     {
         /// <summary>
         ///     Populate the select element matching selectElementId with key and values from data
@@ -205,7 +205,18 @@
                 'of lifeStory.SelectEntry';
         }
 
-        var previousValue = parseInt($('#' + selectElementId).val(), 10);
+        var previousValue;
+
+        if (name === 'class')
+        {
+            previousValue = lifeStory.values.newClassId;
+        }
+        else if (name === 'race')
+        {
+            previousValue = lifeStory.values.newRaceId;
+        }
+
+        previousValue = previousValue || parseInt($('#' + selectElementId).val(), 10);
 
         $('#' + selectElementId).children().remove().end();
 
@@ -244,7 +255,7 @@
 
         lifeStory.db.getClasses(function(selectEntries)
         {
-            uiLibrary.populateSelectList(classListId, selectEntries);
+            uiLibrary.populateSelectList(classListId, selectEntries, 'class');
 
             if (typeof populationCompleteCallback === 'function')
             {
@@ -265,7 +276,7 @@
 
         lifeStory.db.getRaces(function(selectEntries)
         {
-            uiLibrary.populateSelectList(raceListId, selectEntries);
+            uiLibrary.populateSelectList(raceListId, selectEntries, 'race');
 
             if (typeof populationCompleteCallback === 'function')
             {
