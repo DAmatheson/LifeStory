@@ -456,7 +456,7 @@
 
         var wrappedFailureCallback = wrapTransactionFailureCallback(transactionFailureCallback);
 
-        dbLibrary.getDb().transaction(function (tx)
+        dbLibrary.getDb().transaction(function(tx)
         {
             tx.executeSql(
                 'INSERT INTO event (eventType_Id, characterCount, xp, description) ' +
@@ -465,7 +465,7 @@
                     event.eventTypeId, event.characterCount,
                     event.experience, event.description
                 ],
-                function (transaction, resultSet)
+                function(transaction, resultSet)
                 {
                     tx.executeSql(
                         'INSERT INTO characterEvent (character_id, event_id) VALUES (?, ?);',
@@ -473,7 +473,7 @@
                             characterId, resultSet.insertId
                         ]);
 
-                    eventDetails.forEach(function (item)
+                    eventDetails.forEach(function(item)
                     {
                         tx.executeSql(
                             'INSERT INTO eventDetail (id, event_id, name, creatureCount) ' +
@@ -498,51 +498,58 @@
                     ]);
             }
         }, wrappedFailureCallback,
-        function ()
+        function()
         {
-            dbLibrary.getDb().transaction(function (tx)
+            if (lifeStory.values.showLevelUp)
             {
-                tx.executeSql(
-                'SELECT c.id, race_id, class_id, c.name, living, details, ' +
-                    'SUM(e.xp / e.characterCount) AS experience ' +
-                'FROM character c ' +
-                    'LEFT OUTER JOIN characterEvent ce ' +
-                        'ON c.id = ce.character_id ' +
-                    'LEFT OUTER JOIN event e ' +
-                        'ON ce.event_id = e.id ' +
-                'WHERE c.id = ?;',
-                [
-                    characterId
-                ],
-                function (transaction, resultSet)
+                dbLibrary.getDb().transaction(function(tx)
                 {
-                    var wrappedSuccessCallback;
-
-                    if (resultSet.rows.length > 0)
+                    tx.executeSql(
+                    'SELECT c.id, race_id, class_id, c.name, living, details, ' +
+                        'SUM(e.xp / e.characterCount) AS experience ' +
+                    'FROM character c ' +
+                        'LEFT OUTER JOIN characterEvent ce ' +
+                            'ON c.id = ce.character_id ' +
+                        'LEFT OUTER JOIN event e ' +
+                            'ON ce.event_id = e.id ' +
+                    'WHERE c.id = ?;',
+                    [
+                        characterId
+                    ],
+                    function(transaction, resultSet)
                     {
-                        var newLevel = lifeStory.util.getLevelUp(resultSet.rows.item(0).experience, event.experience);
+                        var wrappedSuccessCallback;
 
-                        if (newLevel != null)
+                        if (resultSet.rows.length > 0)
                         {
-                            wrappedSuccessCallback = function ()
+                            var newLevel = lifeStory.util.getLevelUp(resultSet.rows.item(0).experience, event.experience);
+
+                            if (newLevel != null)
                             {
-                                lifeStory.ui.displaySuccessMessage('You advanced to level ' +
-                                    newLevel + '!', successCallback);
+                                wrappedSuccessCallback = function()
+                                {
+                                    lifeStory.ui.displaySuccessMessage('You advanced to level ' +
+                                        newLevel + '!', successCallback);
+                                }
                             }
                         }
-                    }
 
-                    if (wrappedSuccessCallback)
-                    {
-                        wrappedSuccessCallback();
-                    }
-                    else
-                    {
-                        successCallback();
-                    }
-                },
-                sqlErrorHandler);
-            });
+                        if (wrappedSuccessCallback)
+                        {
+                            wrappedSuccessCallback();
+                        }
+                        else
+                        {
+                            successCallback();
+                        }
+                    },
+                    sqlErrorHandler);
+                });
+            }
+            else
+            {
+                successCallback();
+            }
         });
     };
 
