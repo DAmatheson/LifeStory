@@ -43,7 +43,7 @@ $('#home').one('pageinit', function homePageInit()
     }
 
     // Hook this up after the initial change since it won't result in a filtered list anyways
-    $('#showDeceased').change(lifeStory.ui.filterCharacterList);
+    $('#showDeceased').on('change', lifeStory.ui.filterCharacterList);
 });
 
 // Initialize the event log page
@@ -252,6 +252,16 @@ $('#settings').one('pageinit', function settingsPageInit()
 {
     $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharacterData);
     $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
+
+    if (!lifeStory.values.showLevelUp)
+    {
+        $('#showLevelUp').prop('checked', false).change().checkboxradio('refresh');
+    }
+
+    $('#showLevelUp').on('change', function()
+    {
+        lifeStory.values.showLevelUp = this.checked;
+    });
 });
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
@@ -410,6 +420,28 @@ $('#settings').one('pageinit', function settingsPageInit()
             else if (value === null)
             {
                 localStorage.removeItem('showDeceased');
+            }
+        },
+
+        get showLevelUp()
+        {
+            /// <summary>Gets the current showLevelUp setting for the app</summary>
+            return localStorage.getItem('showLevelUp') === 'true';
+        },
+        set showLevelUp(value)
+        {
+            /// <summary>Sets the showLevelUp setting for the app</summary>
+            /// <param name="value" type="any">
+            ///     The value to set. If null, the current value is removed
+            /// </param>
+
+            if (value !== undefined && value !== null)
+            {
+                localStorage.setItem('showLevelUp', value);
+            }
+            else if (value === null)
+            {
+                localStorage.removeItem('showLevelUp');
             }
         },
 

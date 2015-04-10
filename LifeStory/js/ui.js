@@ -75,7 +75,7 @@
             $('#successBtn').one('tap', function ()
             {
                 // Make this run after all of the event handlers
-                setTimeout(dismissCallback, 50);
+                setTimeout(dismissCallback, 100);
                 $('#successBtn').off('tap');
             });
         }

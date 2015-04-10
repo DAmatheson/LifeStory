@@ -44,7 +44,7 @@ $('#home').one('pageinit', function homePageInit()
     }
 
     // Hook this up after the initial change since it won't result in a filtered list anyways
-    $('#showDeceased').change(lifeStory.ui.filterCharacterList);
+    $('#showDeceased').on('change', lifeStory.ui.filterCharacterList);
 });
 
 // Initialize the event log page
@@ -253,6 +253,16 @@ $('#settings').one('pageinit', function settingsPageInit()
 {
     $('#clearCharacters').on('tap', lifeStory.ui.confirmClearCharacterData);
     $('#resetDatabase').on('tap', lifeStory.ui.confirmClearDatabase);
+
+    if (!lifeStory.values.showLevelUp)
+    {
+        $('#showLevelUp').prop('checked', false).change().checkboxradio('refresh');
+    }
+
+    $('#showLevelUp').on('change', function()
+    {
+        lifeStory.values.showLevelUp = this.checked;
+    });
 });
 
 // Setup lifeStory for later use to minimize global variables and encapsulate functions and variables
@@ -411,6 +421,28 @@ $('#settings').one('pageinit', function settingsPageInit()
             else if (value === null)
             {
                 localStorage.removeItem('showDeceased');
+            }
+        },
+
+        get showLevelUp()
+        {
+            /// <summary>Gets the current showLevelUp setting for the app</summary>
+            return localStorage.getItem('showLevelUp') === 'true';
+        },
+        set showLevelUp(value)
+        {
+            /// <summary>Sets the showLevelUp setting for the app</summary>
+            /// <param name="value" type="any">
+            ///     The value to set. If null, the current value is removed
+            /// </param>
+
+            if (value !== undefined && value !== null)
+            {
+                localStorage.setItem('showLevelUp', value);
+            }
+            else if (value === null)
+            {
+                localStorage.removeItem('showLevelUp');
             }
         },
 
@@ -1097,7 +1129,7 @@ $('#settings').one('pageinit', function settingsPageInit()
 
         var wrappedFailureCallback = wrapTransactionFailureCallback(transactionFailureCallback);
 
-        dbLibrary.getDb().transaction(function (tx)
+        dbLibrary.getDb().transaction(function(tx)
         {
             tx.executeSql(
                 'INSERT INTO event (eventType_Id, characterCount, xp, description) ' +
@@ -1106,7 +1138,7 @@ $('#settings').one('pageinit', function settingsPageInit()
                     event.eventTypeId, event.characterCount,
                     event.experience, event.description
                 ],
-                function (transaction, resultSet)
+                function(transaction, resultSet)
                 {
                     tx.executeSql(
                         'INSERT INTO characterEvent (character_id, event_id) VALUES (?, ?);',
@@ -1114,7 +1146,7 @@ $('#settings').one('pageinit', function settingsPageInit()
                             characterId, resultSet.insertId
                         ]);
 
-                    eventDetails.forEach(function (item)
+                    eventDetails.forEach(function(item)
                     {
                         tx.executeSql(
                             'INSERT INTO eventDetail (id, event_id, name, creatureCount) ' +
@@ -1139,51 +1171,58 @@ $('#settings').one('pageinit', function settingsPageInit()
                     ]);
             }
         }, wrappedFailureCallback,
-        function ()
+        function()
         {
-            dbLibrary.getDb().transaction(function (tx)
+            if (lifeStory.values.showLevelUp)
             {
-                tx.executeSql(
-                'SELECT c.id, race_id, class_id, c.name, living, details, ' +
-                    'SUM(e.xp / e.characterCount) AS experience ' +
-                'FROM character c ' +
-                    'LEFT OUTER JOIN characterEvent ce ' +
-                        'ON c.id = ce.character_id ' +
-                    'LEFT OUTER JOIN event e ' +
-                        'ON ce.event_id = e.id ' +
-                'WHERE c.id = ?;',
-                [
-                    characterId
-                ],
-                function (transaction, resultSet)
+                dbLibrary.getDb().transaction(function(tx)
                 {
-                    var wrappedSuccessCallback;
-
-                    if (resultSet.rows.length > 0)
+                    tx.executeSql(
+                    'SELECT c.id, race_id, class_id, c.name, living, details, ' +
+                        'SUM(e.xp / e.characterCount) AS experience ' +
+                    'FROM character c ' +
+                        'LEFT OUTER JOIN characterEvent ce ' +
+                            'ON c.id = ce.character_id ' +
+                        'LEFT OUTER JOIN event e ' +
+                            'ON ce.event_id = e.id ' +
+                    'WHERE c.id = ?;',
+                    [
+                        characterId
+                    ],
+                    function(transaction, resultSet)
                     {
-                        var newLevel = lifeStory.util.getLevelUp(resultSet.rows.item(0).experience, event.experience);
+                        var wrappedSuccessCallback;
 
-                        if (newLevel != null)
+                        if (resultSet.rows.length > 0)
                         {
-                            wrappedSuccessCallback = function ()
+                            var newLevel = lifeStory.util.getLevelUp(resultSet.rows.item(0).experience, event.experience);
+
+                            if (newLevel != null)
                             {
-                                lifeStory.ui.displaySuccessMessage('You advanced to level ' +
-                                    newLevel + '!', successCallback);
+                                wrappedSuccessCallback = function()
+                                {
+                                    lifeStory.ui.displaySuccessMessage('You advanced to level ' +
+                                        newLevel + '!', successCallback);
+                                }
                             }
                         }
-                    }
 
-                    if (wrappedSuccessCallback)
-                    {
-                        wrappedSuccessCallback();
-                    }
-                    else
-                    {
-                        successCallback();
-                    }
-                },
-                sqlErrorHandler);
-            });
+                        if (wrappedSuccessCallback)
+                        {
+                            wrappedSuccessCallback();
+                        }
+                        else
+                        {
+                            successCallback();
+                        }
+                    },
+                    sqlErrorHandler);
+                });
+            }
+            else
+            {
+                successCallback();
+            }
         });
     };
 
@@ -2818,7 +2857,7 @@ $('#settings').one('pageinit', function settingsPageInit()
             $('#successBtn').one('tap', function ()
             {
                 // Make this run after all of the event handlers
-                setTimeout(dismissCallback, 50);
+                setTimeout(dismissCallback, 100);
                 $('#successBtn').off('tap');
             });
         }
