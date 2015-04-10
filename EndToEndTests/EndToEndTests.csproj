@@ -57,7 +57,11 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CharacterTests.cs" />
+    <Compile Include="EventTests.cs" />
+    <Compile Include="Helpers\EventTestsHelpers.cs" />
+    <Compile Include="Helpers\IWebDriverExtensionMethods.cs" />
     <Compile Include="Helpers\IWebElementExtensionMethods.cs" />
+    <Compile Include="Helpers\NavigationHelpers.cs" />
     <Compile Include="LifeStorySeleniumTestsBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ClassTests.cs" />

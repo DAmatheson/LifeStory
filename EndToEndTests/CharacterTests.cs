@@ -3,8 +3,10 @@
  * 
  * Revision History:
  *      Drew Matheson, 2015.03.30: Created
- */ 
+ */
 
+using System;
+using System.Threading;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
@@ -29,7 +31,7 @@ namespace EndToEndTests
             driver.FindElement(By.CssSelector("#createCharacter #details")).SendKeys(details);
             driver.FindElement(By.CssSelector("#createCharacter button:last-of-type")).Click();
 
-            driver.FindElement(By.CssSelector("#successDialog-popup.ui-popup-active #successBtn")).Click();
+            driver.DismissSuccessDialog();
         }
 
         [Test]
@@ -85,14 +87,14 @@ namespace EndToEndTests
             driver.FindElement(By.Id("createAddClass")).Click();
             driver.FindElement(By.Id("addClassName")).SendKeys(newClass);
             driver.FindElement(By.CssSelector("#addClassForm > div.ui-btn.ui-shadow.ui-btn-corner-all.ui-btn-up-b > button")).Click();
-            driver.FindElement(By.LinkText("Continue")).Click();
+            driver.DismissSuccessDialog();
 
             new SelectElement(driver.FindElement(By.Id("raceSelect"))).SelectByText(newRace);
             new SelectElement(driver.FindElement(By.Id("classSelect"))).SelectByText(newClass);
 
             driver.FindElement(By.Id("details")).SendKeys("Details");
             driver.FindElement(By.CssSelector("button.ui-btn-hidden")).Click();
-            driver.FindElement(By.LinkText("Continue")).Click();
+            driver.DismissSuccessDialog();
             driver.FindElement(By.LinkText("Details")).Click();
 
             IWebElement detailsTable = driver.FindElement(By.Id("characterDetailsTable"));
@@ -133,10 +135,12 @@ namespace EndToEndTests
             string updatedDetails = "UpdatedDetails.";
 
             driver.FindElement(By.LinkText("Add a Character")).Click();
-            CreateCharacter("ToDelete");
+            CreateCharacter("Name");
             driver.FindElement(By.LinkText("Details")).Click();
 
             driver.FindElement(By.CssSelector("a[href='#editCharacter']")).Click();
+
+            Thread.Sleep(50); // Give time for the form to be populated
 
             driver.FindElement(By.Id("editCharacterName")).Empty().SendKeys(updatedName);
             new SelectElement(driver.FindElement(By.Id("editCharacterRaceSelect"))).SelectByText("Elf");
@@ -145,7 +149,7 @@ namespace EndToEndTests
 
             driver.FindElement(By.CssSelector("#editCharacterForm > div.ui-btn.ui-shadow.ui-btn-corner-all.ui-btn-up-b > button")).Click();
 
-            driver.FindElement(By.LinkText("Continue")).Click();
+            driver.DismissSuccessDialog();
 
             driver.FindElement(By.LinkText("Details")).Click();
 
@@ -155,6 +159,28 @@ namespace EndToEndTests
             Assert.That(detailsTable.FindElement(By.CssSelector("td[data-property='race']")).Text, Is.EqualTo("Elf"));
             Assert.That(detailsTable.FindElement(By.CssSelector("td[data-property='class']")).Text, Is.EqualTo("Druid"));
             Assert.That(detailsTable.FindElement(By.CssSelector("td[data-property='details']")).Text, Is.EqualTo(updatedDetails));
+        }
+
+        [Test]
+        public void DeleteCharacter_CharacterNoLongerInList()
+        {
+            driver.FindElement(By.LinkText("Add a Character")).Click();
+            CreateCharacter("ToDelete");
+            driver.FindElement(By.LinkText("Details")).Click();
+            driver.FindElement(By.Id("deleteCharacter")).Click();
+            driver.FindElement(By.CssSelector("#confirmDialog-popup.ui-popup-active #confirmAccept")).Click();
+            driver.DismissSuccessDialog();
+
+            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(2));
+
+            // Confirm no list items other than the default "Add a Character" exist
+            Assert.That(
+                driver.FindElements(
+                    By.CssSelector(
+                        "#characterList > li.ui-btn.ui-btn-icon-right.ui-li-has-arrow.ui-li.ui-btn-up-c:not(.ui-screen-hidden) > div > div > a > p")),
+                Is.Empty);
+
+            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(DEFAULT_WAIT_TIME));
         }
     }
 }

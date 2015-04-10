@@ -2,7 +2,7 @@
  * Purpose: Base class for Selenium/NUnit end to end tests for LifeStory
  * 
  * Revision History:
- *      Drew Matheson, 2015.03.30: Created
+ *      Drew Matheson, 2015.04.08: Created
  */ 
 
 using System;
@@ -15,6 +15,8 @@ namespace EndToEndTests
     [TestFixture]
     public abstract class LifeStorySeleniumTestsBase
     {
+        protected const int DEFAULT_WAIT_TIME = 5;
+
         protected IWebDriver driver;
         protected const string baseURL = @"http://localhost:6632/";
 
@@ -36,7 +38,7 @@ namespace EndToEndTests
         {
             driver = new ChromeDriver();
 
-            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(5));
+            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(DEFAULT_WAIT_TIME));
         }
 
         [TestFixtureTearDown]

@@ -2,10 +2,11 @@
  * Purpose: Selenium/NUnit end to end tests for LifeStory's Race CRUD pages
  * 
  * Revision History:
- *      Drew Matheson, 2015.03.30: Created
+ *      Drew Matheson, 2015.04.08: Created
  */ 
 
 using System.Linq;
+using EndToEndTests.Helpers;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
@@ -13,18 +14,8 @@ using OpenQA.Selenium.Support.UI;
 namespace EndToEndTests
 {
     [TestFixture]
-    internal class RaceTests : LifeStorySeleniumTestsBase
+    public class RaceTests : LifeStorySeleniumTestsBase
     {
-        private void CreateCharacter()
-        {
-            driver.Navigate().GoToUrl(baseURL + "#createCharacter");
-
-            driver.FindElement(By.CssSelector("#createCharacter #characterName")).SendKeys("Test");
-            driver.FindElement(By.CssSelector("#createCharacter button:last-of-type")).Click();
-
-            driver.FindElement(By.CssSelector("#successDialog-popup.ui-popup-active #successBtn")).Click();
-        }
-
         [SetUp]
         public void SetUp()
         {
@@ -79,7 +70,7 @@ namespace EndToEndTests
         {
             string raceName = "TestRace";
 
-            CreateCharacter();
+            driver.CreateCharacter(baseURL);
 
             driver.Navigate().GoToUrl(baseURL + "#eventLog");
 
