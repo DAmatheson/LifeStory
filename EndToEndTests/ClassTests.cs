@@ -6,6 +6,7 @@
  */ 
 
 using System.Linq;
+using System.Threading;
 using EndToEndTests.Helpers;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -43,6 +44,24 @@ namespace EndToEndTests
 
             Assert.That(newClassOption.Text, Is.EqualTo(className));
             Assert.That(classes.SelectedOption.Text, Is.EqualTo(className));
+        }
+
+        [Test]
+        public void SelectClass_ClickAddClassFromNewCharacterFormAndReturn_InitiallySelectedValueIsSelected()
+        {
+            string selectedClass = "Druid";
+
+            driver.Navigate().GoToUrl(baseURL + "#createCharacter");
+
+            SelectElement classes = new SelectElement(driver.FindElement(By.Id("classSelect")));
+            classes.SelectByText(selectedClass);
+
+            driver.FindElement(By.Id("createAddClass")).Click();
+            driver.FindElement(By.PartialLinkText("New Character")).Click();
+
+            Thread.Sleep(50); // Give time for the select to be populated
+
+            Assert.That(classes.SelectedOption.Text, Is.EqualTo(selectedClass));
         }
 
         [Test]

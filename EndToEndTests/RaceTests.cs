@@ -6,6 +6,7 @@
  */ 
 
 using System.Linq;
+using System.Threading;
 using EndToEndTests.Helpers;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -64,6 +65,24 @@ namespace EndToEndTests
             IWebElement newRaceOption = races.Options.First(ele => ele.Text == raceName);
 
             Assert.That(newRaceOption.Text, Is.EqualTo(raceName));
+        }
+
+        [Test]
+        public void SelectRace_ClickAddRaceFromNewCharacterFormAndReturn_InitiallySelectedValueIsSelected()
+        {
+            string selectedRace = "Dwarf";
+
+            driver.Navigate().GoToUrl(baseURL + "#createCharacter");
+
+            SelectElement races = new SelectElement(driver.FindElement(By.Id("raceSelect")));
+            races.SelectByText(selectedRace);
+
+            driver.FindElement(By.Id("createAddRace")).Click();
+            driver.FindElement(By.PartialLinkText("New Character")).Click();
+
+            Thread.Sleep(50); // Give time for the select to be populated
+
+            Assert.That(races.SelectedOption.Text, Is.EqualTo(selectedRace));
         }
 
         [Test]
