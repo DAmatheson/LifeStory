@@ -24,7 +24,7 @@ namespace EndToEndTests
         }
 
         [Test]
-        public void AddClass_FromNewCharacterForm_IsInListOnNewCharacterForm()
+        public void AddClass_FromNewCharacterForm_IsSelectedOnNewCharacterForm()
         {
             string className = "TestClass";
 
@@ -42,6 +42,7 @@ namespace EndToEndTests
             IWebElement newClassOption = classes.Options.First(ele => ele.Text == className);
 
             Assert.That(newClassOption.Text, Is.EqualTo(className));
+            Assert.That(classes.SelectedOption.Text, Is.EqualTo(className));
         }
 
         [Test]

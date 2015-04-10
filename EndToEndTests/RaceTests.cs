@@ -24,7 +24,7 @@ namespace EndToEndTests
         }
 
         [Test]
-        public void AddRace_FromNewCharacterForm_IsInListOnNewCharacterForm()
+        public void AddRace_FromNewCharacterForm_IsSelectedOnNewCharacterForm()
         {
             string raceName = "TestRace";
 
@@ -42,6 +42,7 @@ namespace EndToEndTests
             IWebElement newRaceOption = races.Options.First(ele => ele.Text == raceName);
 
             Assert.That(newRaceOption.Text, Is.EqualTo(raceName));
+            Assert.That(races.SelectedOption.Text, Is.EqualTo(raceName));
         }
 
         [Test]
